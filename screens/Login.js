@@ -15,10 +15,10 @@ const Login = () => {
 
   console.log("login isauth", isAuthenticate)
 
-  async function loginHandler({name, password}){
+  async function loginHandler({name, phone, region}){
     try{
       setIsAuthenticated(true)
-      const tokenData = { name, password };
+      const tokenData = { name, phone, region };
 
       authenticate(JSON.stringify(tokenData))
       setIsAuthenticated(false)
@@ -70,9 +70,9 @@ useEffect(() => {
 
   return (
     <View style={styles.screen}>
-         {/* <View style={styles.cokeHeadStyle}>
-            <HeadComp />
-         </View> */}
+         <View style={styles.cokeHeadStyle}>
+            {/* <HeadComp /> */}
+         </View>
 
          <AuthContent isLogin isAuthenticate={isAuthenticate} onAuthenticate={loginHandler} isUpdating={false}/>
 
@@ -87,6 +87,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginBlock: 10,
   },
+
   cokeHeadStyle: {
     marginTop: 62,
     paddingVertical: 16,

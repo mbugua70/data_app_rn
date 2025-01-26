@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 // import { Colors } from '../../constants/styles';
 import FormContainer from "./FormContainer";
 
-function AuthContent({  onAuthenticate, name, password, isAuthenticate, isUpdating }) {
+function AuthContent({  onAuthenticate, password, name,  isAuthenticate, isUpdating }) {
   const navigation = useNavigation();
   const [credentialsInvalid, setCredentialsInvalid] = useState({
     name: false,
@@ -16,11 +16,11 @@ function AuthContent({  onAuthenticate, name, password, isAuthenticate, isUpdati
     let { name, password } = credentials;
 
 
-    password = password.trim();
     name = name.trim();
+    password = password.trim();
 
     const nameIsValid = name.length > 2;
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&_])[A-Za-z\d$@$!%*?&_]{8,12}$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&_])[A-Za-z\d$@$!%*?&_]{8,12}$/
     const passwordIsValid = passwordRegex.test(password);
 
 
@@ -28,11 +28,11 @@ function AuthContent({  onAuthenticate, name, password, isAuthenticate, isUpdati
       Alert.alert("Invalid Input", "Please check your credentials.");
       setCredentialsInvalid({
         name: !nameIsValid,
-        password: !passwordIsValid,
+        password: !passwordIsValid
       });
+
       return;
     }
-
     onAuthenticate({ name, password });
   }
 
@@ -56,7 +56,6 @@ export default AuthContent;
 const styles = StyleSheet.create({
 
   authContent: {
-    marginTop: 50,
     flex: 1,
     marginHorizontal: 16,
     padding: 16,

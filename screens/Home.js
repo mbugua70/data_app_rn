@@ -1,36 +1,60 @@
-import { View, Text, StatusBar, StyleSheet } from 'react-native'
-import React from 'react'
+import { View, Text, StatusBar, StyleSheet, FlatList } from "react-native";
+import React from "react";
+import { CATEGORIES } from "../data/dummy-data";
 
-import CategoryItem from "../components/CategoryItem"
+import CategoryItem from "../components/CategoryItem";
+import OfflineComp from "../components/OfflineComp";
 
-const Home = ({navigation}) => {
-
-    function handleNavigation(){
-    navigation.navigate("Report");
+const Home = ({ navigation }) => {
+  function handleCategoryItem(itemData) {
+    function handleNavigation() {
+      navigation.navigate("Form Container", {
+        formID: itemData.item.id
+      });
     }
 
-    function handleNavigationRecord(){
-      navigation.navigate("Record")
-    }
+    return (
+      <>
+        <StatusBar hidden={true} />
+
+        <View style={styles.screen}>
+          {/* <CategoryItem color="#49393a" title="REPORT" onNavigate={handleNavigation}/> */}
+          {/* <CategoryItem color="#49393a" title="RECORD" onNavigate={handleNavigationRecord}/> */}
+          <CategoryItem
+            title={itemData.item.title}
+            color={itemData.item.color}
+            onNavigate={handleNavigation}
+          />
+        </View>
+      </>
+    );
+  }
+
+  function handleNavigationRecord() {
+    navigation.navigate("Record");
+  }
 
   return (
-   <>
-     <StatusBar hidden={true}/>
+     <View style={styles.screenContainer}>
+      <FlatList
+      key={"numColumns_1"}
+      data={CATEGORIES}
+      keyExtractor={(item) => item.id}
+      renderItem={handleCategoryItem}
+      numColumns={2}
+    />
+  </View>
+  );
+};
 
-      <View style={styles.screen}>
-       <CategoryItem color="#49393a" title="REPORT" onNavigate={handleNavigation}/>
-       {/* <CategoryItem color="#49393a" title="RECORD" onNavigate={handleNavigationRecord}/> */}
-      </View>
-
-   </>
-  )
-}
-
-export default Home
+export default Home;
 
 const styles = StyleSheet.create({
-  screen: {
+  screenContainer: {
     flex: 1,
-    marginTop: 30,
-  }
-})
+    backgroundColor: "#000000"
+  },
+  screen: {
+   flex: 1,
+  },
+});

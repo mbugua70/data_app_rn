@@ -4,7 +4,7 @@ import {createContext, useEffect, useState} from "react";
 export const AuthContext = createContext({
     token: "",
     authenticate: (token)=>{},
-    isAuthenticate: true,
+    isAuthenticate: false,
     logout: () =>{}
 })
 

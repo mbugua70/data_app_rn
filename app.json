@@ -14,7 +14,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.iguru.co.ke.cocacola"
+      "bundleIdentifier": "com.iguru.co.ke.data"
     },
     "android": {
       "adaptiveIcon": {
@@ -40,20 +40,12 @@
       [
         "expo-font",
         {
-          "fonts": ["./assets/fonts/cocacola.ttf"]
-        }
-      ],
-      ["react-native-bottom-tabs"],
-      [
-        "expo-build-properties",
-        {
-          "ios": {
-            "useFrameworks": "static"
-          }
+          "fonts": [
+            "./assets/fonts/cocacola.ttf"
+          ]
         }
       ]
     ],
-
     "extra": {
       "eas": {
         "projectId": "a44c0b8c-9513-490d-bfc8-30a6e7198f7d"

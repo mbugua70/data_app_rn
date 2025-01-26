@@ -5,6 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from "@react-navigation/native";
 import { GlobalStyles } from "./Constants/Globalcolors";
 import { AuthContextProvider } from "./store/store";
@@ -19,11 +20,12 @@ import IconButton from "./UI/Icon";
 import Profile from "./screens/Profile";
 import EditProfile from "./screens/EditProfile";
 import BackButtonIcon from "./components/BackButtonIcon";
-
+import TabBarIcon from "./components/TabBarIcon";
+import FormScreen from "./screens/FormScreen";
 
 
 const Stack = createNativeStackNavigator();
-
+const Tab = createBottomTabNavigator();
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
 
@@ -40,9 +42,6 @@ function AuthStack() {
           component={Login}
           options={{
             headerShown: false,
-            contentStyle: {
-              backgroundColor: "#fff",
-            },
           }}
         />
       </Stack.Navigator>
@@ -50,84 +49,74 @@ function AuthStack() {
   );
 }
 
+
+function AuthReportStack (){
+    return (
+      <>
+       <Stack.Navigator
+        screenOptions={{
+          headerTitleAlign: "center",
+        }}>
+         <Stack.Screen
+            name="Home Main"
+            component={AuthenticatedStack}
+            options={{
+              contentStyle: {
+                backgroundColor: "red",
+               },
+              headerTitle: "Home",
+              headerShown: false,
+            }}
+          />
+
+        <Stack.Screen
+            name="Form Container"
+            component={FormScreen}
+          />
+        <Stack.Screen
+            name="Report"
+            component={Report}
+          />
+      </Stack.Navigator>
+      </>
+    )
+}
+
 function AuthenticatedStack() {
   return (
-    <Stack.Navigator
+    <Tab.Navigator
       screenOptions={{
-        headerTitleAlign: "left",
+        headerTitleAlign: "center",
       }}>
-      <Stack.Screen
+      <Tab.Screen
         name='Home'
         component={Home}
         options={{
-          headerShadowVisible: false,
-          contentStyle: {
-            backgroundColor: GlobalStyles.colors.primary50,
+          headerTintColor: "#ffffff",
+          tabBarStyle: {
+            backgroundColor: "#000000"
           },
-          headerTitle: () => <CocaColaTitle size={30} />,
-          headerRight: ({ headerTintColor }) => {
-            return (
-              <IconButton
-                color={GlobalStyles.colors.primary800}
-                size={24}
-                name='person'
-              />
-            );
+          headerStyle: {
+            backgroundColor: "#000000"
           },
+          tabBarIcon: ({ color, size }) => {
+            return <TabBarIcon name="home" color={color} size={size} />;
+          }
         }}
       />
 
-      <Stack.Screen
-        name='Report'
-        component={Report}
-        options={{
-          headerShadowVisible: false,
-          contentStyle: {
-            backgroundColor: GlobalStyles.colors.primary50,
-          },
-          headerTitle: "Report",
-          headerRight: ({ headerTintColor }) => {
-            return (
-              <IconButton
-                color={GlobalStyles.colors.primary800}
-                size={24}
-                name='person'
-              />
-            );
-          },
-        }}
-      />
-
-
-      <Stack.Screen
+      <Tab.Screen
         name='Profile'
         component={Profile}
         options={{
-          headerShadowVisible: false,
-          contentStyle: {
-            backgroundColor: "#fff",
-          },
-          headerTitle: "Profile",
+          tabBarIcon: ({ color, size }) => {
+            return <TabBarIcon name="person" color={color} size={size} />;
+          }
         }}
       />
 
-      <Stack.Screen
-        name='Edit Profile'
-        component={EditProfile}
-        options={{
-          presentation: "modal",
-          headerTintColor: "#fff",
-          contentStyle: {backgroundColor: "#fff"},
-          headerStyle: { backgroundColor: "#fff" },
-          headerBackButtonDisplayMode: "minimal",
-          headerShadowVisible: false,
-          headerLeft: ({ headerTintColor }) => {
-            return <BackButtonIcon tintColor={headerTintColor} />;
-          },
 
-        }}
-      />
-    </Stack.Navigator>
+    </Tab.Navigator>
   );
 }
 
@@ -136,7 +125,8 @@ function Navigation() {
   console.log("screen", authctx.isAuthenticate);
   return (
     <NavigationContainer>
-      {authctx.isAuthenticate ? <AuthenticatedStack /> : <AuthStack />}
+      {authctx.isAuthenticate ? <AuthReportStack/> : <AuthStack />}
+
     </NavigationContainer>
   );
 }

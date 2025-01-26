@@ -29,9 +29,9 @@ import {
 
   const styles = StyleSheet.create({
     gridNavItem: {
-      // flex: 1,
-      marginTop: 10,
-      marginHorizontal: 18,
+      flex: 1,
+      marginTop: 16,
+      marginHorizontal: 8,
       height: 150,
       borderRadius: 8,
       elevation: 8,
@@ -62,6 +62,6 @@ import {
     title: {
       fontWeight: "bold",
       fontSize: 18,
-      color: "#fff",
+      color: "#000000",
     },
   });

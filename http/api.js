@@ -4,7 +4,6 @@ export async function SummaryForm(
   name,
   phone,
   age,
-  soda,
   frequency,
   purchase,
   variant,
@@ -14,7 +13,7 @@ export async function SummaryForm(
   lat,
   long
 ) {
-  console.log("API Testing");
+  console.log("API Testing location", lat, long);
 
   const token = await AsyncStorage.getItem("token");
   console.log("Token from AsyncStorage:", token);
@@ -41,7 +40,7 @@ export async function SummaryForm(
   formData.append("sub_1_1", name);
   formData.append("sub_1_2", phone);
   formData.append("sub_1_3", age);
-  formData.append("sub_1_4", soda);
+  // formData.append("sub_1_4", soda);
   // formData.append("sub_1_5", beverage);
   // formData.append("sub_1_6", reason);
   formData.append("sub_1_7", frequency);
@@ -72,3 +71,35 @@ export async function SummaryForm(
     };
   }
 }
+
+
+export async function fetchRecordData(phone) {
+
+      const baPhone = {
+        ba_phone: phone
+      }
+
+      const encodedDat = new URLSearchParams(baPhone).toString();
+
+     try{
+         const response = await fetch(`https://iguru.co.ke/coke/api/REPORT.php/`, {
+             method:"POST",
+             headers:{
+               "Content-Type": "application/x-www-form-urlencoded",
+               },
+               body: encodedDat
+         });
+
+
+         if(!response.ok){
+             throw new Error("Failed to fetch package data");
+         }
+         const data = await response.text();
+         console.log("Response text", data);
+         return  data;
+     }catch(error){
+         console.log("Error found");
+         console.error('Error fetching package data:',error);
+         return error;
+     }
+ }

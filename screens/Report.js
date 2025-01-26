@@ -11,9 +11,6 @@ const Report = () => {
           setIsAuthenticated(true)
 
           setIsAuthenticated(false)
-
-
-
         }catch(error){
 
           if (error.response) {
