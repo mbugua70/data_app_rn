@@ -71,9 +71,9 @@ useEffect(() => {
   return (
     <View style={styles.screen}>
          <View style={styles.cokeHeadStyle}>
-            {/* <HeadComp /> */}
+            <CocaColaTitle size={24}/>
          </View>
-
+          <Text style={styles.text}>Please login in to continue.</Text>
          <AuthContent isLogin isAuthenticate={isAuthenticate} onAuthenticate={loginHandler} isUpdating={false}/>
 
     </View>
@@ -89,10 +89,17 @@ const styles = StyleSheet.create({
   },
 
   cokeHeadStyle: {
-    marginTop: 62,
+    marginTop: 48,
+    marginHorizontal: 10,
     paddingVertical: 16,
-    justifyContent: 'center',
-    alignItems: 'center'
+  //  justifyContent: '',
+    alignItems: 'flex-start'
+  },
+  text: {
+    marginHorizontal: 26,
+    paddingHorizontal: 6,
+    color: "gray",
+    fontSize: 16,
   }
 
 })

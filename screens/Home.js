@@ -4,6 +4,7 @@ import { CATEGORIES } from "../data/dummy-data";
 
 import CategoryItem from "../components/CategoryItem";
 import OfflineComp from "../components/OfflineComp";
+import Welcome from "../components/Welcome";
 
 const Home = ({ navigation }) => {
   function handleCategoryItem(itemData) {
@@ -36,6 +37,7 @@ const Home = ({ navigation }) => {
 
   return (
      <View style={styles.screenContainer}>
+      <Welcome/>
       <FlatList
       key={"numColumns_1"}
       data={CATEGORIES}
