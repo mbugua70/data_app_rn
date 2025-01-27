@@ -1,13 +1,26 @@
 import { View, Text, FlatList, StyleSheet } from "react-native";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import FormItem from "../components/FormItem";
 
 
 import { CATEGORIES } from "../data/dummy-data";
+import { ProjectContext } from "../store/projectContext";
 
 const FormScreen = ({ navigation, route }) => {
-  const { formID } = route.params;
-  console.log(formID);
+  const {formsData} = useContext(ProjectContext)
+  const { projectID } = route.params;
+  const [forms, setForms] = useState("");
+
+
+  useEffect(() => {
+    formsData.forEach((project) => {
+      if(projectID === project.project_id){
+        setForms(project.forms)
+      }
+    })
+  }, [formsData])
+
+
 
   function handleFormItem({item, index}) {
 
@@ -15,7 +28,7 @@ const FormScreen = ({ navigation, route }) => {
 
     function handleNavigation() {
       navigation.navigate("Form Container", {
-        formID: itemData.item.id,
+        formID: item.form_id,
       });
     }
 
@@ -24,8 +37,8 @@ const FormScreen = ({ navigation, route }) => {
 
         <View style={styles.screen}>
           <FormItem
-           index = {index}
-          // title={itemData.item.title}
+          index = {index}
+          title={item.form_title}
           // color={item.color}
           // onNavigate={handleNavigation}
           />
@@ -38,8 +51,8 @@ const FormScreen = ({ navigation, route }) => {
     <>
       <View style={styles.screenContainer}>
         <FlatList
-          data={CATEGORIES}
-          keyExtractor={(item) => item.id}
+          data={forms}
+          keyExtractor={(item) => item.form_id}
           renderItem={handleFormItem}
           contentContainerStyle= {styles.flatListContainer}
         />

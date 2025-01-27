@@ -5,7 +5,7 @@ import { Button } from "react-native-paper";
 import { IconButton, MD3Colors } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 
-const FormItem = ({index}) => {
+const FormItem = ({index, title}) => {
     const navigation = useNavigation();
 
     const styling = {
@@ -35,7 +35,7 @@ const FormItem = ({index}) => {
   return (
     <View style={[styles.screen, {...styling}]}>
       <View>
-        <Text style={styles.title}>Form One</Text>
+        <Text style={styles.title}>{title}</Text>
       </View>
       <View style={styles.buttoncontainer}>
         <View>

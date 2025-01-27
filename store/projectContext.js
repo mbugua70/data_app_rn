@@ -18,9 +18,6 @@ function projectReducer(state, action) {
     case "ADD":
       // const id = new Date().toString() + Math.random().toString();
       return [ ...action.payload];
-    case "ADDFORMS":
-      // const id = new Date().toString() + Math.random().toString();
-      return [ ...action.payload];
     case "SET":
       const inverted = action.payload.reverse();
       return  inverted;
@@ -41,15 +38,28 @@ function projectReducer(state, action) {
   }
 }
 
+// formReducer
+function formReducer(state, action) {
+  switch (action.type) {
+    case "ADDFORM":
+      // const id = new Date().toString() + Math.random().toString();
+      return [ ...action.payload];
+    default:
+      return state;
+  }
+}
+
 function ProjectContextProvider({ children }) {
   const [projectsState, dispatch] = useReducer(projectReducer, []);
+  const [formsState, dispatchForm] = useReducer(formReducer, []);
+
 
   function addProjects(data) {
     dispatch({ type: "ADD", payload: data });
   }
 
   function addForms(data){
-   dispatch({type: "ADDFORM", payload: data})
+   dispatchForm({type: "ADDFORM", payload: data})
   }
 
   function deleteProject(id) {
@@ -71,6 +81,7 @@ function ProjectContextProvider({ children }) {
     editProject: editProject,
     setProjects: setProjects,
     projectsData: projectsState,
+    formsData: formsState,
     addForms: addForms,
   };
 

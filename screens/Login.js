@@ -40,6 +40,8 @@ const Login = () => {
           project_id: project.project_id,
           forms: project.forms
         }))
+
+        console.log("filted form data", filteredForms)
         addProjects(filteredProjects)
         addForms(filteredForms)
       }

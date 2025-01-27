@@ -12,7 +12,7 @@ const Home = ({ navigation }) => {
 
     function handleNavigation() {
       navigation.navigate("Form Container", {
-        formID: item.project_id
+        projectID: item.project_id
       });
     }
 
