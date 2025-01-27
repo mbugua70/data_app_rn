@@ -13,3 +13,5 @@ export const GlobalStyles = {
       gray800: '#49393a'
     },
   };
+
+  export const HomeColors = ["#9cacff", "#ffcc90", "#80d8b8", "#f5d142", "#f894c4", "#41d95d"]

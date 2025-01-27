@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import FormItem from "../components/FormItem";
 
 
-import { CATEGORIES } from "../data/dummy-data";
+
 import { ProjectContext } from "../store/projectContext";
 
 const FormScreen = ({ navigation, route }) => {

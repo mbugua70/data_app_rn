@@ -3,12 +3,13 @@ import React, { useContext } from "react";
 import { ProjectContext } from "../store/projectContext";
 
 import CategoryItem from "../components/CategoryItem";
+import { HomeColors } from "../Constants/Globalcolors";
 
 
 const Home = ({ navigation }) => {
   const {projectsData} = useContext(ProjectContext)
 
-  function handleCategoryItem({item}) {
+  function handleCategoryItem({item,index}) {
 
     function handleNavigation() {
       navigation.navigate("Form Container", {
@@ -23,7 +24,7 @@ const Home = ({ navigation }) => {
         <View style={styles.screen}>
           <CategoryItem
             title={item.project_title}
-            color="#fff"
+            color={HomeColors[index % HomeColors.length]}
             onNavigate={handleNavigation}
           />
         </View>
