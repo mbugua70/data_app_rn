@@ -6,6 +6,8 @@ import {
     Platform,
   } from "react-native";
 
+  import { Badge } from "react-native-paper";
+
 
   const CategoryItem = ({ onNavigate, title, color, imagename}) => {
     return (
@@ -19,8 +21,11 @@ import {
           onPress={onNavigate}
         >
           <View style={[styles.innerGridContainer, {backgroundColor: color}]}>
-
-            <Text style={styles.title}>{title}</Text>
+          <Text style={styles.title}>{title}</Text>
+             <View style={styles.container}>
+               <Badge size={32} style={styles.badge}>5</Badge>
+               <Text style={styles.badgeText}>Forms</Text>
+             </View>
           </View>
         </Pressable>
       </View>
@@ -57,13 +62,27 @@ import {
       height: "100%",
       padding: 16,
       borderRadius: 8,
-      justifyContent: "center",
-      alignItems: "center",
+      justifyContent: 'space-between',
+      alignItems: "flex-start",
     },
 
     title: {
-      fontWeight: "bold",
-      fontSize: 18,
+      fontWeight: "600",
+      fontSize: 16,
       color: "#000000",
+      marginRight: 4,
     },
+    container: {
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    badge: {
+      marginRight: 10,
+    },
+    badgeText: {
+      fontSize: 22,
+      fontWeight: "600",
+      color: "#000000"
+    }
+
   });
