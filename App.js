@@ -11,6 +11,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { GlobalStyles } from "./Constants/Globalcolors";
 import { AuthContextProvider } from "./store/store";
 import { AuthContext } from "./store/store";
+import { queryClient } from "./http/api";
 
 // screens and components import
 import Login from "./screens/Login";
@@ -197,8 +198,11 @@ export default function App() {
     <>
       <StatusBar style='dark' />
       <AuthContextProvider>
+        <QueryClientProvider client={queryClient}>
         <TokenHolder />
+        </QueryClientProvider>
       </AuthContextProvider>
+
       <Toast/>
     </>
   );
