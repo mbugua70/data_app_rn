@@ -24,7 +24,7 @@ import BadgeUI from "./Badge";
             <View>
             <Text style={styles.title}>{title}</Text>
              {/* badge component */}
-             <BadgeUI badgeValue="0" projectTitle={`${title}`}/>
+             <BadgeUI badgeValue={badge} projectTitle={`${title}`}/>
             </View>
           </View>
         </Pressable>

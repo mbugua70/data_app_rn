@@ -4,6 +4,7 @@ import React from 'react'
 import { GlobalStyles } from '../Constants/Globalcolors';
 
 const BadgeUI = ({projectTitle, badgeValue}) => {
+
   return (
     <View style={styles.screen}>
       <Text style={styles.text}>{projectTitle}</Text>
