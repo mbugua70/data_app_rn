@@ -63,8 +63,8 @@ function AuthReportStack (){
             component={AuthenticatedStack}
             options={{
               contentStyle: {
-                backgroundColor: "red",
-               },
+                backgroundColor: "#000000"
+              },
               headerTitle: "Home",
               headerShown: false,
             }}
@@ -108,6 +108,7 @@ function AuthenticatedStack() {
     <Tab.Navigator
       screenOptions={{
         headerTitleAlign: "center",
+        animation: 'shift'
       }}>
       <Tab.Screen
         name='Home'
