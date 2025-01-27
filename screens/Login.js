@@ -8,9 +8,11 @@ import { AuthContext } from "../store/store";
 import AuthContent from "../components/AuthContent";
 import CocaColaTitle from "../UI/CokeHead";
 import Toast from "react-native-toast-message";
+import { ProjectContext } from "../store/projectContext";
 
 const Login = () => {
   const { authenticate, isAuthenticate } = useContext(AuthContext);
+  const {addProjects, addForms} = useContext(ProjectContext)
 
   const { data,mutate, isError, error, isPending } = useMutation({
     mutationFn: LoginHander,
@@ -20,7 +22,28 @@ const Login = () => {
     },
 
     onSuccess: (data) => {
-      authenticate(data.name)
+      if(data.response == "fail"){
+        Toast.show({
+          type: "error",
+          text1: "Log in failed",
+          text2: "Incorrect phone number and password",
+        });
+      }else{
+        authenticate(data.name)
+        const filteredProjects = data.projects.map((project) => ({
+          project_id: project.project_id,
+          project_title: project.project_title,
+          code_name: project.code_name,
+        }));
+
+        const filteredForms = data.projects.map((project) => ({
+          project_id: project.project_id,
+          forms: project.forms
+        }))
+        addProjects(filteredProjects)
+        addForms(filteredForms)
+      }
+
     },
   });
 
@@ -28,7 +51,7 @@ const Login = () => {
     mutate({ name, password });
   }
 
-  console.log(error);
+
 
   useEffect(() => {
     if (error && !isPending) {

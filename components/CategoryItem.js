@@ -6,7 +6,8 @@ import {
     Platform,
   } from "react-native";
 
-  const CategoryItem = ({ onNavigate, title, color}) => {
+
+  const CategoryItem = ({ onNavigate, title, color, imagename}) => {
     return (
       <View style={styles.gridNavItem}>
         <Pressable
@@ -18,6 +19,7 @@ import {
           onPress={onNavigate}
         >
           <View style={[styles.innerGridContainer, {backgroundColor: color}]}>
+
             <Text style={styles.title}>{title}</Text>
           </View>
         </Pressable>

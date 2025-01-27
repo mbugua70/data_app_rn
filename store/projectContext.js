@@ -1,71 +1,82 @@
 import { createContext, useReducer, useState } from "react";
-import { DUMMY_EXPENSES } from "../constants/dummy-data";
 
-export const ExpenseContext = createContext({
-  expenseData: [],
-  setExpense: (expenses)=> {},
-  addExpenses: ({ title, description, amount, date, category }) => {},
-  deleteExpense: (id) => {},
-  editExpense: (id, { title, description, amount, date }) => {},
+
+export const ProjectContext = createContext({
+  projectsData: [],
+  formsData: [],
+  setProjects: (projects)=> {},
+  setForms: (formsData) => {},
+  addForms: (formsData) => {},
+  addProjects: (projects) => {},
+  deleteProject: (id) => {},
+  editProject: (id, project) => {},
 });
 
 // the use of Reducer function
-function expenseReducer(state, action) {
+function projectReducer(state, action) {
   switch (action.type) {
     case "ADD":
       // const id = new Date().toString() + Math.random().toString();
-      return [{ ...action.payload}, ...state];
+      return [ ...action.payload];
+    case "ADDFORMS":
+      // const id = new Date().toString() + Math.random().toString();
+      return [ ...action.payload];
     case "SET":
       const inverted = action.payload.reverse();
       return  inverted;
     case "DELETE":
-      return state.filter((expense) => expense.id !== action.payload);
+      return state.filter((project) => project.id !== action.payload);
     case "UPDATE":
       const updatedIndex = state.findIndex(
         (expense) => expense.id === action.payload.id
       );
 
-      const updatebleExpense = state[updatedIndex];
-      const updatedItem = { ...updatebleExpense, ...action.payload.data };
-      const updatedExpenses = [...state];
-      updatedExpenses[updatedIndex] = updatedItem;
-      return updatedExpenses;
+      const updatebleProject = state[updatedIndex];
+      const updatedItem = { ...updatebleProject, ...action.payload.data };
+      const updatedProjects = [...state];
+      updatedProjects[updatedIndex] = updatedItem;
+      return updatedProjects;
     default:
       return state;
   }
 }
 
-function ExpenseContextProvider({ children }) {
-  const [expensesState, dispatch] = useReducer(expenseReducer, []);
+function ProjectContextProvider({ children }) {
+  const [projectsState, dispatch] = useReducer(projectReducer, []);
 
-  function addExpense(data) {
+  function addProjects(data) {
     dispatch({ type: "ADD", payload: data });
   }
 
-  function deleteExpense(id) {
+  function addForms(data){
+   dispatch({type: "ADDFORM", payload: data})
+  }
+
+  function deleteProject(id) {
     dispatch({ type: "DELETE", payload: id });
   }
 
-  function setExpenses(expenses){
-    dispatch({type: "SET", payload: expenses})
+  function setProjects(project){
+    dispatch({type: "SET", payload: project})
   }
 
-  function editExpense(id, data) {
+  function editProject(id, data) {
 
     dispatch({ type: "UPDATE", payload: { id: id, data: data } });
   }
 
   const value = {
-    addExpense: addExpense,
-    deleteExpense: deleteExpense,
-    editExpense: editExpense,
-    setExpenses: setExpenses,
-    expenseData: expensesState,
+    addProjects: addProjects,
+    deleteProject: deleteProject,
+    editProject: editProject,
+    setProjects: setProjects,
+    projectsData: projectsState,
+    addForms: addForms,
   };
 
   return (
-    <ExpenseContext.Provider value={value}>{children}</ExpenseContext.Provider>
+    <ProjectContext.Provider value={value}>{children}</ProjectContext.Provider>
   );
 }
 
-export default ExpenseContextProvider;
+export default ProjectContextProvider;

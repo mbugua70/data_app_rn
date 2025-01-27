@@ -4,19 +4,31 @@ import { QueryClient } from "@tanstack/react-query";
 export const queryClient = new QueryClient();
 
 
-export async function LoginAPI(credentials){
-  if(!credentials){
+export async function LoginHander({name, password}){
+  if(!name || !password){
     throw new Error("No username and password provided!")
   }
 
 
-  const res = await fetch("https://iguru.co.ke/coke/api/BM.php", {
+  const userData = {
+    username: name,
+    password: password
+  }
+
+  const encodedDat = new URLSearchParams(userData).toString();
+
+
+  const res = await fetch("https://iguru.co.ke/BAIMS/ep/login.php", {
     method: "POST",
-    body: formData,
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: encodedDat,
   });
 
-  console.log("API Response:", res);
-  const data = await res.text(); // Handle as plain text
+
+  const data = await res.json();
+
   if (res.ok) {
     return data;
   } else {

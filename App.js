@@ -25,6 +25,8 @@ import BackButtonIcon from "./components/BackButtonIcon";
 import TabBarIcon from "./components/TabBarIcon";
 import FormScreen from "./screens/FormScreen";
 import Records from "./screens/Records";
+import Dashboard from "./screens/Dashboard";
+import ProjectContextProvider from "./store/projectContext";
 
 
 const Stack = createNativeStackNavigator();
@@ -67,7 +69,7 @@ function AuthReportStack (){
               contentStyle: {
                 backgroundColor: "#000000"
               },
-              headerTitle: "Home",
+              headerTitle: "Dashboard",
               headerShown: false,
             }}
           />
@@ -85,6 +87,19 @@ function AuthReportStack (){
               }
             }}
           />
+
+        <Stack.Screen
+            name="Home"
+            component={Home}
+            options={{
+              headerTitle: "Projects",
+              headerTintColor: "#fff",
+              headerStyle: {
+                backgroundColor: "#000000"
+              }
+            }}
+          />
+
         <Stack.Screen
             name="Report"
             component={Report}
@@ -95,6 +110,7 @@ function AuthReportStack (){
               }
             }}
           />
+
 
         <Stack.Screen
             name="Records"
@@ -112,22 +128,22 @@ function AuthenticatedStack() {
         headerTitleAlign: "center",
         animation: 'shift'
       }}>
-      <Tab.Screen
-        name='Home'
-        component={Home}
-        options={{
-          headerTintColor: "#ffffff",
-          tabBarStyle: {
-            backgroundColor: "#000000"
-          },
-          headerStyle: {
-            backgroundColor: "#000000"
-          },
-          tabBarIcon: ({ color, size }) => {
-            return <TabBarIcon name="home" color={color} size={size} />;
-          }
-        }}
-      />
+        <Tab.Screen
+          name='Dashboard'
+          component={Dashboard}
+          options={{
+            headerTintColor: "#ffffff",
+            tabBarStyle: {
+              backgroundColor: "#000000"
+            },
+            headerStyle: {
+              backgroundColor: "#000000"
+            },
+            tabBarIcon: ({ color, size }) => {
+              return <TabBarIcon name="home" color={color} size={size} />;
+            }
+          }}
+        />
 
       <Tab.Screen
         name='Profile'
@@ -198,9 +214,11 @@ export default function App() {
     <>
       <StatusBar style='dark' />
       <AuthContextProvider>
+        <ProjectContextProvider>
         <QueryClientProvider client={queryClient}>
         <TokenHolder />
         </QueryClientProvider>
+        </ProjectContextProvider>
       </AuthContextProvider>
 
       <Toast/>

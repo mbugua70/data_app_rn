@@ -1,16 +1,18 @@
 import { View, Text, StatusBar, StyleSheet, FlatList } from "react-native";
-import React from "react";
-import { CATEGORIES } from "../data/dummy-data";
+import React, { useContext } from "react";
+import { ProjectContext } from "../store/projectContext";
 
 import CategoryItem from "../components/CategoryItem";
-import OfflineComp from "../components/OfflineComp";
-import Welcome from "../components/Welcome";
+
 
 const Home = ({ navigation }) => {
-  function handleCategoryItem(itemData) {
+  const {projectsData} = useContext(ProjectContext)
+
+  function handleCategoryItem({item}) {
+
     function handleNavigation() {
       navigation.navigate("Form Container", {
-        formID: itemData.item.id
+        formID: item.project_id
       });
     }
 
@@ -19,11 +21,9 @@ const Home = ({ navigation }) => {
         <StatusBar hidden={true} />
 
         <View style={styles.screen}>
-          {/* <CategoryItem color="#49393a" title="REPORT" onNavigate={handleNavigation}/> */}
-          {/* <CategoryItem color="#49393a" title="RECORD" onNavigate={handleNavigationRecord}/> */}
           <CategoryItem
-            title={itemData.item.title}
-            color={itemData.item.color}
+            title={item.project_title}
+            color="#fff"
             onNavigate={handleNavigation}
           />
         </View>
@@ -37,11 +37,10 @@ const Home = ({ navigation }) => {
 
   return (
      <View style={styles.screenContainer}>
-      <Welcome/>
       <FlatList
       key={"numColumns_1"}
-      data={CATEGORIES}
-      keyExtractor={(item) => item.id}
+      data={projectsData}
+      keyExtractor={(item) => item.project_id}
       renderItem={handleCategoryItem}
       numColumns={2}
     />

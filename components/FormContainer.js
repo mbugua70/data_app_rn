@@ -75,7 +75,7 @@ const FormContainer = ({ onSubmit, credentialsInvalid, isAuthenticate, name, pas
           keyboardShouldPersistTaps='handled'>
 
        <Input
-          label="Name"
+          label="Phone"
           onUpdateValue={updateInputValueHandler.bind(this, 'name')}
           value={enteredName}
           isInvalid={nameIsValid}

@@ -16,8 +16,7 @@ const Welcome = () => {
     async function handleToken() {
       const token = await AsyncStorage.getItem("token");
       if (token) {
-        const user = JSON.parse(token);
-        setName(user.name);
+        setName(token);
       }
     }
 
