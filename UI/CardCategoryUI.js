@@ -5,8 +5,10 @@ import {
     StyleSheet,
     Platform,
   } from "react-native";
+import ImageLogo from "./ImageLogo";
+import BadgeUI from "./Badge";
 
-  const CardCategoryUI = ({ onNavigate, title, color}) => {
+  const CardCategoryUI = ({ onNavigate, title, color, imagename, badge, isProject}) => {
     return (
       <View style={styles.gridNavItem}>
         <Pressable
@@ -18,7 +20,12 @@ import {
           onPress={onNavigate}
         >
           <View style={[styles.innerGridContainer, {backgroundColor: color}]}>
+            <ImageLogo imagename={imagename} />
+            <View>
             <Text style={styles.title}>{title}</Text>
+             {/* badge component */}
+             <BadgeUI badgeValue="0" projectTitle={`${title}`}/>
+            </View>
           </View>
         </Pressable>
       </View>
@@ -55,8 +62,7 @@ import {
       height: "100%",
       padding: 16,
       borderRadius: 8,
-      justifyContent: "center",
-      alignItems: "center",
+      justifyContent: 'space-between'
     },
 
     title: {
