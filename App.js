@@ -22,6 +22,7 @@ import EditProfile from "./screens/EditProfile";
 import BackButtonIcon from "./components/BackButtonIcon";
 import TabBarIcon from "./components/TabBarIcon";
 import FormScreen from "./screens/FormScreen";
+import Records from "./screens/Records";
 
 
 const Stack = createNativeStackNavigator();
@@ -72,10 +73,30 @@ function AuthReportStack (){
         <Stack.Screen
             name="Form Container"
             component={FormScreen}
+            options={{
+              headerTintColor: "#fff",
+              headerStyle: {
+               backgroundColor: "#000000"
+              },
+              contentStyle: {
+                backgroundColor: "#000000"
+              }
+            }}
           />
         <Stack.Screen
             name="Report"
             component={Report}
+            options={{
+              headerTintColor: "#fff",
+              headerStyle: {
+                backgroundColor: "#000000"
+              }
+            }}
+          />
+
+        <Stack.Screen
+            name="Records"
+            component={Records}
           />
       </Stack.Navigator>
       </>
@@ -109,6 +130,13 @@ function AuthenticatedStack() {
         name='Profile'
         component={Profile}
         options={{
+          tabBarStyle: {
+            backgroundColor: "#000000"
+          },
+          headerTintColor: "#fff",
+          headerStyle: {
+            backgroundColor: "#000000"
+          },
           tabBarIcon: ({ color, size }) => {
             return <TabBarIcon name="person" color={color} size={size} />;
           }

@@ -3,8 +3,10 @@ import React from "react";
 
 import { Button } from "react-native-paper";
 import { IconButton, MD3Colors } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
 
 const FormItem = ({index}) => {
+    const navigation = useNavigation();
 
     const styling = {
         backgroundColor: index % 2 === 0 ? "#9cacff" : "#fff",
@@ -18,6 +20,14 @@ const FormItem = ({index}) => {
 
       const iconButton = {
         mode: index % 2 === 0 ? "contained-tonal" : "contained"
+      }
+
+      function handleRecordNavigation(){
+       navigation.navigate("Records");
+      }
+
+      function handleProfileNavigation(){
+        navigation.navigate("Report")
       }
 
 
@@ -34,18 +44,18 @@ const FormItem = ({index}) => {
             labelStyle={{fontSize: 14}}
             style={styles.button}
             mode={button.mode}
-            onPress={() => console.log("Pressed")}>
+            onPress={handleRecordNavigation}>
             Records
           </Button>
         </View>
         <View>
           <IconButton
-            // containerColor={index % 2 === 0 ? "" : "#9cacff"}
+            containerColor={index % 2 === 0 ? "#f5f5f5" : "#9cacff"}
             mode={iconButton.mode}
             icon='square-edit-outline'
             iconColor="#000000"
             size={32}
-            onPress={() => console.log("Pressed")}
+            onPress={handleProfileNavigation}
           />
         </View>
       </View>

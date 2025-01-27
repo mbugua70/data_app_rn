@@ -22,13 +22,13 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
     },
     button: {
-        backgroundColor: "#d42030",
+        backgroundColor: "#9cacff",
         paddingVertical: 16,
     },
 
     textButton: {
       textAlign: "center",
-      color: "#fff",
+      color: "#000000",
       fontWeight: "bold",
       fontSize: 14,
     },

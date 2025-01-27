@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
   authContent: {
     flex: 1,
     marginHorizontal: 16,
-    padding: 16,
+    paddingHorizontal: 16,
     borderRadius: 8,
     // backgroundColor: Colors.primary800,
     // elevation: 2,
