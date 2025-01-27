@@ -1,3 +1,4 @@
+import { QueryClientProvider } from "@tanstack/react-query";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Toast from 'react-native-toast-message';
 import * as SplashScreen from "expo-splash-screen";

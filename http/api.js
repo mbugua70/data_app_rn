@@ -1,4 +1,33 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { QueryClient } from "@tanstack/react-query";
+
+export const queryClient = new QueryClient();
+
+
+export async function LoginAPI(credentials){
+  if(!credentials){
+    throw new Error("No username and password provided!")
+  }
+
+
+  const res = await fetch("https://iguru.co.ke/coke/api/BM.php", {
+    method: "POST",
+    body: formData,
+  });
+
+  console.log("API Response:", res);
+  const data = await res.text(); // Handle as plain text
+  if (res.ok) {
+    return data;
+  } else {
+    throw {
+      message: data || "Submission failed.",
+      statusText: res.statusText,
+      status: res.status,
+    };
+  }
+
+}
 
 export async function SummaryForm(
   name,
