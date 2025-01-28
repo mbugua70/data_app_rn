@@ -24,8 +24,6 @@ const FormScreen = ({ navigation, route }) => {
 
   function handleFormItem({item, index}) {
 
-   console.log(item)
-
     function handleNavigation() {
       navigation.navigate("Form Container", {
         formID: item.form_id,

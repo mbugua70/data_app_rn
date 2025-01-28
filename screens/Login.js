@@ -41,7 +41,7 @@ const Login = () => {
           forms: project.forms
         }))
 
-        console.log("filted form data", filteredForms)
+
         addProjects(filteredProjects)
         addForms(filteredForms)
       }
@@ -78,6 +78,7 @@ const Login = () => {
       </View>
       <Text style={styles.text}>Please login in to continue.</Text>
       <AuthContent
+        isPending={isPending}
         isLogin
         isAuthenticate={isAuthenticate}
         onAuthenticate={loginHandler}

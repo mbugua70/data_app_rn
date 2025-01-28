@@ -10,6 +10,7 @@ export const ProjectContext = createContext({
   addProjects: (projects) => {},
   deleteProject: (id) => {},
   editProject: (id, project) => {},
+  setFormNumber: (forms) => {}
 });
 
 // the use of Reducer function
@@ -49,9 +50,20 @@ function formReducer(state, action) {
   }
 }
 
+
+function formNumberReducer(state, action) {
+  switch (action.type) {
+    case "SETFORMNUMBERS":
+      return [...action.payload];
+    default:
+      return state;
+  }
+}
+
 function ProjectContextProvider({ children }) {
   const [projectsState, dispatch] = useReducer(projectReducer, []);
   const [formsState, dispatchForm] = useReducer(formReducer, []);
+  const [formNumbersState, dispatchFormNumber] = useReducer(formNumberReducer, [])
 
 
   function addProjects(data) {
@@ -75,6 +87,10 @@ function ProjectContextProvider({ children }) {
     dispatch({ type: "UPDATE", payload: { id: id, data: data } });
   }
 
+  function setFormNumber(data){
+   dispatchFormNumber({type: "SETFORMNUMBERS", payload: data})
+  }
+
   const value = {
     addProjects: addProjects,
     deleteProject: deleteProject,
@@ -83,6 +99,8 @@ function ProjectContextProvider({ children }) {
     projectsData: projectsState,
     formsData: formsState,
     addForms: addForms,
+    setFormNumber: setFormNumber,
+    formNumbers: formNumbersState
   };
 
   return (

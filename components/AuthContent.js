@@ -11,7 +11,7 @@ function AuthContent({
   onAuthenticate,
   password,
   name,
-  isAuthenticate,
+  isPending,
   isUpdating,
 }) {
   const navigation = useNavigation();
@@ -75,7 +75,7 @@ function AuthContent({
   return (
     <View style={styles.authContent}>
       <FormContainer
-        isAuthenticate={isAuthenticate}
+        isPending={isPending}
         isUpdating={isUpdating}
         name={name}
         password={password}

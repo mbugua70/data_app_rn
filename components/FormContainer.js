@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, Pressable, KeyboardAvoidingView,TouchableWithoutFeedback, ScrollView, Keyboard} from 'react-native';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { ActivityIndicator, MD2Colors } from 'react-native-paper';
 import React, {useState, useLayoutEffect} from 'react';
 
 import Input from "./Input";
@@ -7,7 +8,7 @@ import FlatButton from "../UI/FlatButton";
 import { GlobalStyles } from '../Constants/Globalcolors';
 
 
-const FormContainer = ({ onSubmit, credentialsInvalid, isAuthenticate, name, password, isUpdating}) => {
+const FormContainer = ({ onSubmit, credentialsInvalid, isPending, name, password, isUpdating}) => {
    const [enteredName, setEnteredName] = useState(name ? name : "");
     const [enteredPassword, setEnteredPassword] = useState("");
 
@@ -79,7 +80,8 @@ const FormContainer = ({ onSubmit, credentialsInvalid, isAuthenticate, name, pas
           onUpdateValue={updateInputValueHandler.bind(this, 'name')}
           value={enteredName}
           isInvalid={nameIsValid}
-          icon="account"
+          icon="phone"
+          keyboardType="numeric"
         />
 
 
@@ -94,9 +96,10 @@ const FormContainer = ({ onSubmit, credentialsInvalid, isAuthenticate, name, pas
 
        {/* button content */}
         <View style={styles.submitContainer}>
-         {!isUpdating &&  <FlatButton onPress={submitHandler}>
+         {!isUpdating && !isPending &&  <FlatButton onPress={submitHandler}>
             Login
          </FlatButton>}
+         {isPending &&  <ActivityIndicator size={32} animating={true} color={MD2Colors.blue700} />}
         </View>
     </ScrollView>
     </TouchableWithoutFeedback>

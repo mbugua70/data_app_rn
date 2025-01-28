@@ -9,6 +9,7 @@ import { HomeColors } from "../Constants/Globalcolors";
 const Home = ({ navigation }) => {
   const {projectsData} = useContext(ProjectContext)
 
+
   function handleCategoryItem({item,index}) {
 
     function handleNavigation() {
