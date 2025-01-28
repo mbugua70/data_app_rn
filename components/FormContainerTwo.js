@@ -11,7 +11,7 @@ import {
 import { ActivityIndicator, MD2Colors } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState, useRef, useContext } from "react";
-import { RadioButton } from 'react-native-paper';
+
 
 import InputTwo from "./InputTwo";
 import FlatButton from "../UI/FlatButton";
@@ -100,22 +100,26 @@ const FormContainerTwo = ({
         setInputs(input.inputs);
       }
     });
-  }, [formInputData]);
+  }, []);
 
 
   useEffect(() => {
     formInputData.forEach((input) => {
+      // console.log("logging formInputData ", input.inputs)
       if (formID === input.form_id) {
-       const dataValue =  formsSelectData.map((selects) => ({
-          label: selects['0'],
-          value: selects.option_text
-        }))
+       const dataValue =  input.inputs.flatMap((selects) =>  selects.field_input_options.map((item) => ({
+        label: item["0"],
+        value: item.option_text,
+       })))
+
         setMySelectValue(dataValue)
       }
 
     });
 
-  },[formsSelectData])
+  },[])
+
+
 
 
   function handleInputsForms({ item, index }) {
@@ -124,7 +128,10 @@ const FormContainerTwo = ({
     const isDropdown = item.field_type === "dropdown";
     const isRadio = item.field_type === "radio"
 
-
+    const dataView = item.field_input_options.map((item) => ({
+      label: item["0"],
+      value: item.option_text,
+    }))
     function updateInputValueHandler(inputType, enteredValue) {
       switch (inputType) {
         case "name":
@@ -173,20 +180,20 @@ const FormContainerTwo = ({
         {isDropdown &&   <DropdownComponent
             isInvalid ={frequencyIsInValid}
             label={item.input_title}
-            data={mySelectValue}
+            data={dataView}
             value={enteredFrequency}
             onUpdateValue={updateInputValueHandler.bind(this, item.input_title)}
             ref={inputRef7}
           />}
 
-          {isRadio && <RadioComponent isInvalid label={item.input_title} data={mySelectValue} value={checked}  onUpdateValue={updateInputValueHandler.bind(this, item.input_title)}  />}
+          {isRadio && <RadioComponent isInvalid title={item.input_title}  data={dataView}  valueEntered={checked}  onUpdateValue={updateInputValueHandler.bind(this, item.input_title)}  />}
 
       </>
     );
   }
 
   function takeLocationHandler(pickedlocation) {
-    console.log("Picked location is", pickedlocation);
+
     setLocation(pickedlocation);
   }
 

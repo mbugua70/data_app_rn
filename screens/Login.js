@@ -49,9 +49,10 @@ const Login = () => {
         })));
 
         const selectFields = inputsFields.flatMap((formSelect) =>
-          formSelect.inputs.flatMap((input) =>
-            input.field_input_options ? input.field_input_options : []
-          )
+          formSelect.inputs.flatMap((input) => ({
+            field_id: input.field_id ? input.field_id : null,
+            field_input_options: input.field_input_options ? input.field_input_options : []
+          }))
         );
 
         addFormSelects(selectFields);
