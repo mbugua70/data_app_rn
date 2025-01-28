@@ -18,6 +18,7 @@ import FlatButton from "../UI/FlatButton";
 import DropdownComponent from "./Dropdown";
 import LocationPicker from "./LocationPicker";
 import { ProjectContext } from "../store/projectContext";
+import RadioComponent from "./RadioComponent";
 
 const data = {
   ageData: [
@@ -171,20 +172,14 @@ const FormContainerTwo = ({
 
         {isDropdown &&   <DropdownComponent
             isInvalid ={frequencyIsInValid}
-            label={item.form_title}
+            label={item.input_title}
             data={mySelectValue}
             value={enteredFrequency}
             onUpdateValue={updateInputValueHandler.bind(this, item.input_title)}
             ref={inputRef7}
           />}
 
-          {isRadio && <View style={styles.container}>
-      <RadioButton.Group onValueChange={(newValue) => setChecked(newValue)} value={checked}>
-        <RadioButton.Item label="Option 1" value="option1" />
-        <RadioButton.Item label="Option 2" value="option2" />
-        <RadioButton.Item label="Option 3" value="option3" />
-      </RadioButton.Group>
-    </View>}
+          {isRadio && <RadioComponent isInvalid label={item.input_title} data={mySelectValue} value={checked}  onUpdateValue={updateInputValueHandler.bind(this, item.input_title)}  />}
 
       </>
     );
