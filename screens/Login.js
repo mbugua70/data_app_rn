@@ -12,7 +12,7 @@ import { ProjectContext } from "../store/projectContext";
 
 const Login = () => {
   const { authenticate, isAuthenticate } = useContext(AuthContext);
-  const {addProjects, addForms} = useContext(ProjectContext)
+  const {addProjects, addForms} = useContext(ProjectContext);
 
   const { data,mutate, isError, error, isPending } = useMutation({
     mutationFn: LoginHander,
@@ -34,6 +34,7 @@ const Login = () => {
           project_id: project.project_id,
           project_title: project.project_title,
           code_name: project.code_name,
+          forms: project.forms
         }));
 
         const filteredForms = data.projects.map((project) => ({

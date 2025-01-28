@@ -9,14 +9,18 @@ import { HomeColors } from "../Constants/Globalcolors";
 const Home = ({ navigation }) => {
   const {projectsData} = useContext(ProjectContext)
 
+  console.log("form debugging", projectsData)
+
+  let badgeNumber = 0;
 
   function handleCategoryItem({item,index}) {
-
     function handleNavigation() {
       navigation.navigate("Form Container", {
         projectID: item.project_id
       });
     }
+
+    badgeNumber = item.forms.length
 
     return (
       <>
@@ -24,6 +28,7 @@ const Home = ({ navigation }) => {
 
         <View style={styles.screen}>
           <CategoryItem
+            badgeNumber={badgeNumber}
             title={item.project_title}
             color={HomeColors[index % HomeColors.length]}
             onNavigate={handleNavigation}

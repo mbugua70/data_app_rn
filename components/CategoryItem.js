@@ -9,7 +9,7 @@ import {
   import { Badge } from "react-native-paper";
 
 
-  const CategoryItem = ({ onNavigate, title, color, imagename}) => {
+  const CategoryItem = ({ onNavigate, title, color, badgeNumber}) => {
     return (
       <View style={styles.gridNavItem}>
         <Pressable
@@ -23,7 +23,7 @@ import {
           <View style={[styles.innerGridContainer, {backgroundColor: color}]}>
           <Text style={styles.title}>{title}</Text>
              <View style={styles.container}>
-               <Badge size={32} style={styles.badge}>5</Badge>
+               <Badge size={32} style={styles.badge}>{badgeNumber}</Badge>
                <Text style={styles.badgeText}>Forms</Text>
              </View>
           </View>
@@ -78,6 +78,8 @@ import {
     },
     badge: {
       marginRight: 10,
+      fontSize: 16,
+      fontWeight: 'bold',
     },
     badgeText: {
       fontSize: 22,
