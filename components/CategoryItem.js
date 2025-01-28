@@ -16,11 +16,11 @@ import {
           android_ripple={{ color: "#ccc" }}
           style={({ pressed }) => [
             styles.buttonContainer,
-            pressed ? styles.pressedButton : null,
+            pressed ? [styles.pressedButton, {backgroundColor: color}] : {backgroundColor: color},
           ]}
           onPress={onNavigate}
         >
-          <View style={[styles.innerGridContainer, {backgroundColor: color}]}>
+          <View style={[styles.innerGridContainer]}>
           <Text style={styles.title}>{title}</Text>
              <View style={styles.container}>
                <Badge size={32} style={styles.badge}>{badgeNumber}</Badge>
@@ -50,6 +50,7 @@ import {
     },
 
     buttonContainer: {
+      borderRadius: 8,
       flex: 1,
       height: "100%",
     },

@@ -15,11 +15,11 @@ import BadgeUI from "./Badge";
           android_ripple={{ color: "#ccc" }}
           style={({ pressed }) => [
             styles.buttonContainer,
-            pressed ? styles.pressedButton : null,
+            pressed ? [styles.pressedButton, {backgroundColor: color}]: {backgroundColor: color},
           ]}
           onPress={onNavigate}
         >
-          <View style={[styles.innerGridContainer, {backgroundColor: color}]}>
+          <View style={[styles.innerGridContainer]}>
             <ImageLogo imagename={imagename} />
             <View>
             <Text style={styles.title}>{title}</Text>
@@ -50,6 +50,7 @@ import BadgeUI from "./Badge";
     },
 
     buttonContainer: {
+      borderRadius: 8,
       flex: 1,
       height: "100%",
     },
