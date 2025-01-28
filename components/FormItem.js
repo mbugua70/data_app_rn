@@ -5,7 +5,7 @@ import { Button } from "react-native-paper";
 import { IconButton, MD3Colors } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 
-const FormItem = ({index, title}) => {
+const FormItem = ({index, title, onNavigate}) => {
     const navigation = useNavigation();
 
     const styling = {
@@ -26,9 +26,6 @@ const FormItem = ({index, title}) => {
        navigation.navigate("Records");
       }
 
-      function handleProfileNavigation(){
-        navigation.navigate("Report")
-      }
 
 
 
@@ -55,7 +52,7 @@ const FormItem = ({index, title}) => {
             icon='square-edit-outline'
             iconColor="#000000"
             size={32}
-            onPress={handleProfileNavigation}
+            onPress={onNavigate}
           />
         </View>
       </View>

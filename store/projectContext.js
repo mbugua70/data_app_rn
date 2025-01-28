@@ -6,11 +6,15 @@ export const ProjectContext = createContext({
   formsData: [],
   setProjects: (projects)=> {},
   setForms: (formsData) => {},
+  addFormSelects: (forms) => {},
   addForms: (formsData) => {},
   addProjects: (projects) => {},
   deleteProject: (id) => {},
   editProject: (id, project) => {},
-  setFormNumber: (forms) => {}
+  setFormNumber: (forms) => {},
+  addFormInputs: (forms) => {},
+  formInputData: [],
+  formsSelectData: [],
 });
 
 // the use of Reducer function
@@ -60,10 +64,31 @@ function formNumberReducer(state, action) {
   }
 }
 
+function formInputsReducer (state, action) {
+  switch (action.type) {
+    case "ADDINPUTFORMS":
+      return [...action.payload];
+    default:
+      return state;
+  }
+}
+
+function formSelectsReducer (state, action) {
+   switch (action.type){
+    case "ADDSELECT":
+      return [...action.payload];
+      default:
+      return state;
+   }
+}
+
+
 function ProjectContextProvider({ children }) {
   const [projectsState, dispatch] = useReducer(projectReducer, []);
   const [formsState, dispatchForm] = useReducer(formReducer, []);
   const [formNumbersState, dispatchFormNumber] = useReducer(formNumberReducer, [])
+  const [formInputsState, dispatchFormInputs] = useReducer(formInputsReducer, [])
+  const [formSelectsState, dispatchFormSelect] = useReducer(formSelectsReducer, [])
 
 
   function addProjects(data) {
@@ -91,6 +116,15 @@ function ProjectContextProvider({ children }) {
    dispatchFormNumber({type: "SETFORMNUMBERS", payload: data})
   }
 
+  function addFormInputs (data){
+   dispatchFormInputs({type: "ADDINPUTFORMS", payload: data})
+  }
+
+
+  function addFormSelects (data){
+    dispatchFormSelect({type: "ADDSELECT", payload: data})
+  }
+
   const value = {
     addProjects: addProjects,
     deleteProject: deleteProject,
@@ -100,7 +134,11 @@ function ProjectContextProvider({ children }) {
     formsData: formsState,
     addForms: addForms,
     setFormNumber: setFormNumber,
-    formNumbers: formNumbersState
+    formNumbers: formNumbersState,
+    formInputData: formInputsState,
+    addFormInputs: addFormInputs,
+    formsSelectData: formSelectsState,
+    addFormSelects: addFormSelects,
   };
 
   return (

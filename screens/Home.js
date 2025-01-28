@@ -9,7 +9,6 @@ import { HomeColors } from "../Constants/Globalcolors";
 const Home = ({ navigation }) => {
   const {projectsData} = useContext(ProjectContext)
 
-  console.log("form debugging", projectsData)
 
   let badgeNumber = 0;
 

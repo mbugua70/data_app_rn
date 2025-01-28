@@ -12,9 +12,9 @@ import { ProjectContext } from "../store/projectContext";
 
 const Login = () => {
   const { authenticate, isAuthenticate } = useContext(AuthContext);
-  const {addProjects, addForms} = useContext(ProjectContext);
+  const { addProjects, addForms, addFormInputs, addFormSelects} = useContext(ProjectContext);
 
-  const { data,mutate, isError, error, isPending } = useMutation({
+  const { data, mutate, isError, error, isPending } = useMutation({
     mutationFn: LoginHander,
     // the code below will wait the request to finish before moving to another page.
     onMutate: async (data) => {
@@ -22,39 +22,49 @@ const Login = () => {
     },
 
     onSuccess: (data) => {
-      if(data.response == "fail"){
+      if (data.response == "fail") {
         Toast.show({
           type: "error",
           text1: "Log in failed",
           text2: "Incorrect phone number and password",
         });
-      }else{
-        authenticate(data.name)
+      } else {
+        authenticate(data.name);
         const filteredProjects = data.projects.map((project) => ({
           project_id: project.project_id,
           project_title: project.project_title,
           code_name: project.code_name,
-          forms: project.forms
+          forms: project.forms,
         }));
 
         const filteredForms = data.projects.map((project) => ({
           project_id: project.project_id,
-          forms: project.forms
-        }))
+          forms: project.forms,
+        }));
 
+        const inputsFields = filteredForms.flatMap((form) => form.forms.map((form_inputs) => ({
+          form_id: form_inputs.form_id,
+          form_title: form_inputs.form_title,
+          inputs: form_inputs.form_fields
+        })));
 
-        addProjects(filteredProjects)
-        addForms(filteredForms)
+        const selectFields = inputsFields.flatMap((formSelect) =>
+          formSelect.inputs.flatMap((input) =>
+            input.field_input_options ? input.field_input_options : []
+          )
+        );
+
+        addFormSelects(selectFields);
+        addFormInputs(inputsFields);
+        addProjects(filteredProjects);
+        addForms(filteredForms);
       }
-
     },
   });
 
   function loginHandler({ name, password }) {
     mutate({ name, password });
   }
-
-
 
   useEffect(() => {
     if (error && !isPending) {

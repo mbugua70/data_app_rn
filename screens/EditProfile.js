@@ -26,9 +26,6 @@ const EditProfile = ({ route }) => {
         // setError(error.response.data.error.message)
         setError("Invalid credintials, Please check your details");
 
-        // console.log('Status Code:', error.response.status);
-        // console.log('Response Data:', error.response.data);
-        // console.log('Headers:', error.response.headers);
       } else if (error.request) {
         // The request was made, but no response was received
         setError("Please check your network");

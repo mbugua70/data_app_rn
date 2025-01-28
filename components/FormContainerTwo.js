@@ -6,15 +6,18 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
+  FlatList,
 } from "react-native";
 import { ActivityIndicator, MD2Colors } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
+import { RadioButton } from 'react-native-paper';
 
 import InputTwo from "./InputTwo";
 import FlatButton from "../UI/FlatButton";
 import DropdownComponent from "./Dropdown";
 import LocationPicker from "./LocationPicker";
+import { ProjectContext } from "../store/projectContext";
 
 const data = {
   ageData: [
@@ -47,7 +50,9 @@ const FormContainerTwo = ({
   credentialsInvalid,
   isSubmiting,
   resetForm,
+  formID,
 }) => {
+  const [checked, setChecked] = React.useState('first');
   const [enteredName, setEnteredName] = useState("");
   const [enteredPhone, setEnteredPhone] = useState("");
   const [enteredPurchase, setEnteredPurchase] = useState("");
@@ -58,7 +63,9 @@ const FormContainerTwo = ({
   const [enteredFrequency, setEnteredFrequency] = useState("");
   const [enteredSku, setEnteredSku] = useState("");
   const [location, setLocation] = useState("");
-  const navigaton = useNavigation();
+  const { formInputData, formsSelectData} = useContext(ProjectContext);
+  const [inputs, setInputs] = useState("");
+  const [mySelectValue, setMySelectValue] = useState({})
 
   // userRefs for input fields to be used in the form
   const inputRef1 = useRef(null);
@@ -86,41 +93,105 @@ const FormContainerTwo = ({
     purchase: purchaseIsInValid,
   } = credentialsInvalid;
 
+  useEffect(() => {
+    formInputData.forEach((input) => {
+      if (formID === input.form_id) {
+        setInputs(input.inputs);
+      }
+    });
+  }, [formInputData]);
 
-  function updateInputValueHandler(inputType, enteredValue) {
-    switch (inputType) {
-      case "name":
-        setEnteredName(enteredValue);
-        break;
-      case "phone":
-        setEnteredPhone(enteredValue);
-        break;
-      case "purchase":
-        setEnteredPurchase(enteredValue);
-        break;
-      case "variant":
-        setEnteredVariant(enteredValue);
-        break;
-      case "pricing":
-        setEnteredPricing(enteredValue);
-        break;
-      case "feedback":
-        setEnteredFeedback(enteredValue);
-        break;
-      case "age":
-        setEnteredAge(enteredValue);
-        break;
-      case "frequency":
-        setEnteredFrequency(enteredValue);
-        break;
-      case "sku":
-        setEnteredSku(enteredValue);
-        break;
+
+  useEffect(() => {
+    formInputData.forEach((input) => {
+      if (formID === input.form_id) {
+       const dataValue =  formsSelectData.map((selects) => ({
+          label: selects['0'],
+          value: selects.option_text
+        }))
+        setMySelectValue(dataValue)
+      }
+
+    });
+
+  },[formsSelectData])
+
+
+  function handleInputsForms({ item, index }) {
+    const isInput = item.field_type === "input";
+    const isCheckbox = item.field_type === "checkbox";
+    const isDropdown = item.field_type === "dropdown";
+    const isRadio = item.field_type === "radio"
+
+
+    function updateInputValueHandler(inputType, enteredValue) {
+      switch (inputType) {
+        case "name":
+          setEnteredName(enteredValue);
+          break;
+        case "phone":
+          setEnteredPhone(enteredValue);
+          break;
+        case "purchase":
+          setEnteredPurchase(enteredValue);
+          break;
+        case "variant":
+          setEnteredVariant(enteredValue);
+          break;
+        case "pricing":
+          setEnteredPricing(enteredValue);
+          break;
+        case "feedback":
+          setEnteredFeedback(enteredValue);
+          break;
+        case "age":
+          setEnteredAge(enteredValue);
+          break;
+        case "frequency":
+          setEnteredFrequency(enteredValue);
+          break;
+        case "sku":
+          setEnteredSku(enteredValue);
+          break;
+      }
     }
+
+    return (
+      <>
+      {isInput &&  <InputTwo
+          label={item.input_title}
+          onUpdateValue={updateInputValueHandler.bind(this, item.input_title)}
+          value={enteredName}
+          isInvalid={nameIsValid}
+          placeholder='Enter value'
+          onSubmitEditing={() => inputRef2.current?.focus()}
+          blurOnSubmit={false}
+          returnKeyType='next'
+        />}
+
+        {isDropdown &&   <DropdownComponent
+            isInvalid ={frequencyIsInValid}
+            label={item.form_title}
+            data={mySelectValue}
+            value={enteredFrequency}
+            onUpdateValue={updateInputValueHandler.bind(this, item.input_title)}
+            ref={inputRef7}
+          />}
+
+          {isRadio && <View style={styles.container}>
+      <RadioButton.Group onValueChange={(newValue) => setChecked(newValue)} value={checked}>
+        <RadioButton.Item label="Option 1" value="option1" />
+        <RadioButton.Item label="Option 2" value="option2" />
+        <RadioButton.Item label="Option 3" value="option3" />
+      </RadioButton.Group>
+    </View>}
+
+      </>
+    );
   }
 
   function takeLocationHandler(pickedlocation) {
-    console.log("Picked location is", pickedlocation)
+    console.log("Picked location is", pickedlocation);
     setLocation(pickedlocation);
   }
 
@@ -142,9 +213,7 @@ const FormContainerTwo = ({
 
   useEffect(() => {
     setEnteredAge("");
-    setEnteredFeedback(""),
-    setEnteredFrequency(""),
-    setEnteredName("");
+    setEnteredFeedback(""), setEnteredFrequency(""), setEnteredName("");
     setEnteredPhone("");
     setEnteredPricing("");
     setEnteredPurchase("");
@@ -153,117 +222,40 @@ const FormContainerTwo = ({
   }, [resetForm]);
 
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior='padding'
-      keyboardVerticalOffset={100}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <ScrollView
-          contentContainerStyle={styles.container}
-          keyboardShouldPersistTaps='handled'>
-          <InputTwo
-            label='Name'
-            onUpdateValue={updateInputValueHandler.bind(this, "name")}
-            value={enteredName}
-            isInvalid={nameIsValid}
-            placeholder='Enter name'
-            onSubmitEditing={() => inputRef2.current?.focus()}
-            blurOnSubmit={false}
-            returnKeyType='next'
-          />
+    <>
+      <View style={styles.screen}>
+        <FlatList
+          // scrollEnabled={}
+          data={inputs}
+          keyExtractor={(item) => item.field_id}
+          renderItem={handleInputsForms}
+          contentContainerStyle={styles.flatListContainer}
+          ListFooterComponent={() => (
+            <View style={styles.submitContainer}>
+              {isSubmiting ? (
+                <ActivityIndicator
+                  animating={true}
+                  color={MD2Colors.lightBlueA700}
+                  size='small'
+                />
+              ) : (
+                <FlatButton isSubmiting={isSubmiting} onPress={submitHandler}>
+                  SUBMIT
+                </FlatButton>
+              )}
+            </View>
+          )}
+        />
+      </View>
 
-          <InputTwo
-            label='Phone Number'
-            ref={inputRef2}
-            onUpdateValue={updateInputValueHandler.bind(this, "phone")}
-            value={enteredPhone}
-            isInvalid={phoneIsInvalid}
-            placeholder='Enter phone number'
-            keyboardType='numeric'
-          />
-
-          <DropdownComponent
-            isInvalid={ageIsInvalid}
-            label='Age'
-            data={data.ageData}
-            value={enteredAge}
-            onUpdateValue={updateInputValueHandler.bind(this, "age")}
-            ref={inputRef3}
-          />
-
-          {/* soda */}
-
-          {/* frequency */}
-          <DropdownComponent
-            isInvalid ={frequencyIsInValid}
-            label='Frequency'
-            data={data.frequency}
-            value={enteredFrequency}
-            onUpdateValue={updateInputValueHandler.bind(this, "frequency")}
-            ref={inputRef7}
-          />
-
-          <InputTwo
-            isInvalid={purchaseIsInValid}
-            label='Point of purchase'
-            onUpdateValue={updateInputValueHandler.bind(this, "purchase")}
-            value={enteredPurchase}
-            placeholder='Enter point of purchase'
-            ref={inputRef8}
-            onSubmitEditing={() => inputRef9.current?.focus()}
-            blurOnSubmit={false}
-            returnKeyType='next'
-          />
-
-          <InputTwo
-            isInvalid={variantIsInValid}
-            label='Variant'
-            onUpdateValue={updateInputValueHandler.bind(this, "variant")}
-            value={enteredVariant}
-            placeholder='Enter variant'
-            ref={inputRef9}
-          />
-
-          {/* SKU */}
-          <DropdownComponent
-            isInvalid={skuIsInValid}
-            label='SKU'
-            data={data.sku}
-            value={enteredSku}
-            onUpdateValue={updateInputValueHandler.bind(this, "sku")}
-            ref={inputRef10}
-          />
-
-          <InputTwo
-            isInvalid={pricingIsInValid}
-            label='Pricing'
-            onUpdateValue={updateInputValueHandler.bind(this, "pricing")}
-            value={enteredPricing}
-            placeholder='Enter pricing'
-            ref={inputRef11}
-            onSubmitEditing={() => inputRef12.current?.focus()}
-            blurOnSubmit={false}
-            returnKeyType='next'
-          />
-
-          <InputTwo
-            isInvalid={feedbackIsInvalid}
-            label='Feedback'
-            onUpdateValue={updateInputValueHandler.bind(this, "feedback")}
-            value={enteredFeedback}
-            placeholder='Enter feedback'
-            ref={inputRef12}
-            returnKeyType='done'
-          />
-
-          {/* location functionality */}
-          <LocationPicker
+      {/* location component */}
+      {/* <LocationPicker
             onLocationHandler={takeLocationHandler}
             resetForm={resetForm}
-          />
+          /> */}
 
-          {/* button content */}
-          <View style={styles.submitContainer}>
+      {/* button content */}
+      {/* <View style={styles.submitContainer}>
             {isSubmiting ? (
               <ActivityIndicator
                 animating={true}
@@ -275,16 +267,17 @@ const FormContainerTwo = ({
                 SUBMIT
               </FlatButton>
             )}
-          </View>
-        </ScrollView>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+          </View> */}
+    </>
   );
 };
 
 export default FormContainerTwo;
 
 const styles = StyleSheet.create({
+  screen: {
+    flex: 1,
+  },
   container: {
     paddingBottom: 0,
     paddingTop: 20,
@@ -294,5 +287,9 @@ const styles = StyleSheet.create({
   submitContainer: {
     marginTop: 20,
     marginBottom: 0,
+  },
+
+  flatListContainer: {
+    paddingTop: 20,
   },
 });

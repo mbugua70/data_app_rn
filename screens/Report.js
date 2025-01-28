@@ -3,8 +3,11 @@ import { View, Text } from 'react-native'
 import React from 'react'
 import AuthContentTwo from '../components/AuthContentTwo'
 
-const Report = () => {
+const Report = ({route}) => {
 
+    const {formID} = route.params
+
+    console.log("form id debugging",formID)
 
     async function submitHandler({name, phone, region}){
         try{
@@ -36,7 +39,7 @@ const Report = () => {
       }
   return (
      <>
-       <AuthContentTwo onAuthenticate={submitHandler}/>
+       <AuthContentTwo onAuthenticate={submitHandler} formID={formID}/>
      </>
   )
 }
