@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "cocacola",
-    "slug": "cocacola",
+    "name": "data_app",
+    "slug": "data_app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -25,7 +25,7 @@
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION"
       ],
-      "package": "com.mbugua_code.cocacola"
+      "package": "com.mbugua_code.data_app"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -48,7 +48,7 @@
     ],
     "extra": {
       "eas": {
-        "projectId": "a44c0b8c-9513-490d-bfc8-30a6e7198f7d"
+        "projectId": "19b83c21-64f9-4ac1-85e4-6c16387a927c"
       }
     }
   }

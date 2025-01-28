@@ -54,7 +54,7 @@ import BadgeUI from "./Badge";
       height: "100%",
     },
     pressedButton: {
-      opacity: 0.75,
+      opacity: Platform.OS === "android" ? 1 : 0.75,
     },
 
     innerGridContainer: {
