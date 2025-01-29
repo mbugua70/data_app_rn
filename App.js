@@ -7,6 +7,8 @@ import { StatusBar } from "expo-status-bar";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NotifierWrapper } from 'react-native-notifier';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { NavigationContainer } from "@react-navigation/native";
 import { GlobalStyles } from "./Constants/Globalcolors";
 import { AuthContextProvider } from "./store/store";
@@ -206,7 +208,16 @@ function TokenHolder() {
   }
 
 
-  return <Navigation />;
+  return (
+    <>
+    <GestureHandlerRootView>
+    <NotifierWrapper>
+    <Navigation />
+    </NotifierWrapper>
+    </GestureHandlerRootView>
+
+    </>
+  );
 }
 
 export default function App() {

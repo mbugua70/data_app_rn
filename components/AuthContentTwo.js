@@ -27,54 +27,6 @@ function AuthContentTwo({ isLogin, onAuthenticate, formID }) {
 
   async function submitHandler(credentials) {
 
-
-    // phone = phone.trim();
-    // name = name.trim();
-    // age = age.trim();
-    // frequency = frequency.trim();
-    // variant = variant.trim();
-    // sku = sku.trim();
-    // feedback = feedback.trim();
-    // purchase = purchase.trim();
-
-    // const nameIsValid = name.length > 2;
-    // const phoneText = phone.replace(/\s+/g, '');
-    // const phoneRegex = /^[0-9]{7,15}$/;
-    // const phoneIsValid = phoneRegex.test(phoneText);
-    // const ageIsValid = age.length > 1;
-    // const frequencyIsValid = frequency.length > 1;
-    // const variantIsValid = variant.length > 1;
-    // const skuIsValid = sku.length > 1;
-    // const feedbackIsvalid = feedback.length > 1;
-    // const pricingIsValid = pricing.length > 1;
-    // const purchaseIsValid = purchase.length > 1;
-
-    // if (
-    //   !ageIsValid ||
-    //   !nameIsValid ||
-    //   !phoneIsValid ||
-    //   !frequencyIsValid ||
-    //   !variantIsValid ||
-    //   !skuIsValid ||
-    //   !feedbackIsvalid ||
-    //   !pricingIsValid ||
-    //   !purchaseIsValid
-    // ) {
-      // Alert.alert("Invalid input", "Please check your input values.");
-      // setCredentialsInvalid({
-      //   name: !nameIsValid,
-      //   age: !ageIsValid,
-      //   phone: !phoneIsValid,
-      //   frequency: !frequencyIsValid,
-      //   variant: !variantIsValid,
-      //   sku: !skuIsValid,
-      //   pricing: !pricingIsValid,
-      //   feedback: !feedbackIsvalid,
-      //   purchase: !purchaseIsValid
-      // });
-      // return;
-    // }
-
       if (isOffline) {
               Toast.show({
                 type: 'error',
@@ -93,20 +45,6 @@ function AuthContentTwo({ isLogin, onAuthenticate, formID }) {
 
     try {
       // Submit the form data
-
-
-      // setCredentialsInvalid({
-      //   name: !nameIsValid,
-      //   age: !ageIsValid,
-      //   phone: !phoneIsValid,
-      //   frequency: !frequencyIsValid,
-      //   variant: !variantIsValid,
-      //   sku: !skuIsValid,
-      //   pricing: !pricingIsValid,
-      //   feedback: !feedbackIsvalid,
-      //   purchase: !purchaseIsValid
-      // });
-
 
       setIsSubmitting(true);
       // const response = await SummaryForm(

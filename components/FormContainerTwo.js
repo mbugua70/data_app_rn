@@ -11,6 +11,7 @@ import {
 import { ActivityIndicator, MD2Colors } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState, useRef, useContext } from "react";
+import { Notifier, NotifierComponents } from 'react-native-notifier';
 
 import InputTwo from "./InputTwo";
 import FlatButton from "../UI/FlatButton";
@@ -156,8 +157,17 @@ const FormContainerTwo = ({
       const value = formState[item.field_id];
 
       if (!value || (Array.isArray(value) && value.length === 0)) {
+
         errors[item.field_id] = `${item.input_title} is required`;
         isValid = false;
+        Notifier.showNotification({
+          title: 'Invalid inputs',
+          description: 'Please fill in all the required inputs',
+          Component: NotifierComponents.Alert,
+          componentProps: {
+            alertType: 'error',
+          },
+        });
       }
     });
 
@@ -171,6 +181,8 @@ const FormContainerTwo = ({
     onSubmit(formState)
    }
   }
+
+
 
   useEffect(() => {
 
