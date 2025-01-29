@@ -22,6 +22,11 @@ export function AuthContextProvider({children}){
 
     function logout(){
         AsyncStorage.removeItem("token");
+        AsyncStorage.removeItem("formNumbers")
+        AsyncStorage.removeItem("projectsData")
+        AsyncStorage.removeItem("formsData")
+        AsyncStorage.removeItem("formInputData")
+        AsyncStorage.removeItem("formsSelectData")
         setAuthToken(null);
     }
 
