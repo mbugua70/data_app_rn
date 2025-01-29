@@ -44,23 +44,30 @@ export default InputTwo;
 
 const styles = StyleSheet.create({
   inputContainer: {
-    marginVertical: 8,
+    marginVertical: 4,
+    paddingHorizontal: 4,
   },
   label: {
-    color: "black",
+    color: GlobalStyles.colors.gray800,
     marginBottom: 4,
+    marginTop: 6,
+    fontSize: 14,
   },
   labelInvalid: {
     color: GlobalStyles.colors.error500,
   },
   input: {
-    paddingVertical: 8,
+    elevation: 4,
+    shadowColor: 'black',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0,
+    shadowRadius: 2,
+    paddingVertical: 12,
     paddingHorizontal: 6,
-    backgroundColor: GlobalStyles.colors.primary50,
-    borderRadius: 4,
+    backgroundColor: "#fff",
+    borderRadius: 8,
     fontSize: 16,
-    borderColor: GlobalStyles.colors.gray700,
-    borderWidth: 1,
+    marginTop: 4,
   },
   inputInvalid: {
     backgroundColor: GlobalStyles.colors.error50,

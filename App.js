@@ -106,6 +106,9 @@ function AuthReportStack (){
             name="Report"
             component={Report}
             options={{
+              contentStyle: {
+                backgroundColor: "#f2f2f2"
+              },
               headerTintColor: "#fff",
               headerStyle: {
                 backgroundColor: "#000000"
