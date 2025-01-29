@@ -12,13 +12,14 @@ import { ActivityIndicator, MD2Colors } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState, useRef, useContext } from "react";
 
-
 import InputTwo from "./InputTwo";
 import FlatButton from "../UI/FlatButton";
 import DropdownComponent from "./Dropdown";
 import LocationPicker from "./LocationPicker";
 import { ProjectContext } from "../store/projectContext";
 import RadioComponent from "./RadioComponent";
+import Checkbox from "./Checkbox";
+import CheckboxComponent from "./Checkbox";
 
 const data = {
   ageData: [
@@ -53,20 +54,12 @@ const FormContainerTwo = ({
   resetForm,
   formID,
 }) => {
-  const [checked, setChecked] = React.useState('first');
-  const [enteredName, setEnteredName] = useState("");
-  const [enteredPhone, setEnteredPhone] = useState("");
-  const [enteredPurchase, setEnteredPurchase] = useState("");
-  const [enteredVariant, setEnteredVariant] = useState("");
-  const [enteredPricing, setEnteredPricing] = useState("");
-  const [enteredFeedback, setEnteredFeedback] = useState("");
-  const [enteredAge, setEnteredAge] = useState("");
-  const [enteredFrequency, setEnteredFrequency] = useState("");
-  const [enteredSku, setEnteredSku] = useState("");
+
+  const [formState, setFormState] = useState({});
   const [location, setLocation] = useState("");
-  const { formInputData, formsSelectData} = useContext(ProjectContext);
+  const { formInputData, formsSelectData } = useContext(ProjectContext);
   const [inputs, setInputs] = useState("");
-  const [mySelectValue, setMySelectValue] = useState({})
+  const [mySelectValue, setMySelectValue] = useState({});
 
   // userRefs for input fields to be used in the form
   const inputRef1 = useRef(null);
@@ -102,98 +95,91 @@ const FormContainerTwo = ({
     });
   }, []);
 
-
   useEffect(() => {
     formInputData.forEach((input) => {
       // console.log("logging formInputData ", input.inputs)
       if (formID === input.form_id) {
-       const dataValue =  input.inputs.flatMap((selects) =>  selects.field_input_options.map((item) => ({
-        label: item["0"],
-        value: item.option_text,
-       })))
+        const dataValue = input.inputs.flatMap((selects) =>
+          selects.field_input_options.map((item) => ({
+            label: item["0"],
+            value: item.option_text,
+          }))
+        );
 
-        setMySelectValue(dataValue)
+        setMySelectValue(dataValue);
       }
-
     });
-
-  },[])
-
-
-
+  }, []);
 
   function handleInputsForms({ item, index }) {
     const isInput = item.field_type === "input";
     const isCheckbox = item.field_type === "checkbox";
     const isDropdown = item.field_type === "dropdown";
-    const isRadio = item.field_type === "radio"
+    const isRadio = item.field_type === "radio";
 
     const dataView = item.field_input_options.map((item) => ({
       label: item["0"],
       value: item.option_text,
-    }))
-    function updateInputValueHandler(inputType, enteredValue) {
-      switch (inputType) {
-        case "name":
-          setEnteredName(enteredValue);
-          break;
-        case "phone":
-          setEnteredPhone(enteredValue);
-          break;
-        case "purchase":
-          setEnteredPurchase(enteredValue);
-          break;
-        case "variant":
-          setEnteredVariant(enteredValue);
-          break;
-        case "pricing":
-          setEnteredPricing(enteredValue);
-          break;
-        case "feedback":
-          setEnteredFeedback(enteredValue);
-          break;
-        case "age":
-          setEnteredAge(enteredValue);
-          break;
-        case "frequency":
-          setEnteredFrequency(enteredValue);
-          break;
-        case "sku":
-          setEnteredSku(enteredValue);
-          break;
-      }
+    }));
+
+
+    function updateInputValueHandler(field_id, enteredValue) {
+      setFormState((prevState) => ({
+        ...prevState,
+        [field_id]: enteredValue, // Update only the specific field
+      }));
     }
 
     return (
       <>
-      {isInput &&  <InputTwo
-          label={item.input_title}
-          onUpdateValue={updateInputValueHandler.bind(this, item.input_title)}
-          value={enteredName}
-          isInvalid={nameIsValid}
-          placeholder='Enter value'
-          onSubmitEditing={() => inputRef2.current?.focus()}
-          blurOnSubmit={false}
-          returnKeyType='next'
-        />}
+        {isInput && (
+          <InputTwo
+            label={item.input_title}
+            onUpdateValue={(value) => updateInputValueHandler(item.field_id, value)}
+            value={formState[item.field_id]}
+            isInvalid={nameIsValid}
+            placeholder='Enter value'
+            onSubmitEditing={() => inputRef2.current?.focus()}
+            blurOnSubmit={false}
+            returnKeyType='next'
+          />
+        )}
 
-        {isDropdown &&   <DropdownComponent
-            isInvalid ={frequencyIsInValid}
+        {isDropdown && (
+          <DropdownComponent
+            isInvalid={frequencyIsInValid}
             label={item.input_title}
             data={dataView}
-            value={enteredFrequency}
-            onUpdateValue={updateInputValueHandler.bind(this, item.input_title)}
+            value={formState[item.field_id]}
+            onUpdateValue={(value) => updateInputValueHandler(item.field_id, value)}
             ref={inputRef7}
-          />}
+          />
+        )}
 
-          {isRadio && <RadioComponent isInvalid title={item.input_title}  data={dataView}  valueEntered={checked}  onUpdateValue={updateInputValueHandler.bind(this, item.input_title)}  />}
+        {isRadio && (
+          <RadioComponent
+            isInvalid
+            title={item.input_title}
+            data={dataView}
+            valueEntered={formState[item.field_id]}
+            onUpdateValue={(value) => updateInputValueHandler(item.field_id, value)}
+            />
+        )}
 
+        {isCheckbox && (
+          <CheckboxComponent
+           isInvalid
+           title = {item.input_title}
+           data={dataView}
+           valueEntered={formState[item.field_id]}
+           onUpdateValue={(value) => updateInputValueHandler(item.field_id, value)}
+          />
+        )}
       </>
     );
   }
 
   function takeLocationHandler(pickedlocation) {
-
     setLocation(pickedlocation);
   }
 
@@ -214,13 +200,7 @@ const FormContainerTwo = ({
   }
 
   useEffect(() => {
-    setEnteredAge("");
-    setEnteredFeedback(""), setEnteredFrequency(""), setEnteredName("");
-    setEnteredPhone("");
-    setEnteredPricing("");
-    setEnteredPurchase("");
-    setEnteredSku("");
-    setEnteredVariant("");
+
   }, [resetForm]);
 
   return (

@@ -1,42 +1,50 @@
 import { View, Text, FlatList, StyleSheet } from "react-native";
-import { RadioButton } from 'react-native-paper';
+import { RadioButton } from "react-native-paper";
 import React, { useEffect, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 
-const RadioComponent = ({ valueEntered, title, data , onUpdateValue}) => {
-  const [checked, setChecked] = useState("");
-  const [radio, Radio] = useState("");
-
+const RadioComponent = ({  title, data, onUpdateValue }) => {
+  const [selectedValue, setSelectedValue] = useState("");
 
   function handleRadioButton({ item, index }) {
     return (
       <>
-      <RadioButton.Group
-        onValueChange={() => onUpdateValue(item.value)}>
-        <RadioButton.Item label={item.label} value={valueEntered} />
+        <RadioButton.Group
+          onValueChange={(newValue) => {
+            setSelectedValue(newValue);
+            onUpdateValue(newValue);
+          }}>
+          <RadioButton.Item
+            label={item.label}
+            value={item.value}
+            status={selectedValue === item.value ? "checked" : "unchecked"}
+          />
         </RadioButton.Group>
       </>
     );
   }
   return (
-    <View style={styles.container}>
-      <Text>{title}</Text>
-
+    <>
+      <Text style={styles.radioText}>{title}</Text>
+      <View style={styles.container}>
         <FlatList
           data={data}
           keyExtractor={(item) => item.label}
           renderItem={handleRadioButton}
           contentContainerStyle={styles.flatListContainer}
         />
-
-    </View>
+      </View>
+    </>
   );
 };
 
 export default RadioComponent;
 
 const styles = StyleSheet.create({
-   container: {
+  container: {
     margin: 20,
-   }
-})
+  },
+  radioText: {
+    marginTop: 10,
+  }
+});
