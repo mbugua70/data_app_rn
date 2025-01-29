@@ -59,12 +59,17 @@ const styles = StyleSheet.create({
   },
 
   dropdown: {
-    paddingVertical: 8,
+    elevation: 4,
+    shadowColor: 'black',
+    shadowOffset: {width: 0, height: 1},
+    shadowOpacity: 0,
+    shadowRadius: 2,
+    paddingVertical: 12,
     paddingHorizontal: 6,
-    backgroundColor: GlobalStyles.colors.primary50,
-    borderRadius: 4,
+    backgroundColor: "#fff",
+    borderRadius: 8,
     fontSize: 16,
-    borderWidth: 1,
+    marginTop: 4,
   },
   icon: {
     marginRight: 5,
