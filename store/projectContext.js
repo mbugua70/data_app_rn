@@ -1,4 +1,5 @@
-import { createContext, useReducer, useState } from "react";
+import { createContext, useReducer, useState, useEffect } from "react";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export const ProjectContext = createContext({
@@ -90,13 +91,37 @@ function ProjectContextProvider({ children }) {
   const [formInputsState, dispatchFormInputs] = useReducer(formInputsReducer, [])
   const [formSelectsState, dispatchFormSelect] = useReducer(formSelectsReducer, [])
 
+  useEffect(() => {
+    async function loadStoredData() {
+      try {
+        const projects = await AsyncStorage.getItem("projectsData");
+        const forms = await AsyncStorage.getItem("formsData");
+        const formNumbers = await AsyncStorage.getItem("formNumbers");
+        const formInputs = await AsyncStorage.getItem("formInputData");
+        const formSelects = await AsyncStorage.getItem("formsSelectData");
+
+        if (projects) dispatch({ type: "ADD", payload: JSON.parse(projects) });
+        if (forms) dispatchForm({ type: "ADDFORM", payload: JSON.parse(forms) });
+        if (formNumbers) dispatchFormNumber({ type: "SETFORMNUMBERS", payload: JSON.parse(formNumbers) });
+        if (formInputs) dispatchFormInputs({ type: "ADDINPUTFORMS", payload: JSON.parse(formInputs) });
+        if (formSelects) dispatchFormSelect({ type: "ADDSELECT", payload: JSON.parse(formSelects) });
+      } catch (error) {
+        console.error("Error loading data:", error);
+      }
+    }
+
+    loadStoredData();
+  }, []);
+
 
   function addProjects(data) {
     dispatch({ type: "ADD", payload: data });
+    AsyncStorage.setItem("projectsData", JSON.stringify(data))
   }
 
   function addForms(data){
    dispatchForm({type: "ADDFORM", payload: data})
+   AsyncStorage.setItem("formsData", JSON.stringify(data))
   }
 
   function deleteProject(id) {
@@ -114,15 +139,18 @@ function ProjectContextProvider({ children }) {
 
   function setFormNumber(data){
    dispatchFormNumber({type: "SETFORMNUMBERS", payload: data})
+   AsyncStorage.setItem("formNumbers", JSON.stringify(data))
   }
 
   function addFormInputs (data){
    dispatchFormInputs({type: "ADDINPUTFORMS", payload: data})
+   AsyncStorage.setItem("formInputData", JSON.stringify(data))
   }
 
 
   function addFormSelects (data){
     dispatchFormSelect({type: "ADDSELECT", payload: data})
+    AsyncStorage.setItem("formsSelectData", JSON.stringify(data))
   }
 
   const value = {
