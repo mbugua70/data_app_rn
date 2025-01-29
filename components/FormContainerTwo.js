@@ -21,30 +21,7 @@ import RadioComponent from "./RadioComponent";
 import Checkbox from "./Checkbox";
 import CheckboxComponent from "./Checkbox";
 
-const data = {
-  ageData: [
-    { label: "18-24 years", value: "18-24" },
-    { label: "25-34 years", value: "25-34" },
-    { label: "35-44 years", value: "35-44" },
-    { label: "45-54 years", value: "45-54" },
-    { label: "55-64 years", value: "55-64" },
-    { label: "65+ years", value: "65+" },
-  ],
-  sodaData: [
-    { label: "Yes", value: "Yes" },
-    { label: "No", value: "No" },
-  ],
-  frequency: [
-    { label: "Weekly", value: "Weekly" },
-    { label: "Daily", value: "Daily" },
-    { label: "Yearly", value: "Yearly" },
-  ],
-  sku: [
-    { label: "300ml", value: "300ml" },
-    { label: "500ml", value: "500ml" },
-    { label: "1L", value: "1L" },
-  ],
-};
+
 
 const FormContainerTwo = ({
   isLogin,
@@ -59,7 +36,7 @@ const FormContainerTwo = ({
   const [location, setLocation] = useState("");
   const { formInputData, formsSelectData } = useContext(ProjectContext);
   const [inputs, setInputs] = useState("");
-  const [mySelectValue, setMySelectValue] = useState({});
+
 
   // userRefs for input fields to be used in the form
   const inputRef1 = useRef(null);
@@ -95,21 +72,7 @@ const FormContainerTwo = ({
     });
   }, []);
 
-  useEffect(() => {
-    formInputData.forEach((input) => {
-      // console.log("logging formInputData ", input.inputs)
-      if (formID === input.form_id) {
-        const dataValue = input.inputs.flatMap((selects) =>
-          selects.field_input_options.map((item) => ({
-            label: item["0"],
-            value: item.option_text,
-          }))
-        );
 
-        setMySelectValue(dataValue);
-      }
-    });
-  }, []);
 
   function handleInputsForms({ item, index }) {
     const isInput = item.field_type === "input";
@@ -184,19 +147,7 @@ const FormContainerTwo = ({
   }
 
   function submitHandler() {
-    onSubmit({
-      name: enteredName,
-      phone: enteredPhone,
-      age: enteredAge,
-      frequency: enteredFrequency,
-      purchase: enteredPurchase,
-      variant: enteredVariant,
-      sku: enteredSku,
-      pricing: enteredPricing,
-      feedback: enteredFeedback,
-      lat: location.lat,
-      long: location.long,
-    });
+    console.log(formState)
   }
 
   useEffect(() => {

@@ -1,44 +1,45 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { Checkbox } from 'react-native-paper';
-import React, {useState} from 'react'
+import React, { useState } from 'react';
 
-const CheckboxComponent = ({title, data, onUpdateValue}) => {
+const CheckboxComponent = ({ title, data, onUpdateValue }) => {
+  const [selectedValues, setSelectedValues] = useState({}); // Store checked state per item
 
-    const [selectedValue, setSelectedValue] = useState("");
+  function toggleCheckbox(item) {
+    const newValues = {
+      ...selectedValues,
+      [item.label]: !selectedValues[item.label], // Toggle checked status
+    };
+    setSelectedValues(newValues);
+    onUpdateValue(newValues); // Pass selected values to parent
+  }
 
-    function handleCheckboxButton({ item, index }) {
-      return (
-        <>
-          <Checkbox.Group
-            onValueChange={(newValue) => {
-              setSelectedValue(newValue);
-              onUpdateValue(newValue);
-            }}>
-            <Checkbox.Item
-              label={item.label}
-              value={item.value}
-            //   status={selectedValue === item.value ? "checked" : "unchecked"}
-            />
-          </Checkbox.Group>
-        </>
-      );
-    }
+  function renderCheckbox({ item }) {
     return (
-      <>
-        <Text style={styles.radioText}>{title}</Text>
-        <View style={styles.container}>
-          <FlatList
-            data={data}
-            keyExtractor={(item) => item.label}
-            renderItem={handleCheckboxButton}
-            contentContainerStyle={styles.flatListContainer}
-          />
-        </View>
-      </>
+      <Checkbox.Item
+        label={item.label}
+        status={selectedValues[item.label] ? 'checked' : 'unchecked'}
+        onPress={() => toggleCheckbox(item)}
+      />
     );
-}
+  }
 
-export default CheckboxComponent
+  return (
+    <>
+      <Text style={styles.radioText}>{title}</Text>
+      <View style={styles.container}>
+        <FlatList
+          data={data}
+          keyExtractor={(item) => item.label}
+          renderItem={renderCheckbox}
+          contentContainerStyle={styles.flatListContainer}
+        />
+      </View>
+    </>
+  );
+};
+
+export default CheckboxComponent;
 
 const styles = StyleSheet.create({
   container: {
@@ -46,5 +47,7 @@ const styles = StyleSheet.create({
   },
   radioText: {
     marginTop: 10,
-  }
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 });
