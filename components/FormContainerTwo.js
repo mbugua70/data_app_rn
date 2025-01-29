@@ -36,6 +36,7 @@ const FormContainerTwo = ({
   const [location, setLocation] = useState("");
   const { formInputData, formsSelectData } = useContext(ProjectContext);
   const [inputs, setInputs] = useState("");
+  const [errors, setErrors] = useState({})
 
 
   // userRefs for input fields to be used in the form
@@ -52,17 +53,17 @@ const FormContainerTwo = ({
   const inputRef11 = useRef(null);
   const inputRef12 = useRef(null);
 
-  const {
-    name: nameIsValid,
-    phone: phoneIsInvalid,
-    age: ageIsInvalid,
-    frequency: frequencyIsInValid,
-    variant: variantIsInValid,
-    sku: skuIsInValid,
-    pricing: pricingIsInValid,
-    feedback: feedbackIsInvalid,
-    purchase: purchaseIsInValid,
-  } = credentialsInvalid;
+  // const {
+  //   name: nameIsValid,
+  //   phone: phoneIsInvalid,
+  //   age: ageIsInvalid,
+  //   frequency: frequencyIsInValid,
+  //   variant: variantIsInValid,
+  //   sku: skuIsInValid,
+  //   pricing: pricingIsInValid,
+  //   feedback: feedbackIsInvalid,
+  //   purchase: purchaseIsInValid,
+  // } = credentialsInvalid;
 
   useEffect(() => {
     formInputData.forEach((input) => {
@@ -100,7 +101,7 @@ const FormContainerTwo = ({
             label={item.input_title}
             onUpdateValue={(value) => updateInputValueHandler(item.field_id, value)}
             value={formState[item.field_id]}
-            isInvalid={nameIsValid}
+            isInvalid={errors[item.field_id]}
             placeholder='Enter value'
             onSubmitEditing={() => inputRef2.current?.focus()}
             blurOnSubmit={false}
@@ -110,7 +111,7 @@ const FormContainerTwo = ({
 
         {isDropdown && (
           <DropdownComponent
-            isInvalid={frequencyIsInValid}
+            isInvalid={errors[item.field_id]}
             label={item.input_title}
             data={dataView}
             value={formState[item.field_id]}
@@ -121,7 +122,7 @@ const FormContainerTwo = ({
 
         {isRadio && (
           <RadioComponent
-            isInvalid
+            isInvalid={errors[item.field_id]}
             title={item.input_title}
             data={dataView}
             valueEntered={formState[item.field_id]}
@@ -131,7 +132,7 @@ const FormContainerTwo = ({
 
         {isCheckbox && (
           <CheckboxComponent
-           isInvalid
+           isInvalid={errors[item.field_id]}
            title = {item.input_title}
            data={dataView}
            valueEntered={formState[item.field_id]}
@@ -146,8 +147,29 @@ const FormContainerTwo = ({
     setLocation(pickedlocation);
   }
 
+
+  function validateForm() {
+    let errors = {};
+    let isValid = true;
+
+    inputs.forEach((item) => {
+      const value = formState[item.field_id];
+
+      if (!value || (Array.isArray(value) && value.length === 0)) {
+        errors[item.field_id] = `${item.input_title} is required`;
+        isValid = false;
+      }
+    });
+
+    setErrors(errors); // Store errors to display feedback
+    return isValid;
+  }
+
   function submitHandler() {
-    console.log(formState)
+    console.log(errors)
+   if(validateForm()){
+    onSubmit(formState)
+   }
   }
 
   useEffect(() => {
@@ -187,20 +209,8 @@ const FormContainerTwo = ({
             resetForm={resetForm}
           /> */}
 
-      {/* button content */}
-      {/* <View style={styles.submitContainer}>
-            {isSubmiting ? (
-              <ActivityIndicator
-                animating={true}
-                color={MD2Colors.lightBlueA700}
-                size='small'
-              />
-            ) : (
-              <FlatButton isSubmiting={isSubmiting} onPress={submitHandler}>
-                SUBMIT
-              </FlatButton>
-            )}
-          </View> */}
+
+
     </>
   );
 };

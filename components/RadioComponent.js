@@ -15,6 +15,7 @@ const RadioComponent = ({  title, data, onUpdateValue }) => {
             onUpdateValue(newValue);
           }}>
           <RadioButton.Item
+            position="leading"
             label={item.label}
             value={item.value}
             status={selectedValue === item.value ? "checked" : "unchecked"}

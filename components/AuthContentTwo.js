@@ -14,20 +14,7 @@ function AuthContentTwo({ isLogin, onAuthenticate, formID }) {
   const [resetForm, setResetForm] = useState(false);
   const [isOffline, setIsOffline] = useState(false);
   const [isInternetReachable, setIsInternetReachable] = useState(false);
-  const [credentialsInvalid, setCredentialsInvalid] = useState({
-    name: false,
-    phone: false,
-    age: false,
-    beverage: false,
-    reason: false,
-    frequency: false,
-    purchase: false,
-    variant: false,
-    sku: false,
-    pricing: false,
-    feedback: false,
-    purchase: false,
-  });
+  const [credentialsInvalid, setCredentialsInvalid] = useState({});
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
@@ -39,66 +26,54 @@ function AuthContentTwo({ isLogin, onAuthenticate, formID }) {
   }, []);
 
   async function submitHandler(credentials) {
-    let {
-      name,
-      phone,
-      age,
-      frequency,
-      purchase,
-      variant,
-      sku,
-      pricing,
-      feedback,
-      lat,
-      long,
-    } = credentials;
 
-    phone = phone.trim();
-    name = name.trim();
-    age = age.trim();
-    frequency = frequency.trim();
-    variant = variant.trim();
-    sku = sku.trim();
-    feedback = feedback.trim();
-    purchase = purchase.trim();
 
-    const nameIsValid = name.length > 2;
-    const phoneText = phone.replace(/\s+/g, '');
-    const phoneRegex = /^[0-9]{7,15}$/;
-    const phoneIsValid = phoneRegex.test(phoneText);
-    const ageIsValid = age.length > 1;
-    const frequencyIsValid = frequency.length > 1;
-    const variantIsValid = variant.length > 1;
-    const skuIsValid = sku.length > 1;
-    const feedbackIsvalid = feedback.length > 1;
-    const pricingIsValid = pricing.length > 1;
-    const purchaseIsValid = purchase.length > 1;
+    // phone = phone.trim();
+    // name = name.trim();
+    // age = age.trim();
+    // frequency = frequency.trim();
+    // variant = variant.trim();
+    // sku = sku.trim();
+    // feedback = feedback.trim();
+    // purchase = purchase.trim();
 
-    if (
-      !ageIsValid ||
-      !nameIsValid ||
-      !phoneIsValid ||
-      !frequencyIsValid ||
-      !variantIsValid ||
-      !skuIsValid ||
-      !feedbackIsvalid ||
-      !pricingIsValid ||
-      !purchaseIsValid
-    ) {
-      Alert.alert("Invalid input", "Please check your input values.");
-      setCredentialsInvalid({
-        name: !nameIsValid,
-        age: !ageIsValid,
-        phone: !phoneIsValid,
-        frequency: !frequencyIsValid,
-        variant: !variantIsValid,
-        sku: !skuIsValid,
-        pricing: !pricingIsValid,
-        feedback: !feedbackIsvalid,
-        purchase: !purchaseIsValid
-      });
-      return;
-    }
+    // const nameIsValid = name.length > 2;
+    // const phoneText = phone.replace(/\s+/g, '');
+    // const phoneRegex = /^[0-9]{7,15}$/;
+    // const phoneIsValid = phoneRegex.test(phoneText);
+    // const ageIsValid = age.length > 1;
+    // const frequencyIsValid = frequency.length > 1;
+    // const variantIsValid = variant.length > 1;
+    // const skuIsValid = sku.length > 1;
+    // const feedbackIsvalid = feedback.length > 1;
+    // const pricingIsValid = pricing.length > 1;
+    // const purchaseIsValid = purchase.length > 1;
+
+    // if (
+    //   !ageIsValid ||
+    //   !nameIsValid ||
+    //   !phoneIsValid ||
+    //   !frequencyIsValid ||
+    //   !variantIsValid ||
+    //   !skuIsValid ||
+    //   !feedbackIsvalid ||
+    //   !pricingIsValid ||
+    //   !purchaseIsValid
+    // ) {
+      // Alert.alert("Invalid input", "Please check your input values.");
+      // setCredentialsInvalid({
+      //   name: !nameIsValid,
+      //   age: !ageIsValid,
+      //   phone: !phoneIsValid,
+      //   frequency: !frequencyIsValid,
+      //   variant: !variantIsValid,
+      //   sku: !skuIsValid,
+      //   pricing: !pricingIsValid,
+      //   feedback: !feedbackIsvalid,
+      //   purchase: !purchaseIsValid
+      // });
+      // return;
+    // }
 
       if (isOffline) {
               Toast.show({
@@ -120,33 +95,33 @@ function AuthContentTwo({ isLogin, onAuthenticate, formID }) {
       // Submit the form data
 
 
-      setCredentialsInvalid({
-        name: !nameIsValid,
-        age: !ageIsValid,
-        phone: !phoneIsValid,
-        frequency: !frequencyIsValid,
-        variant: !variantIsValid,
-        sku: !skuIsValid,
-        pricing: !pricingIsValid,
-        feedback: !feedbackIsvalid,
-        purchase: !purchaseIsValid
-      });
+      // setCredentialsInvalid({
+      //   name: !nameIsValid,
+      //   age: !ageIsValid,
+      //   phone: !phoneIsValid,
+      //   frequency: !frequencyIsValid,
+      //   variant: !variantIsValid,
+      //   sku: !skuIsValid,
+      //   pricing: !pricingIsValid,
+      //   feedback: !feedbackIsvalid,
+      //   purchase: !purchaseIsValid
+      // });
 
 
       setIsSubmitting(true);
-      const response = await SummaryForm(
-        name,
-        phone,
-        age,
-        frequency,
-        purchase,
-        variant,
-        sku,
-        pricing,
-        feedback,
-        lat,
-        long
-      );
+      // const response = await SummaryForm(
+      //   name,
+      //   phone,
+      //   age,
+      //   frequency,
+      //   purchase,
+      //   variant,
+      //   sku,
+      //   pricing,
+      //   feedback,
+      //   lat,
+      //   long
+      // );
 
 
       // resetting the validation check
@@ -183,7 +158,7 @@ function AuthContentTwo({ isLogin, onAuthenticate, formID }) {
         isSubmiting={isSubmiting}
         isLogin={isLogin}
         onSubmit={submitHandler}
-        credentialsInvalid={credentialsInvalid}
+        // credentialsInvalid={credentialsInvalid}
       />
     </View>
   );

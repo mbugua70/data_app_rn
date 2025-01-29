@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { Checkbox } from 'react-native-paper';
 import React, { useState } from 'react';
+import { GlobalStyles } from '../Constants/Globalcolors';
 
 const CheckboxComponent = ({ title, data, onUpdateValue }) => {
   const [selectedValues, setSelectedValues] = useState({}); // Store checked state per item
@@ -17,6 +18,8 @@ const CheckboxComponent = ({ title, data, onUpdateValue }) => {
   function renderCheckbox({ item }) {
     return (
       <Checkbox.Item
+        position='leading'
+        uncheckedColor={GlobalStyles.colors.gray800}
         label={item.label}
         status={selectedValues[item.label] ? 'checked' : 'unchecked'}
         onPress={() => toggleCheckbox(item)}
