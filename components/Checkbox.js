@@ -49,8 +49,10 @@ const styles = StyleSheet.create({
     margin: 20,
   },
   radioText: {
-    marginTop: 10,
-    fontSize: 16,
-    fontWeight: 'bold',
+      color: GlobalStyles.colors.gray800,
+      marginBottom: 4,
+      marginTop: 8,
+      fontSize: 14,
+      paddingHorizontal: 8,
   },
 });

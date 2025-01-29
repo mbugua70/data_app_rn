@@ -48,9 +48,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
   },
   label: {
-    color: GlobalStyles.colors.gray800,
+    color: GlobalStyles.colors.gray700,
     marginBottom: 4,
-    marginTop: 6,
+    marginTop: 8,
     fontSize: 14,
   },
   labelInvalid: {
