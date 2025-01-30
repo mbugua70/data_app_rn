@@ -19,6 +19,7 @@ const CheckboxComponent = ({ title, data, onUpdateValue, formNumber}) => {
     return (
       <Checkbox.Item
         position='leading'
+        labelStyle={{fontSize: 14}}
         uncheckedColor={GlobalStyles.colors.gray800}
         label={item.label}
         status={selectedValues[item.label] ? 'checked' : 'unchecked'}
