@@ -11,7 +11,7 @@ import {
 import { ActivityIndicator, MD2Colors } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState, useRef, useContext } from "react";
-import { Notifier, NotifierComponents } from 'react-native-notifier';
+import { Notifier, NotifierComponents } from "react-native-notifier";
 
 import InputTwo from "./InputTwo";
 import FlatButton from "../UI/FlatButton";
@@ -22,8 +22,6 @@ import RadioComponent from "./RadioComponent";
 import Checkbox from "./Checkbox";
 import CheckboxComponent from "./Checkbox";
 
-
-
 const FormContainerTwo = ({
   formTitle,
   isLogin,
@@ -33,13 +31,11 @@ const FormContainerTwo = ({
   resetForm,
   formID,
 }) => {
-
   const [formState, setFormState] = useState({});
   const [location, setLocation] = useState("");
   const { formInputData, formsSelectData } = useContext(ProjectContext);
   const [inputs, setInputs] = useState("");
-  const [errors, setErrors] = useState({})
-
+  const [errors, setErrors] = useState({});
 
   // userRefs for input fields to be used in the form
   const inputRef1 = useRef(null);
@@ -75,8 +71,6 @@ const FormContainerTwo = ({
     });
   }, []);
 
-
-
   function handleInputsForms({ item, index }) {
     const isInput = item.field_type === "input";
     const isCheckbox = item.field_type === "checkbox";
@@ -87,7 +81,6 @@ const FormContainerTwo = ({
       label: item["0"],
       value: item.option_text,
     }));
-
 
     function updateInputValueHandler(field_id, enteredValue) {
       setFormState((prevState) => ({
@@ -100,8 +93,11 @@ const FormContainerTwo = ({
       <>
         {isInput && (
           <InputTwo
+            formNumber={item.input_rank}
             label={item.input_title}
-            onUpdateValue={(value) => updateInputValueHandler(item.field_id, value)}
+            onUpdateValue={(value) =>
+              updateInputValueHandler(item.field_id, value)
+            }
             value={formState[item.field_id]}
             isInvalid={errors[item.field_id]}
             placeholder='Enter value'
@@ -114,31 +110,40 @@ const FormContainerTwo = ({
         {isDropdown && (
           <DropdownComponent
             isInvalid={errors[item.field_id]}
+            formNumber={item.input_rank}
             label={item.input_title}
             data={dataView}
             value={formState[item.field_id]}
-            onUpdateValue={(value) => updateInputValueHandler(item.field_id, value)}
+            onUpdateValue={(value) =>
+              updateInputValueHandler(item.field_id, value)
+            }
             ref={inputRef7}
           />
         )}
 
         {isRadio && (
           <RadioComponent
+            formNumber={item.input_rank}
             isInvalid={errors[item.field_id]}
             title={item.input_title}
             data={dataView}
             valueEntered={formState[item.field_id]}
-            onUpdateValue={(value) => updateInputValueHandler(item.field_id, value)}
-            />
+            onUpdateValue={(value) =>
+              updateInputValueHandler(item.field_id, value)
+            }
+          />
         )}
 
         {isCheckbox && (
           <CheckboxComponent
-           isInvalid={errors[item.field_id]}
-           title = {item.input_title}
-           data={dataView}
-           valueEntered={formState[item.field_id]}
-           onUpdateValue={(value) => updateInputValueHandler(item.field_id, value)}
+            formNumber={item.input_rank}
+            isInvalid={errors[item.field_id]}
+            title={item.input_title}
+            data={dataView}
+            valueEntered={formState[item.field_id]}
+            onUpdateValue={(value) =>
+              updateInputValueHandler(item.field_id, value)
+            }
           />
         )}
       </>
@@ -149,7 +154,6 @@ const FormContainerTwo = ({
     setLocation(pickedlocation);
   }
 
-
   function validateForm() {
     let errors = {};
     let isValid = true;
@@ -158,15 +162,14 @@ const FormContainerTwo = ({
       const value = formState[item.field_id];
 
       if (!value || (Array.isArray(value) && value.length === 0)) {
-
         errors[item.field_id] = `${item.input_title} is required`;
         isValid = false;
         Notifier.showNotification({
-          title: 'Invalid inputs',
-          description: 'Please fill in all the required inputs',
+          title: "Invalid inputs",
+          description: "Please fill in all the required inputs",
           Component: NotifierComponents.Alert,
           componentProps: {
-            alertType: 'error',
+            alertType: "error",
           },
         });
       }
@@ -177,17 +180,13 @@ const FormContainerTwo = ({
   }
 
   function submitHandler() {
-    console.log(errors)
-   if(validateForm()){
-    onSubmit(formState)
-   }
+    console.log(errors);
+    if (validateForm()) {
+      onSubmit(formState);
+    }
   }
 
-
-
-  useEffect(() => {
-
-  }, [resetForm]);
+  useEffect(() => {}, [resetForm]);
 
   return (
     <>
@@ -224,9 +223,6 @@ const FormContainerTwo = ({
             onLocationHandler={takeLocationHandler}
             resetForm={resetForm}
           /> */}
-
-
-
     </>
   );
 };
@@ -239,7 +235,7 @@ const styles = StyleSheet.create({
   },
   formTitle: {
     fontSize: 20,
-    fontWeight: '600',
+    fontWeight: "600",
     marginBottom: 30,
   },
   container: {

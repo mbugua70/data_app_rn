@@ -3,7 +3,7 @@ import { RadioButton } from "react-native-paper";
 import React, { useEffect, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 
-const RadioComponent = ({  title, data, onUpdateValue }) => {
+const RadioComponent = ({  title, data, onUpdateValue, formNumber }) => {
   const [selectedValue, setSelectedValue] = useState("");
 
   function handleRadioButton({ item, index }) {
@@ -26,7 +26,7 @@ const RadioComponent = ({  title, data, onUpdateValue }) => {
   }
   return (
     <>
-      <Text style={styles.radioText}>{title}</Text>
+      <Text style={styles.radioText}>{formNumber}.{ title}</Text>
       <View style={styles.container}>
         <FlatList
           data={data}

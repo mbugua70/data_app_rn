@@ -4,6 +4,7 @@ import { forwardRef } from "react";
 
 const InputTwo = forwardRef((
   {
+    formNumber,
     label,
     keyboardType,
     secure,
@@ -18,8 +19,8 @@ const InputTwo = forwardRef((
 ) => {
   return (
     <View style={styles.inputContainer}>
-      <Text style={[styles.label, isInvalid && styles.labelInvalid]}>
-        {label}
+      <Text style={[styles.label, isInvalid && styles.labelInvalid]}>{formNumber}.
+        { label}
       </Text>
      <TextInput
         style={[styles.input, isInvalid && styles.inputInvalid]}

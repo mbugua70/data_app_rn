@@ -3,7 +3,7 @@ import { Checkbox } from 'react-native-paper';
 import React, { useState } from 'react';
 import { GlobalStyles } from '../Constants/Globalcolors';
 
-const CheckboxComponent = ({ title, data, onUpdateValue }) => {
+const CheckboxComponent = ({ title, data, onUpdateValue, formNumber}) => {
   const [selectedValues, setSelectedValues] = useState({}); // Store checked state per item
 
   function toggleCheckbox(item) {
@@ -29,7 +29,7 @@ const CheckboxComponent = ({ title, data, onUpdateValue }) => {
 
   return (
     <>
-      <Text style={styles.radioText}>{title}</Text>
+      <Text style={styles.radioText}>{formNumber}.{ title}</Text>
       <View style={styles.container}>
         <FlatList
           data={data}

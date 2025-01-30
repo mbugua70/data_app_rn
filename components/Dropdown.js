@@ -5,6 +5,7 @@ import { Dropdown } from "react-native-element-dropdown";
 import { GlobalStyles } from "../Constants/Globalcolors";
 
 const DropdownComponent = forwardRef(({
+  formNumber,
   data,
   label,
   isInvalid,
@@ -18,8 +19,8 @@ const DropdownComponent = forwardRef(({
 
   return (
     <View style={styles.inputContainer}>
-      <Text style={[styles.label, isInvalid && styles.labelInvalid]}>
-        {label}
+      <Text style={[styles.label, isInvalid && styles.labelInvalid]}>{formNumber}.
+        { label}
       </Text>
       <Dropdown
         style={[
