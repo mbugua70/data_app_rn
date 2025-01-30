@@ -1,6 +1,6 @@
 import NetInfo from '@react-native-community/netinfo';
 import { useState, useEffect } from "react";
-import { Alert, StyleSheet, View, Platform } from "react-native";
+import { Alert, StyleSheet, View, Platform, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { SummaryForm } from "../http/api";
 // import { Colors } from '../../constants/styles';
@@ -8,7 +8,7 @@ import { SummaryForm } from "../http/api";
 import Toast from "react-native-toast-message";
 import FormContainerTwo from "./FormContainerTwo";
 
-function AuthContentTwo({ isLogin, onAuthenticate, formID }) {
+function AuthContentTwo({ isLogin, onAuthenticate, formID, formTitle }) {
   const navigation = useNavigation();
   const [isSubmiting, setIsSubmitting] = useState(false);
   const [resetForm, setResetForm] = useState(false);
@@ -91,6 +91,7 @@ function AuthContentTwo({ isLogin, onAuthenticate, formID }) {
   return (
     <View style={styles.authContent}>
       <FormContainerTwo
+        formTitle= {formTitle}
         formID={formID}
         resetForm={resetForm}
         isSubmiting={isSubmiting}

@@ -25,6 +25,7 @@ import CheckboxComponent from "./Checkbox";
 
 
 const FormContainerTwo = ({
+  formTitle,
   isLogin,
   onSubmit,
   credentialsInvalid,
@@ -197,6 +198,9 @@ const FormContainerTwo = ({
           keyExtractor={(item) => item.field_id}
           renderItem={handleInputsForms}
           contentContainerStyle={styles.flatListContainer}
+          ListHeaderComponent={() => (
+            <Text style={styles.formTitle}>{formTitle}</Text>
+          )}
           ListFooterComponent={() => (
             <View style={styles.submitContainer}>
               {isSubmiting ? (
@@ -232,6 +236,11 @@ export default FormContainerTwo;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+  },
+  formTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    marginBottom: 30,
   },
   container: {
     paddingBottom: 0,

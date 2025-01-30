@@ -28,6 +28,7 @@ const FormScreen = ({ navigation, route }) => {
       console.log("working")
       navigation.navigate("Report", {
         formID: item.form_id,
+        formTitle: item.form_title,
       });
     }
 

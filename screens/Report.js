@@ -5,7 +5,7 @@ import AuthContentTwo from '../components/AuthContentTwo'
 
 const Report = ({route}) => {
 
-    const {formID} = route.params
+    const {formID, formTitle} = route.params
 
     console.log("form id debugging",formID)
 
@@ -39,7 +39,8 @@ const Report = ({route}) => {
       }
   return (
      <>
-       <AuthContentTwo onAuthenticate={submitHandler} formID={formID}/>
+
+       <AuthContentTwo onAuthenticate={submitHandler} formID={formID} formTitle={formTitle}/>
      </>
   )
 }
