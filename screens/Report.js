@@ -29,7 +29,11 @@ const Report = ({route}) => {
         }
 
         if(data.response === "success"){
-
+          Toast.show({
+            type: "success",
+            text1: "Success",
+            text2: "Data submitted successfully!",
+          });
         }
 
       },
