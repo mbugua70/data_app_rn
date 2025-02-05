@@ -8,7 +8,7 @@ import React from "react";
 
 const Welcome = () => {
  const navigation = useNavigation();
- const [name, setName] = useState("");
+ const [BaData, setBaData] = useState("");
  const isFocused = useIsFocused();
 
   // fetching user name from storage
@@ -16,7 +16,8 @@ const Welcome = () => {
     async function handleToken() {
       const token = await AsyncStorage.getItem("token");
       if (token) {
-        setName(token);
+
+        setBaData(JSON.parse(token));
       }
     }
 
@@ -31,7 +32,7 @@ const Welcome = () => {
     <View style={styles.screen}>
       {/* i need welcome text  and profile icon*/}
       <View>
-        <Text style={styles.heading}>Hello,{name} {"\u{1F44B}"}</Text>
+        <Text style={styles.heading}>Hello,{BaData.name} {"\u{1F44B}"}</Text>
       </View>
       <IconButton
         containerColor='#fff'

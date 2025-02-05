@@ -69,13 +69,14 @@ const FormContainerTwo = ({
         setInputs(input.inputs);
       }
     });
-  }, []);
+  }, [formInputData, formID]);
 
   function handleInputsForms({ item, index }) {
     const isInput = item.field_type === "input";
     const isCheckbox = item.field_type === "checkbox";
     const isDropdown = item.field_type === "dropdown";
     const isRadio = item.field_type === "radio";
+    const isRecord = item.field_type === "auto";
 
     const dataView = item.field_input_options.map((item) => ({
       label: item["0"],
@@ -83,14 +84,38 @@ const FormContainerTwo = ({
     }));
 
     function updateInputValueHandler(field_id, enteredValue) {
+      // setFormState((prevState) => ({
+      //   ...prevState,
+      //   [field_id]: enteredValue, // Update only the specific field
+      // }));
+
       setFormState((prevState) => ({
         ...prevState,
-        [field_id]: enteredValue, // Update only the specific field
+        [field_id]:
+          typeof enteredValue === "object"
+            ? { ...prevState[field_id], ...enteredValue } // Merge objects properly
+            : enteredValue, // Otherwise, just update
       }));
     }
 
     return (
       <>
+        {isRecord && (
+          <InputTwo
+            formNumber={item.input_rank}
+            label={item.input_title}
+            onUpdateValue={(value) =>
+              updateInputValueHandler(item.field_id, value)
+            }
+            value={formState[item.field_id]}
+            isInvalid={errors[item.field_id]}
+            placeholder='Enter date'
+            onSubmitEditing={() => inputRef2.current?.focus()}
+            blurOnSubmit={false}
+            returnKeyType='next'
+          />
+        )}
+
         {isInput && (
           <InputTwo
             formNumber={item.input_rank}
@@ -180,9 +205,8 @@ const FormContainerTwo = ({
   }
 
   function submitHandler() {
-    console.log(errors);
     if (validateForm()) {
-      onSubmit(formState);
+      onSubmit({...formState, form_id: formID});
     }
   }
 

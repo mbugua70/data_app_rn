@@ -29,7 +29,11 @@ const Login = () => {
           text2: "Incorrect phone number and password",
         });
       } else {
-        authenticate(data.name);
+        const baRecord = {
+          name: data.name,
+          ba_id: data.ba_id
+        }
+        authenticate(JSON.stringify(baRecord));
         const filteredProjects = data.projects.map((project) => ({
           project_id: project.project_id,
           project_title: project.project_title,

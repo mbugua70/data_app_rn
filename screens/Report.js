@@ -1,42 +1,56 @@
 import { useEffect, useState, useContext } from 'react';
+import { useMutation } from "@tanstack/react-query";
+import { SummaryForm } from '../http/api';
 import { View, Text } from 'react-native'
 import React from 'react'
 import AuthContentTwo from '../components/AuthContentTwo'
+import Toast from "react-native-toast-message";
 
 const Report = ({route}) => {
 
     const {formID, formTitle} = route.params
 
-    console.log("form id debugging",formID)
 
-    async function submitHandler({name, phone, region}){
-        try{
-          setIsAuthenticated(true)
+    const { data, mutate, isError, error, isPending } = useMutation({
+      mutationFn: SummaryForm,
+      // the code below will wait the request to finish before moving to another page.
+      onMutate: async (data) => {
+        return data;
+      },
 
-          setIsAuthenticated(false)
-        }catch(error){
-
-          if (error.response) {
-
-            // setError(error.response.data.error.message)
-            setError("Invalid Data, Please check your details");
-
-            // console.log('Status Code:', error.response.status);
-            // console.log('Response Data:', error.response.data);
-            // console.log('Headers:', error.response.headers);
-
-
-          } else if (error.request) {
-            // The request was made, but no response was received
-            setError("Please check your network")
-          } else {
-            // Something happened in setting up the request that triggered an Error
-            console.log('Error Message:', error.message);
-          }
-          setIsAuthenticated(false)
+      onSuccess: (data) => {
+        if (data.response == "fail") {
+          Toast.show({
+            type: "error",
+            text1: "Failed to submit",
+            text2: "Failed to submit the record, please try again!",
+          });
         }
-        setIsAuthenticated(false)
+
+      },
+    });
+
+    async function submitHandler(record){
+        // report submission
+        mutate(record)
       }
+
+
+      useEffect(() => {
+        if (error && !isPending) {
+          Toast.show({
+            type: "error",
+            text1: "Failed to submit",
+            text2: error.message,
+          });
+        } else if (error === "TOO_MANY_ATTEMPTS_TRY-LATER" && !isPending) {
+          Toast.show({
+            type: "error",
+            text1: "Error",
+            text2: "Too many attempts try later",
+          });
+        }
+      }, [error, isPending]);
   return (
      <>
 

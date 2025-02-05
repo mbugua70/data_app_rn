@@ -1,22 +1,19 @@
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { QueryClient } from "@tanstack/react-query";
 
 export const queryClient = new QueryClient();
 
-
-export async function LoginHander({name, password}){
-  if(!name || !password){
-    throw new Error("No username and password provided!")
+export async function LoginHander({ name, password }) {
+  if (!name || !password) {
+    throw new Error("No username and password provided!");
   }
-
 
   const userData = {
     username: name,
-    password: password
-  }
+    password: password,
+  };
 
   const encodedDat = new URLSearchParams(userData).toString();
-
 
   const res = await fetch("https://iguru.co.ke/BAIMS/ep/login.php", {
     method: "POST",
@@ -25,7 +22,6 @@ export async function LoginHander({name, password}){
     },
     body: encodedDat,
   });
-
 
   const data = await res.json();
 
@@ -38,26 +34,12 @@ export async function LoginHander({name, password}){
       status: res.status,
     };
   }
-
 }
 
-export async function SummaryForm(
-  name,
-  phone,
-  age,
-  frequency,
-  purchase,
-  variant,
-  sku,
-  pricing,
-  feedback,
-  lat,
-  long
-) {
-  console.log("API Testing location", lat, long);
-
+export async function SummaryForm(recordData) {
+  console.log("checking api record data", recordData)
   const token = await AsyncStorage.getItem("token");
-  console.log("Token from AsyncStorage:", token);
+
   if (!token) {
     throw new Error("No token found in AsyncStorage.");
   }
@@ -69,40 +51,22 @@ export async function SummaryForm(
     throw new Error("Failed to parse token.");
   }
 
-  const nameEl = user?.name || "Unknown";
-  const PhoneEl = user?.phone || "Unknown";
-  const locationsEl = user?.region || "Unknown";
+  const baID = user?.ba_id || "Unknown";
+;
 
-  const formData = new FormData();
-  formData.append("place", "COKE");
-  formData.append("ba_name", nameEl);
-  formData.append("ba_phone", PhoneEl);
-  formData.append("ba_region", locationsEl);
-  formData.append("sub_1_1", name);
-  formData.append("sub_1_2", phone);
-  formData.append("sub_1_3", age);
-  // formData.append("sub_1_4", soda);
-  // formData.append("sub_1_5", beverage);
-  // formData.append("sub_1_6", reason);
-  formData.append("sub_1_7", frequency);
-  formData.append("sub_1_8", purchase);
-  formData.append("sub_1_9", variant);
-  formData.append("sub_1_10", sku);
-  formData.append("sub_1_11", pricing);
-  formData.append("sub_1_12", feedback);
-  formData.append("sub_1_13", lat ?? "0");
-  formData.append("sub_1_14", long ?? "0");
+  const formData = new FormData(recordData);
+  formData.append("ba_id", baID)
 
-  console.log("Submitting data:", Object.fromEntries(formData.entries()));
+  // console.log("Submitting data:", Object.fromEntries(formData.entries()));
 
-  const res = await fetch("https://iguru.co.ke/coke/api/BM.php", {
+  const res = await fetch("https://iguru.co.ke/BAIMS/ep/BM.php", {
     method: "POST",
     body: formData,
   });
 
-  console.log("API Response:", res);
-  const data = await res.text(); // Handle as plain text
+  const data = await res.json(); // Handle as plain text
   if (res.ok) {
+    console.log("data, submitted")
     return data;
   } else {
     throw {
@@ -113,34 +77,31 @@ export async function SummaryForm(
   }
 }
 
-
 export async function fetchRecordData(phone) {
+  const baPhone = {
+    ba_phone: phone,
+  };
 
-      const baPhone = {
-        ba_phone: phone
-      }
+  const encodedDat = new URLSearchParams(baPhone).toString();
 
-      const encodedDat = new URLSearchParams(baPhone).toString();
+  try {
+    const response = await fetch(`https://iguru.co.ke/coke/api/REPORT.php/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: encodedDat,
+    });
 
-     try{
-         const response = await fetch(`https://iguru.co.ke/coke/api/REPORT.php/`, {
-             method:"POST",
-             headers:{
-               "Content-Type": "application/x-www-form-urlencoded",
-               },
-               body: encodedDat
-         });
-
-
-         if(!response.ok){
-             throw new Error("Failed to fetch package data");
-         }
-         const data = await response.text();
-         console.log("Response text", data);
-         return  data;
-     }catch(error){
-         console.log("Error found");
-         console.error('Error fetching package data:',error);
-         return error;
-     }
- }
+    if (!response.ok) {
+      throw new Error("Failed to fetch package data");
+    }
+    const data = await response.text();
+    console.log("Response text", data);
+    return data;
+  } catch (error) {
+    console.log("Error found");
+    console.error("Error fetching package data:", error);
+    return error;
+  }
+}

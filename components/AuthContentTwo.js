@@ -1,4 +1,4 @@
-import NetInfo from '@react-native-community/netinfo';
+import NetInfo from "@react-native-community/netinfo";
 import { useState, useEffect } from "react";
 import { Alert, StyleSheet, View, Platform, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -26,78 +26,34 @@ function AuthContentTwo({ isLogin, onAuthenticate, formID, formTitle }) {
   }, []);
 
   async function submitHandler(credentials) {
-
-      if (isOffline) {
-              Toast.show({
-                type: 'error',
-                text1: 'Network Error',
-                text2: 'No internet connection. Please try again later.',
-              });
-              return;
-            }else if(!isInternetReachable){
-              Toast.show({
-                type: 'error',
-                text1: 'Network Error',
-                text2: 'No internet access',
-              });
-              return;
-            }
-
-    try {
-      // Submit the form data
-
-      setIsSubmitting(true);
-      // const response = await SummaryForm(
-      //   name,
-      //   phone,
-      //   age,
-      //   frequency,
-      //   purchase,
-      //   variant,
-      //   sku,
-      //   pricing,
-      //   feedback,
-      //   lat,
-      //   long
-      // );
-
-
-      // resetting the validation check
-      setIsSubmitting(false);
-
-      // Optionally, show success feedback to the user
-      // adding user UI  alert message for successful data upload
-      Toast.show({
-        type: "success",
-        text1: "Success",
-        text2: "Data submitted successfully!",
-      });
-      setResetForm((prev) => !prev);
-    } catch (error) {
-      setIsSubmitting(false);
-      console.error("Error submitting form:", error);
+    if (isOffline) {
       Toast.show({
         type: "error",
-        text1: "Submission failed",
-        text2: error.message || "An unknown error occurred.",
+        text1: "Network Error",
+        text2: "No internet connection. Please try again later.",
       });
-      // Alert.alert(
-      //   "Submission failed",
-      //   error.message || "An unknown error occurred."
-      // );
+      return;
+    } else if (!isInternetReachable) {
+      Toast.show({
+        type: "error",
+        text1: "Network Error",
+        text2: "No internet access",
+      });
+      return;
     }
+    onAuthenticate(credentials);
   }
 
   return (
     <View style={styles.authContent}>
       <FormContainerTwo
-        formTitle= {formTitle}
+        formTitle={formTitle}
         formID={formID}
         resetForm={resetForm}
         isSubmiting={isSubmiting}
         isLogin={isLogin}
         onSubmit={submitHandler}
-        // credentialsInvalid={credentialsInvalid}
+        credentialsInvalid={credentialsInvalid}
       />
     </View>
   );
