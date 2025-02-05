@@ -19,6 +19,7 @@ const Report = ({route}) => {
       },
 
       onSuccess: (data) => {
+        console.log(data, "user response")
         if (data.response == "fail") {
           Toast.show({
             type: "error",
@@ -54,7 +55,7 @@ const Report = ({route}) => {
   return (
      <>
 
-       <AuthContentTwo onAuthenticate={submitHandler} formID={formID} formTitle={formTitle}/>
+       <AuthContentTwo isPending={isPending} onAuthenticate={submitHandler} formID={formID} formTitle={formTitle}/>
      </>
   )
 }

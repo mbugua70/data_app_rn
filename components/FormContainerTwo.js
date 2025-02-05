@@ -27,7 +27,7 @@ const FormContainerTwo = ({
   isLogin,
   onSubmit,
   credentialsInvalid,
-  isSubmiting,
+   isPending,
   resetForm,
   formID,
 }) => {
@@ -226,14 +226,14 @@ const FormContainerTwo = ({
           )}
           ListFooterComponent={() => (
             <View style={styles.submitContainer}>
-              {isSubmiting ? (
+              {isPending ? (
                 <ActivityIndicator
                   animating={true}
                   color={MD2Colors.lightBlueA700}
                   size='small'
                 />
               ) : (
-                <FlatButton isSubmiting={isSubmiting} onPress={submitHandler}>
+                <FlatButton isPending={isPending} onPress={submitHandler}>
                   SUBMIT
                 </FlatButton>
               )}

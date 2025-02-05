@@ -37,7 +37,7 @@ export async function LoginHander({ name, password }) {
 }
 
 export async function SummaryForm(recordData) {
-  console.log("checking api record data", recordData)
+
   const token = await AsyncStorage.getItem("token");
 
   if (!token) {
@@ -66,7 +66,7 @@ export async function SummaryForm(recordData) {
 
   const data = await res.json(); // Handle as plain text
   if (res.ok) {
-    console.log("data, submitted")
+    console.log("submitted")
     return data;
   } else {
     throw {
@@ -97,7 +97,7 @@ export async function fetchRecordData(phone) {
       throw new Error("Failed to fetch package data");
     }
     const data = await response.text();
-    console.log("Response text", data);
+
     return data;
   } catch (error) {
     console.log("Error found");
