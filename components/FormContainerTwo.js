@@ -89,6 +89,20 @@ const FormContainerTwo = ({
     }
 
 
+    // keybaord type
+    let keyboardType = "default"
+    if(item.input_title === "Date"){
+      keyboardType = "default"
+    }else if(item.input_title === "Date of Activation"){
+      keyboardType = "default"
+    }else if(item.input_title === "Ba Phone"){
+      keyboardType = "phone-pad"
+    }else if(item.input_title === "Phone"){
+      keyboardType = "phone-pad"
+    }else if(item.input_title === "Record Date"){
+      keyboardType = "default"
+    }
+
     const dataView = item.field_input_options.map((item) => ({
       label: item["0"],
       value: item.option_text,
@@ -124,6 +138,7 @@ const FormContainerTwo = ({
             onSubmitEditing={() => inputRef2.current?.focus()}
             blurOnSubmit={false}
             returnKeyType='next'
+            keyboardType={keyboardType}
           />
         )}
 
@@ -140,6 +155,7 @@ const FormContainerTwo = ({
             onSubmitEditing={() => inputRef2.current?.focus()}
             blurOnSubmit={false}
             returnKeyType='next'
+            keyboardType={keyboardType}
           />
         )}
 
