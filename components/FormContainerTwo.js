@@ -12,12 +12,13 @@ import { ActivityIndicator, MD2Colors } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState, useRef, useContext } from "react";
 import { Notifier, NotifierComponents } from "react-native-notifier";
+import { ProjectContext } from "../store/projectContext";
+
 
 import InputTwo from "./InputTwo";
 import FlatButton from "../UI/FlatButton";
 import DropdownComponent from "./Dropdown";
 import LocationPicker from "./LocationPicker";
-import { ProjectContext } from "../store/projectContext";
 import RadioComponent from "./RadioComponent";
 import Checkbox from "./Checkbox";
 import CheckboxComponent from "./Checkbox";
@@ -29,7 +30,7 @@ const FormContainerTwo = ({
   isLogin,
   onSubmit,
   credentialsInvalid,
-   isPending,
+  isPending,
   resetForm,
   formID,
 }) => {
@@ -38,6 +39,7 @@ const FormContainerTwo = ({
   const { formInputData, formsSelectData } = useContext(ProjectContext);
   const [inputs, setInputs] = useState("");
   const [errors, setErrors] = useState({});
+
 
   // userRefs for input fields to be used in the form
   const inputRef1 = useRef(null);
@@ -53,17 +55,6 @@ const FormContainerTwo = ({
   const inputRef11 = useRef(null);
   const inputRef12 = useRef(null);
 
-  // const {
-  //   name: nameIsValid,
-  //   phone: phoneIsInvalid,
-  //   age: ageIsInvalid,
-  //   frequency: frequencyIsInValid,
-  //   variant: variantIsInValid,
-  //   sku: skuIsInValid,
-  //   pricing: pricingIsInValid,
-  //   feedback: feedbackIsInvalid,
-  //   purchase: purchaseIsInValid,
-  // } = credentialsInvalid;
 
   useEffect(() => {
     formInputData.forEach((input) => {
@@ -80,27 +71,25 @@ const FormContainerTwo = ({
     const isRadio = item.field_type === "radio";
     const isRecord = item.field_type === "auto";
 
-
     let placeholder = "Enter value";
-    if(item.input_title === "Date"){
-      placeholder = "Enter date e.g 11-12-2000"
-    }else if(item.input_title === "Date of Activation"){
-      placeholder = "Enter date e.g 11-12-2000"
+    if (item.input_title === "Date") {
+      placeholder = "Enter date e.g 11-12-2000";
+    } else if (item.input_title === "Date of Activation") {
+      placeholder = "Enter date e.g 11-12-2000";
     }
 
-
     // keybaord type
-    let keyboardType = "default"
-    if(item.input_title === "Date"){
-      keyboardType = "default"
-    }else if(item.input_title === "Date of Activation"){
-      keyboardType = "default"
-    }else if(item.input_title === "Ba Phone"){
-      keyboardType = "phone-pad"
-    }else if(item.input_title === "Phone"){
-      keyboardType = "phone-pad"
-    }else if(item.input_title === "Record Date"){
-      keyboardType = "default"
+    let keyboardType = "default";
+    if (item.input_title === "Date") {
+      keyboardType = "default";
+    } else if (item.input_title === "Date of Activation") {
+      keyboardType = "default";
+    } else if (item.input_title === "Ba Phone") {
+      keyboardType = "phone-pad";
+    } else if (item.input_title === "Phone") {
+      keyboardType = "phone-pad";
+    } else if (item.input_title === "Record Date") {
+      keyboardType = "default";
     }
 
     const dataView = item.field_input_options.map((item) => ({
@@ -125,6 +114,9 @@ const FormContainerTwo = ({
 
     return (
       <>
+        {/* date time picker */}
+
+
         {isRecord && (
           <InputTwo
             formNumber={item.input_rank}
@@ -233,16 +225,16 @@ const FormContainerTwo = ({
 
   function submitHandler() {
     if (validateForm()) {
-      onSubmit({...formState, form_id: formID});
+
+      onSubmit({ ...formState, form_id: formID, input_number: inputs.length });
     }
   }
 
   useEffect(() => {
-    if(!isError && isSuccess){
-      setFormState({})
+    if (!isError && isSuccess) {
+      setFormState({});
     }
-  }, [isError, isSuccess])
-
+  }, [isError, isSuccess]);
 
   return (
     <>

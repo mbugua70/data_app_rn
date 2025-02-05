@@ -39,6 +39,7 @@ export async function LoginHander({ name, password }) {
 export async function SummaryForm(recordData) {
 
   const token = await AsyncStorage.getItem("token");
+  console.log("recorded data", recordData)
 
   if (!token) {
     throw new Error("No token found in AsyncStorage.");
@@ -54,10 +55,21 @@ export async function SummaryForm(recordData) {
   const baID = user?.ba_id || "Unknown";
 ;
 
-  const formData = new FormData(recordData);
-  formData.append("ba_id", baID)
+  const formData = new FormData();
 
-  // console.log("Submitting data:", Object.fromEntries(formData.entries()));
+  Object.entries(recordData).forEach(([key, value]) => {
+    if (typeof value === "object" && value !== null) {
+      // Handle nested objects by appending their key-value pairs separately
+      Object.entries(value).forEach(([subKey, subValue]) => {
+        formData.append(`${key}[${subKey}]`, subValue);
+      });
+    } else {
+      formData.append(key, value);
+    }
+  });
+
+
+  console.log("Submitting data:", Object.fromEntries(formData.entries()));
 
   const res = await fetch("https://iguru.co.ke/BAIMS/ep/BM.php", {
     method: "POST",
@@ -65,10 +77,12 @@ export async function SummaryForm(recordData) {
   });
 
   const data = await res.json(); // Handle as plain text
+  console.log(data, "checking");
   if (res.ok) {
     console.log("submitted")
     return data;
   } else {
+    console.log(data)
     throw {
       message: data || "Submission failed.",
       statusText: res.statusText,
