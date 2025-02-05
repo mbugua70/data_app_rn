@@ -23,6 +23,8 @@ import Checkbox from "./Checkbox";
 import CheckboxComponent from "./Checkbox";
 
 const FormContainerTwo = ({
+  isSuccess,
+  isError,
   formTitle,
   isLogin,
   onSubmit,
@@ -210,7 +212,12 @@ const FormContainerTwo = ({
     }
   }
 
-  useEffect(() => {}, [resetForm]);
+  useEffect(() => {
+    if(!isError && isSuccess){
+      setFormState({})
+    }
+  }, [isError, isSuccess])
+
 
   return (
     <>

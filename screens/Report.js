@@ -11,7 +11,7 @@ const Report = ({route}) => {
     const {formID, formTitle} = route.params
 
 
-    const { data, mutate, isError, error, isPending } = useMutation({
+    const { data, mutate, isError, error, isPending, isSuccess} = useMutation({
       mutationFn: SummaryForm,
       // the code below will wait the request to finish before moving to another page.
       onMutate: async (data) => {
@@ -20,12 +20,16 @@ const Report = ({route}) => {
 
       onSuccess: (data) => {
         console.log(data, "user response")
-        if (data.response == "fail") {
+        if (data.response === "fail") {
           Toast.show({
             type: "error",
             text1: "Failed to submit",
             text2: "Failed to submit the record, please try again!",
           });
+        }
+
+        if(data.response === "success"){
+
         }
 
       },
@@ -52,10 +56,12 @@ const Report = ({route}) => {
           });
         }
       }, [error, isPending]);
+
+
   return (
      <>
 
-       <AuthContentTwo isPending={isPending} onAuthenticate={submitHandler} formID={formID} formTitle={formTitle}/>
+       <AuthContentTwo isPending={isPending} isError={isError} isSuccess={isSuccess} onAuthenticate={submitHandler} formID={formID} formTitle={formTitle}/>
      </>
   )
 }
