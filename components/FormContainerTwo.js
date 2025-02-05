@@ -167,6 +167,8 @@ const FormContainerTwo = ({
 
         {isRadio && (
           <RadioComponent
+            isSuccess={isSuccess}
+            isError={isError}
             formNumber={item.input_rank}
             isInvalid={errors[item.field_id]}
             title={item.input_title}
@@ -180,6 +182,8 @@ const FormContainerTwo = ({
 
         {isCheckbox && (
           <CheckboxComponent
+            isSuccess={isSuccess}
+            isError={isError}
             formNumber={item.input_rank}
             isInvalid={errors[item.field_id]}
             title={item.input_title}
@@ -231,10 +235,22 @@ const FormContainerTwo = ({
   }
 
   useEffect(() => {
-    if (!isError && isSuccess) {
-      setFormState({});
-    }
-  }, [isError, isSuccess]);
+
+      if (!isError && isSuccess) {
+        const resetState = {};
+        inputs.forEach((item) => {
+          if (item.field_type === "checkbox") {
+            resetState[item.field_id] = {};
+          } else if (item.field_type === "radio" || item.field_type === "dropdown") {
+            resetState[item.field_id] = null;
+          } else {
+            resetState[item.field_id] = "";
+          }
+        });
+        setFormState(resetState);
+      }
+
+  }, [isError, isSuccess, inputs]);
 
   return (
     <>

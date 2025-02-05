@@ -1,9 +1,9 @@
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import { Checkbox } from 'react-native-paper';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { GlobalStyles } from '../Constants/Globalcolors';
 
-const CheckboxComponent = ({ title, data, onUpdateValue, formNumber}) => {
+const CheckboxComponent = ({ title, data, onUpdateValue, formNumber, isSuccess, isError}) => {
   const [selectedValues, setSelectedValues] = useState({}); // Store checked state per item
 
   function toggleCheckbox(item) {
@@ -27,6 +27,13 @@ const CheckboxComponent = ({ title, data, onUpdateValue, formNumber}) => {
       />
     );
   }
+
+  useEffect(() => {
+    if(isSuccess && !isError){
+      setSelectedValues({})
+    }
+
+  },[isSuccess, isError])
 
   return (
     <>
