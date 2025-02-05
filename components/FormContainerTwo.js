@@ -80,6 +80,15 @@ const FormContainerTwo = ({
     const isRadio = item.field_type === "radio";
     const isRecord = item.field_type === "auto";
 
+
+    let placeholder = "Enter value";
+    if(item.input_title === "Date"){
+      placeholder = "Enter date e.g 11-12-2000"
+    }else if(item.input_title === "Date of Activation"){
+      placeholder = "Enter date e.g 11-12-2000"
+    }
+
+
     const dataView = item.field_input_options.map((item) => ({
       label: item["0"],
       value: item.option_text,
@@ -111,7 +120,7 @@ const FormContainerTwo = ({
             }
             value={formState[item.field_id]}
             isInvalid={errors[item.field_id]}
-            placeholder='Enter date'
+            placeholder='Enter date e.g 11-12-2020'
             onSubmitEditing={() => inputRef2.current?.focus()}
             blurOnSubmit={false}
             returnKeyType='next'
@@ -127,7 +136,7 @@ const FormContainerTwo = ({
             }
             value={formState[item.field_id]}
             isInvalid={errors[item.field_id]}
-            placeholder='Enter value'
+            placeholder={placeholder}
             onSubmitEditing={() => inputRef2.current?.focus()}
             blurOnSubmit={false}
             returnKeyType='next'
