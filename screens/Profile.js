@@ -18,7 +18,7 @@ import { useNavigation, useIsFocused } from "@react-navigation/native";
 
 const Profile = () => {
   const authctx = useContext(AuthContext);
-  const [name, setName] = useState("");
+  const [userData, setUserData] = useState("");
   const navigation = useNavigation();
   const isFocused = useIsFocused();
 
@@ -27,7 +27,7 @@ const Profile = () => {
     async function handleToken() {
       const token = await AsyncStorage.getItem("token");
       if (token) {
-        setName(token);
+        setUserData(token);
       }
     }
 
@@ -59,7 +59,7 @@ const Profile = () => {
     <View style={styles.screen}>
       <View style={styles.screenChild}>
         <ProfilePic />
-        <UserName name={name} />
+        <UserName name={userData.name} />
       </View>
       {/* edit profile */}
       <View style={styles.screen2}>

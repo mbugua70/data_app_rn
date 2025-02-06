@@ -111,13 +111,25 @@ function AuthReportStack (){
               },
               headerTintColor: "#fff",
               headerStyle: {
-                backgroundColor: "#000000"
+                backgroundColor: "#000000",
               }
             }}
           />
 
 
         <Stack.Screen
+            options={{
+               headerStyle: {
+                backgroundColor: GlobalStyles.colors.gray200,
+                elevation: 0,
+                shadowOpacity: 0,
+                borderBottomWidth: 0,
+               },
+               headerShadowVisible: false,
+               headerTitleStyle: {
+                color: GlobalStyles.colors.gray200,
+               }
+            }}
             name="Records"
             component={Records}
           />
