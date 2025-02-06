@@ -140,7 +140,7 @@ function AuthReportStack() {
           options={{
             contentStyle: { backgroundColor: "#fff" , zIndex: -2},
             presentation: "modal",
-            headerStyle: { backgroundColor: GlobalStyles.colors.primary800 },
+            headerStyle: { backgroundColor: "#9cacff"},
             headerBackButtonDisplayMode: "minimal",
             headerShadowVisible: false,
             headerLeft: ({ headerTintColor }) => {
