@@ -2,8 +2,19 @@ import { View, Text, StyleSheet } from "react-native";
 import React from "react";
 import { IconButton, MD3Colors } from 'react-native-paper';
 import { GlobalStyles } from "../Constants/Globalcolors";
+import { useNavigation } from "@react-navigation/native";
 
-const RecordContainer = ({index}) => {
+const RecordContainer = ({index, formID, formTitle}) => {
+    console.log(formID, "testing 2")
+
+    const navigation =  useNavigation()
+
+    function handleRecordEdit(){
+        navigation.navigate("Record Edit", {
+            formID: formID,
+            formTitle: formTitle
+        })
+    }
 
     const styling = {
         backgroundColor: index % 2 === 0 ? "#9cacff" : "#fff",
@@ -41,7 +52,7 @@ const RecordContainer = ({index}) => {
             icon='note-edit'
             iconColor={iconColor.color}
             size={20}
-            onPress={() => console.log("Pressed")}
+            onPress={handleRecordEdit}
           />
         </View>
         <View>

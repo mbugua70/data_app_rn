@@ -5,7 +5,7 @@ import { Button } from "react-native-paper";
 import { IconButton, MD3Colors } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 
-const FormItem = ({index, title, onNavigate}) => {
+const FormItem = ({index, title, onNavigate, onNavigateRecord}) => {
     const navigation = useNavigation();
 
     const styling = {
@@ -22,12 +22,6 @@ const FormItem = ({index, title, onNavigate}) => {
         mode: index % 2 === 0 ? "contained-tonal" : "contained"
       }
 
-      function handleRecordNavigation(){
-       navigation.navigate("Records");
-      }
-
-
-
 
   return (
     <View style={[styles.screen, {...styling}]}>
@@ -41,7 +35,7 @@ const FormItem = ({index, title, onNavigate}) => {
             labelStyle={{fontSize: 14}}
             style={styles.button}
             mode={button.mode}
-            onPress={handleRecordNavigation}>
+            onPress={onNavigateRecord}>
             Records
           </Button>
         </View>

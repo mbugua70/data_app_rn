@@ -23,6 +23,7 @@ const FormScreen = ({ navigation, route }) => {
 
 
   function handleFormItem({item, index}) {
+    console.log(item.form_id)
 
     function handleNavigation() {
       console.log("working")
@@ -32,6 +33,13 @@ const FormScreen = ({ navigation, route }) => {
       });
     }
 
+    function handleRecordNavigation(){
+      navigation.navigate("Records", {
+        formID: item.form_id,
+        formTitle: item.form_title,
+      });
+     }
+
     return (
       <>
 
@@ -39,7 +47,7 @@ const FormScreen = ({ navigation, route }) => {
           <FormItem
           index = {index}
           title={item.form_title}
-          // color={item.color}
+          onNavigateRecord={handleRecordNavigation}
           onNavigate={handleNavigation}
           />
         </View>

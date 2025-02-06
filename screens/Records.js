@@ -3,13 +3,17 @@ import React from 'react'
 import RecordContainer from '../components/RecordContainer'
 import { GlobalStyles } from '../Constants/Globalcolors'
 
-const Records = () => {
+const Records = ({route}) => {
+
+  const {formID, formTitle} = route.params
+
+
   return (
     <View style={styles.screen}>
        {/* header title */}
        <Text style={styles.headerTitle}>Records</Text>
        {/* dashboard  showing the records*/}
-       <RecordContainer />
+       <RecordContainer formID={formID} formTitle={formTitle} />
     </View>
   )
 }
