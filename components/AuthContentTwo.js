@@ -8,7 +8,7 @@ import { SummaryForm } from "../http/api";
 import Toast from "react-native-toast-message";
 import FormContainerTwo from "./FormContainerTwo";
 
-function AuthContentTwo({ isLogin, onAuthenticate, formID, formTitle, isPending, isSuccess, isError }) {
+function AuthContentTwo({isEditing, isLogin, onAuthenticate, formID, formTitle, isPending, isSuccess, isError }) {
   const navigation = useNavigation();
   const [isSubmiting, setIsSubmitting] = useState(false);
   const [resetForm, setResetForm] = useState(false);
@@ -49,6 +49,7 @@ function AuthContentTwo({ isLogin, onAuthenticate, formID, formTitle, isPending,
       <FormContainerTwo
         formTitle={formTitle}
         formID={formID}
+        isEditing={isEditing}
         resetForm={resetForm}
         isSubmiting={isSubmiting}
         isLogin={isLogin}

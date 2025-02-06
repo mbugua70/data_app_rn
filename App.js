@@ -56,6 +56,9 @@ function AuthStack() {
 }
 
 function AuthReportStack() {
+
+
+
   return (
     <>
       <Stack.Navigator
@@ -135,7 +138,7 @@ function AuthReportStack() {
           name='Record Edit'
           component={RecordEdit}
           options={{
-            contentStyle: { backgroundColor: "#fff" },
+            contentStyle: { backgroundColor: "#fff" , zIndex: -2},
             presentation: "modal",
             headerStyle: { backgroundColor: GlobalStyles.colors.primary800 },
             headerBackButtonDisplayMode: "minimal",

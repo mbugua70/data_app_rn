@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   FlatList,
+  Alert,
 } from "react-native";
 import { ActivityIndicator, MD2Colors } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
@@ -14,7 +15,7 @@ import React, { useEffect, useState, useRef, useContext } from "react";
 import { Notifier, NotifierComponents } from "react-native-notifier";
 import { ProjectContext } from "../store/projectContext";
 
-
+import Toast from "react-native-toast-message";
 import InputTwo from "./InputTwo";
 import FlatButton from "../UI/FlatButton";
 import DropdownComponent from "./Dropdown";
@@ -24,6 +25,7 @@ import Checkbox from "./Checkbox";
 import CheckboxComponent from "./Checkbox";
 
 const FormContainerTwo = ({
+  isEditing,
   isSuccess,
   isError,
   formTitle,
@@ -40,7 +42,6 @@ const FormContainerTwo = ({
   const [inputs, setInputs] = useState("");
   const [errors, setErrors] = useState({});
 
-
   // userRefs for input fields to be used in the form
   const inputRef1 = useRef(null);
   const inputRef2 = useRef(null);
@@ -54,7 +55,6 @@ const FormContainerTwo = ({
   const inputRef10 = useRef(null);
   const inputRef11 = useRef(null);
   const inputRef12 = useRef(null);
-
 
   useEffect(() => {
     formInputData.forEach((input) => {
@@ -115,7 +115,6 @@ const FormContainerTwo = ({
     return (
       <>
         {/* date time picker */}
-
 
         {isRecord && (
           <InputTwo
@@ -212,14 +211,24 @@ const FormContainerTwo = ({
       if (!value || (Array.isArray(value) && value.length === 0)) {
         errors[item.field_id] = `${item.input_title} is required`;
         isValid = false;
-        Notifier.showNotification({
-          title: "Invalid inputs",
-          description: "Please fill in all the required inputs",
-          Component: NotifierComponents.Alert,
-          componentProps: {
-            alertType: "error",
-          },
-        });
+
+        if (isEditing) {
+          Toast.show({
+            type: "error",
+            text1: "Please check all your input values",
+            position: "bottom",
+          });
+        } else {
+          Notifier.showNotification({
+            title: "Invalid inputs",
+            description: "Please fill in all the required inputs",
+            Component: NotifierComponents.Alert,
+            componentProps: {
+              alertType: "error",
+            },
+            containerStyle: { zIndex: 999 },
+          });
+        }
       }
     });
 
@@ -229,27 +238,27 @@ const FormContainerTwo = ({
 
   function submitHandler() {
     if (validateForm()) {
-
       onSubmit({ ...formState, form_id: formID, input_number: inputs.length });
     }
   }
 
   useEffect(() => {
-
-      if (!isError && isSuccess) {
-        const resetState = {};
-        inputs.forEach((item) => {
-          if (item.field_type === "checkbox") {
-            resetState[item.field_id] = {};
-          } else if (item.field_type === "radio" || item.field_type === "dropdown") {
-            resetState[item.field_id] = null;
-          } else {
-            resetState[item.field_id] = "";
-          }
-        });
-        setFormState(resetState);
-      }
-
+    if (!isError && isSuccess) {
+      const resetState = {};
+      inputs.forEach((item) => {
+        if (item.field_type === "checkbox") {
+          resetState[item.field_id] = {};
+        } else if (
+          item.field_type === "radio" ||
+          item.field_type === "dropdown"
+        ) {
+          resetState[item.field_id] = null;
+        } else {
+          resetState[item.field_id] = "";
+        }
+      });
+      setFormState(resetState);
+    }
   }, [isError, isSuccess, inputs]);
 
   return (
