@@ -92,7 +92,7 @@ function AuthReportStack() {
         />
 
         <Stack.Screen
-          name='Home'
+          name='Projects'
           component={Home}
           options={{
             headerTitle: "Projects",
@@ -177,6 +177,22 @@ function AuthenticatedStack() {
         }}
       />
 
+      <Tab.Screen
+        name='Projects'
+        component={Home}
+        options={{
+          tabBarStyle: {
+            backgroundColor: "#000000",
+          },
+          headerTintColor: "#fff",
+          headerStyle: {
+            backgroundColor: "#000000",
+          },
+          tabBarIcon: ({ color, size }) => {
+            return <TabBarIcon name='folder' color={color} size={size} />;
+          },
+        }}
+      />
       <Tab.Screen
         name='Profile'
         component={Profile}

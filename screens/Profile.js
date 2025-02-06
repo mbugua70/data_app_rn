@@ -27,7 +27,7 @@ const Profile = () => {
     async function handleToken() {
       const token = await AsyncStorage.getItem("token");
       if (token) {
-        setUserData(token);
+        setUserData(JSON.parse(token));
       }
     }
 
@@ -63,14 +63,14 @@ const Profile = () => {
       </View>
       {/* edit profile */}
       <View style={styles.screen2}>
-        <ProfileIconUI
+        {/* <ProfileIconUI
           name='person'
           size={24}
           color={GlobalStyles.colors.primary800}
           onPress={editHandler}
           text='Edit profile'
           bg='#fff'
-        />
+        /> */}
 
         {/* signout */}
         <ProfileIconUI

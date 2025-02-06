@@ -15,7 +15,7 @@ const Dashboard = ({navigation}) => {
       };
 
       function handleDashboardNav() {
-       navigation.navigate("Home")
+       navigation.navigate("Projects")
       }
 
       const badgeNumber = projectsData.length;
