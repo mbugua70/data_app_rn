@@ -1,7 +1,8 @@
-import { View, Text, Pressable, StyleSheet } from "react-native";
+import { View, Text, Pressable, StyleSheet, Platform } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { GlobalStyles } from "../Constants/Globalcolors";
 import { useNavigation } from "@react-navigation/native";
+
 
 const BackButtonIcon = ({ tintColor }) => {
   const navigation = useNavigation();
@@ -10,7 +11,7 @@ const BackButtonIcon = ({ tintColor }) => {
   }
   return (
     <View style={styles.screen}>
-      <Pressable onPress={handleBackButton} style={styles.buttonContainer} hitSlop={20}>
+      <Pressable onPress={handleBackButton} android_ripple={{color: "black"}} style={({pressed}) => [styles.buttonContainer, pressed && (Platform.OS === "ios" && styles.pressed )]} hitSlop={20} >
         <Ionicons name="close" size={24} color="#000000" />
       </Pressable>
     </View>
@@ -32,4 +33,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+
+  pressed: {
+    opacity: 0.25
+  }
+
 });
