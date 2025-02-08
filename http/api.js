@@ -121,11 +121,12 @@ export async function fetchRecordData(phone) {
 }
 export async function fetchRecordByDate(requestData) {
 
-  const {date, ba_id, form_id} = requestData;
+  const {date, ba_id, formID} = requestData;
+  console.log(date, ba_id, formID)
 
   const fetchData = {
     ba_id: ba_id,
-    form_id: form_id,
+    form_id: formID,
     filter_date: date
   }
 

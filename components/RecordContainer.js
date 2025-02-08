@@ -4,6 +4,8 @@ import { IconButton, MD3Colors } from 'react-native-paper';
 import { GlobalStyles } from "../Constants/Globalcolors";
 import { useNavigation } from "@react-navigation/native";
 
+
+
 const RecordContainer = ({index, formID, formTitle}) => {
     console.log(formID, "testing 2")
 
