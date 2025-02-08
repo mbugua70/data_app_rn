@@ -119,3 +119,36 @@ export async function fetchRecordData(phone) {
     return error;
   }
 }
+export async function fetchRecordByDate(requestData) {
+
+  const {date, ba_id, form_id} = requestData;
+
+  const fetchData = {
+    ba_id: ba_id,
+    form_id: form_id,
+    filter_date: date
+  }
+
+  const encodedData = new URLSearchParams(fetchData).toString();
+
+  try {
+    const response = await fetch(`https://iguru.co.ke/BAIMS/ep/FORM-DATA.php`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: encodedData,
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch package data");
+    }
+    const data = await response.text();
+
+    return data;
+  } catch (error) {
+    console.log("Error found");
+    console.error("Error fetching package data:", error);
+    return error;
+  }
+}
