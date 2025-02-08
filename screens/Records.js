@@ -10,6 +10,7 @@ import { useIsFocused } from "@react-navigation/native";
 import ButtonText from "../UI/ButtonText";
 import Toast from "react-native-toast-message";
 import RecordContainer from "../components/RecordContainer";
+import EmptyBox from "../UI/EmptyBox";
 
 const Records = ({ route }) => {
   const [activeButton, setActiveButton] = useState(1);
@@ -53,7 +54,7 @@ const Records = ({ route }) => {
     }
 
     handleToken();
-  }, [isFocused]);
+  }, []);
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
@@ -64,7 +65,7 @@ const Records = ({ route }) => {
     return () => unsubscribe();
   }, []);
 
-  const { data, mutate, isError, error, isPending } = useMutation({
+  const { data, mutate, isError, error, isPending, isSuccess } = useMutation({
     mutationFn: fetchRecordByDate,
     // the code below will wait the request to finish before moving to another page.
     onMutate: async (data) => {
@@ -134,6 +135,39 @@ const Records = ({ route }) => {
     setActiveButton(3);
   }
 
+  useEffect(() => {
+    if (isOffline) {
+      Toast.show({
+        type: "error",
+        text1: "Network Error",
+        text2: "No internet connection. Please try again later.",
+      });
+      return;
+    } else if (!isInternetReachable) {
+      Toast.show({
+        type: "error",
+        text1: "Network Error",
+        text2: "No internet access",
+      });
+      return;
+    }
+
+     handleToday()
+
+  },[])
+
+  let content;
+
+  if(isSuccess && !isError && !isPending){
+    const fetchedData = JSON.parse(data)
+    if(fetchedData.data.length === 0){
+      content = <EmptyBox noDataText="You have no records to show!" />
+    }else{
+      content = <RecordContainer formID={formID} formTitle={formTitle}/>
+    }
+
+  }
+
   return (
     <>
       <View style={styles.screen}>
@@ -167,8 +201,9 @@ const Records = ({ route }) => {
 
         {/* showing empty box incase no data is available */}
 
+         {content}
         {/* dashboard  showing the records*/}
-        <RecordContainer formID={formID} formTitle={formTitle} />
+
       </View>
       {isPending && (
         <View style={styles.overlayLoading}>
