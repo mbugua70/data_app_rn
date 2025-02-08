@@ -138,7 +138,8 @@ function AuthReportStack() {
           name='Record Edit'
           component={RecordEdit}
           options={{
-            contentStyle: { backgroundColor: "#fff" , zIndex: -2},
+            animation: 'slide_from_bottom',
+            contentStyle: { backgroundColor: "#fff"},
             presentation: "modal",
             headerStyle: { backgroundColor: "#9cacff"},
             headerBackButtonDisplayMode: "minimal",
@@ -215,7 +216,6 @@ function AuthenticatedStack() {
 
 function Navigation() {
   const authctx = useContext(AuthContext);
-  console.log("screen", authctx.isAuthenticate);
   return (
     <NavigationContainer>
       {authctx.isAuthenticate ? <AuthReportStack /> : <AuthStack />}

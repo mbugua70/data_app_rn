@@ -10,24 +10,20 @@ const BackButtonIcon = ({ tintColor }) => {
     navigation.goBack();
   }
   return (
-    <View style={styles.screen}>
-      <Pressable onPress={handleBackButton} android_ripple={{color: "black"}} style={({pressed}) => [styles.buttonContainer, pressed && (Platform.OS === "ios" && styles.pressed )]} hitSlop={20} >
+      <Pressable  onPress={handleBackButton}  android_ripple={{color: "black"}} style={({pressed}) => [styles.buttonContainer, pressed && (Platform.OS === "ios" && styles.pressed )]} hitSlop={{top: 20, bottom: 20, left: 20, right: 20}} >
         <Ionicons name="close" size={24} color="#000000" />
       </Pressable>
-    </View>
+
   );
 };
 
 export default BackButtonIcon;
 
 const styles = StyleSheet.create({
-  screen: {
-    borderRadius: 16,
-    overflow: "hidden",
-    backgroundColor: GlobalStyles.colors.gray200,
-  },
-
   buttonContainer: {
+    backgroundColor: GlobalStyles.colors.gray200,
+    borderRadius: 16,
+
     width: 32,
     height: 32,
     justifyContent: "center",

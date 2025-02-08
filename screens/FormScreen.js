@@ -23,7 +23,7 @@ const FormScreen = ({ navigation, route }) => {
 
 
   function handleFormItem({item, index}) {
-    console.log(item.form_id)
+    console.log(item.form_id, "form id")
 
     function handleNavigation() {
       console.log("working")
