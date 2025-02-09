@@ -9,7 +9,7 @@ import {
   Modal,
   TouchableOpacity,
 } from "react-native";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { GlobalStyles } from "../Constants/Globalcolors";
 import { ActivityIndicator, MD2Colors } from "react-native-paper";
@@ -21,8 +21,10 @@ import ButtonText from "../UI/ButtonText";
 import Toast from "react-native-toast-message";
 import RecordContainer from "../components/RecordContainer";
 import EmptyBox from "../UI/EmptyBox";
+import { ProjectContext } from "../store/projectContext";
 
 const Records = ({ route }) => {
+  const {addRecords} = useContext(ProjectContext)
   const [activeButton, setActiveButton] = useState(1);
   const [userData, setUserData] = useState("");
   const [isOffline, setIsOffline] = useState(false);
@@ -31,6 +33,7 @@ const Records = ({ route }) => {
   const [tempDate, setTempDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
   const [isFetchingUserData, setIsFetchingUserData] = useState(true)
+
 
   const { formID, formTitle } = route.params;
   const isFocused = useIsFocused();
@@ -93,7 +96,11 @@ const Records = ({ route }) => {
     },
 
     onSuccess: (data) => {
-      // console.log(data, "fetching records");
+      const formatData = JSON.parse(data)
+      if(formatData){
+        addRecords(formatData)
+      }
+
     },
   });
 
@@ -188,6 +195,9 @@ const Records = ({ route }) => {
      });
    }
   }
+
+
+  // renderrecord item
 
 
 
