@@ -160,20 +160,23 @@ const Records = ({ route }) => {
   };
 
   const onChange = (event, selectedDate) => {
-    if (selectedDate) {
-      setTempDate(selectedDate);
+    if (event.type === "dismissed") {
+      // User pressed "Cancel"
+      setShowPicker(false);
+      return;
     }
-  };
 
-  const confirmDate = () => {
-    setPickerDate(tempDate); // Finalize the date
-    setShowPicker(false); // Close modal
-    handleDateBackend(tempDate);
+    if (selectedDate) {
+      setPickerDate(selectedDate);
+      setShowPicker(false); // Close after selection
+      handleDateBackend(selectedDate);
+    }
   };
 
   function handleDate() {
     setActiveButton(3);
     // triggering the modal date to open
+    addRecords([]);
     openDatePicker();
   }
 
@@ -196,7 +199,6 @@ const Records = ({ route }) => {
       return;
     }
 
-
     if (pickerdate) {
       const formattedDate = selectedDate.toISOString().split("T")[0];
       mutate({ formattedDate, formID, ba_id });
@@ -210,10 +212,15 @@ const Records = ({ route }) => {
   }
 
   // renderrecord item
-  function handleRecordItem({item, index}) {
+  function handleRecordItem({ item, index }) {
     return (
       <>
-        <RecordContainer formID={formID} formTitle={formTitle} index={index} item={item} />
+        <RecordContainer
+          formID={formID}
+          formTitle={formTitle}
+          index={index}
+          item={item}
+        />
       </>
     );
   }
@@ -240,13 +247,29 @@ const Records = ({ route }) => {
   }
 
   useEffect(() => {
-    if(activeButton === 1){
+    if (activeButton === 1) {
       const formattedDate = new Date().toISOString().split("T")[0];
       const ba_id = userData.ba_id;
       mutate({ formattedDate, formID, ba_id });
     }
   }, [isFetchingUserData, isFocused]);
 
+  useEffect(() => {
+    console.log(error);
+    if (error && !isPending) {
+      Toast.show({
+        type: "error",
+        text1: "Failed to fetch",
+        text2: error.message,
+      });
+    } else if (error === "TOO_MANY_ATTEMPTS_TRY-LATER" && !isPending) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Too many attempts try later",
+      });
+    }
+  }, [error, isPending]);
 
   return (
     <>
@@ -279,41 +302,14 @@ const Records = ({ route }) => {
           </ButtonText>
         </View>
 
-        <Modal visible={showPicker} transparent={true} animationType='slide'>
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <DateTimePicker
-                value={pickerdate}
-                mode='date'
-                display={Platform.OS === "ios" ? "spinner" : "calendar"}
-                onChange={onChange}
-              />
-
-              {/* Confirm Button */}
-              <TouchableOpacity
-                onPress={confirmDate}
-                style={styles.confirmButton}>
-                <Text style={styles.confirmText}>Set Date</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
-
-        {/* {showPicker && (
-          <>
-            <DateTimePicker
-            display={Platform.OS === "android" ? "calendar" : "spinner"}
-            testID='dateTimePicker'
+        {showPicker && (
+          <DateTimePicker
             value={pickerdate}
-            is24Hour={true}
-            onChange={onChange}
             mode='date'
+            display={Platform.OS === "ios" ? "spinner" : "calendar"}
+            onChange={onChange}
           />
-          <View>
-
-          </View>
-          </>
-        )} */}
+        )}
 
         {/* showing empty box incase no data is available */}
 

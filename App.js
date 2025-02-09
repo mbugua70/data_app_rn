@@ -69,6 +69,7 @@ function AuthReportStack() {
           name='Home Main'
           component={AuthenticatedStack}
           options={{
+            animation: "none",
             contentStyle: {
               backgroundColor: "#000000",
             },
@@ -81,6 +82,7 @@ function AuthReportStack() {
           name='Form Container'
           component={FormScreen}
           options={{
+            animation: "none",
             headerTintColor: "#fff",
             headerStyle: {
               backgroundColor: "#000000",
@@ -95,6 +97,7 @@ function AuthReportStack() {
           name='Projects'
           component={Home}
           options={{
+            animation: "none",
             headerTitle: "Projects",
             headerTintColor: "#fff",
             headerStyle: {
@@ -107,6 +110,7 @@ function AuthReportStack() {
           name='Report'
           component={Report}
           options={{
+            animation: "none",
             contentStyle: {
               backgroundColor: "#f2f2f2",
             },
@@ -119,6 +123,7 @@ function AuthReportStack() {
 
         <Stack.Screen
           options={{
+            animation: "none",
             headerStyle: {
               backgroundColor: GlobalStyles.colors.gray200,
               elevation: 0,
@@ -165,6 +170,7 @@ function AuthenticatedStack() {
         name='Dashboard'
         component={Dashboard}
         options={{
+          animation: "none",
           headerTintColor: "#ffffff",
           tabBarStyle: {
             backgroundColor: "#000000",
@@ -182,6 +188,7 @@ function AuthenticatedStack() {
         name='Projects'
         component={Home}
         options={{
+          animation: 'none',
           tabBarStyle: {
             backgroundColor: "#000000",
           },
@@ -198,6 +205,7 @@ function AuthenticatedStack() {
         name='Profile'
         component={Profile}
         options={{
+          animation: 'none',
           tabBarStyle: {
             backgroundColor: "#000000",
           },

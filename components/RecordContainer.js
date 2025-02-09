@@ -7,13 +7,14 @@ import { useNavigation } from "@react-navigation/native";
 
 
 const RecordContainer = ({index, formID, formTitle, item}) => {
+  console.log(item)
   const [dateNumber, setDateNumber] = useState()
   const [dateText, setDateText] = useState();
   const [dayOfWeek, setdayOfWeek] = useState()
 
    useEffect(() => {
     if(item){
-      const date = new Date(item.t_date).toDateString().split(" ")
+      const date = new Date(item["0"]).toDateString().split(" ")
       setDateNumber(date[2])
       setDateText(date[1])
       setdayOfWeek(date[0])
