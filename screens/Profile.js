@@ -47,7 +47,6 @@ const Profile = () => {
       {
         text: "Confirm",
         onPress: () => {
-          console.log("signing off");
           authctx.logout();
         },
       },

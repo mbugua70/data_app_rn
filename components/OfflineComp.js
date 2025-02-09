@@ -18,7 +18,7 @@ const OfflineComp =  () => {
     const [isOffline, setIsOffline] = useState(false);
     const [isInternetReachable, setIsInternetReachable] = useState(false);
     const isFocused = useIsFocused();
-    console.log("is focused",isFocused);
+
 
 
     useEffect(() => {
@@ -73,9 +73,9 @@ const OfflineComp =  () => {
         setIsFetching(false)
          if(res){
             const data = JSON.parse(res);
-            console.log("Response user data", data)
             setToday(data.today)
             setOverall(data.overall)
+
          }
 
         }catch(error){

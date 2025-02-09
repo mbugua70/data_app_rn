@@ -5,11 +5,11 @@ import Toast from 'react-native-toast-message';
 import { GlobalStyles } from "../Constants/Globalcolors";
 
 const RecordEdit = ({ route }) => {
-  const { formID, formTitle } = route.params;
+  const { formID, formTitle, item: exstingData} = route.params;
   return (
     <>
       <View style={styles.screen}>
-      <AuthContentTwo isEditing={true} formID={formID} formTitle={formTitle} />
+      <AuthContentTwo isEditing={true} formID={formID} formTitle={formTitle} exstingData={exstingData} />
     </View>
     <Toast/>
     </>

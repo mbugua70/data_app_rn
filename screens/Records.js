@@ -239,11 +239,13 @@ const Records = ({ route }) => {
   if (!isFetchingUserData && userData) {
   }
 
-  // useEffect(() => {
-  //   const formattedDate = new Date().toISOString().split("T")[0];
-  //   const ba_id = userData.ba_id;
-  //   mutate({ formattedDate, formID, ba_id });
-  // }, [isFetchingUserData, isFocused]);
+  useEffect(() => {
+    if(activeButton === 1){
+      const formattedDate = new Date().toISOString().split("T")[0];
+      const ba_id = userData.ba_id;
+      mutate({ formattedDate, formID, ba_id });
+    }
+  }, [isFetchingUserData, isFocused]);
 
 
   return (

@@ -7,12 +7,9 @@ import { useNavigation } from "@react-navigation/native";
 
 
 const RecordContainer = ({index, formID, formTitle, item}) => {
-  console.log(item)
-  console.log(index, "index")
   const [dateNumber, setDateNumber] = useState()
   const [dateText, setDateText] = useState();
   const [dayOfWeek, setdayOfWeek] = useState()
-    console.log(formID, "testing 2")
 
    useEffect(() => {
     if(item){
@@ -28,7 +25,8 @@ const RecordContainer = ({index, formID, formTitle, item}) => {
     function handleRecordEdit(){
         navigation.navigate("Record Edit", {
             formID: formID,
-            formTitle: formTitle
+            formTitle: formTitle,
+            item: item,
         })
     }
 
