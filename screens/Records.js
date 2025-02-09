@@ -1,12 +1,22 @@
 import NetInfo from "@react-native-community/netinfo";
-import { View, Text, StyleSheet } from "react-native";
-import React, { useState, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Button,
+  Platform,
+  Modal,
+  TouchableOpacity,
+} from "react-native";
+import React, { useState, useEffect, useRef } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { GlobalStyles } from "../Constants/Globalcolors";
 import { ActivityIndicator, MD2Colors } from "react-native-paper";
 import { fetchRecordByDate } from "../http/api";
 import { useIsFocused } from "@react-navigation/native";
 
+import DateTimePicker from "@react-native-community/datetimepicker";
 import ButtonText from "../UI/ButtonText";
 import Toast from "react-native-toast-message";
 import RecordContainer from "../components/RecordContainer";
@@ -17,8 +27,36 @@ const Records = ({ route }) => {
   const [userData, setUserData] = useState("");
   const [isOffline, setIsOffline] = useState(false);
   const [isInternetReachable, setIsInternetReachable] = useState(false);
+  const [pickerdate, setPickerDate] = useState(new Date());
+  const [tempDate, setTempDate] = useState(new Date());
+  const [showPicker, setShowPicker] = useState(false);
+  const [isFetchingUserData, setIsFetchingUserData] = useState(true)
+
   const { formID, formTitle } = route.params;
   const isFocused = useIsFocused();
+
+  useEffect(() => {
+    async function handleToken() {
+      const token = await AsyncStorage.getItem("token");
+      if (token) {
+        setUserData(JSON.parse(token));
+        setIsFetchingUserData(false)
+      }
+      setIsFetchingUserData(false)
+    }
+
+    handleToken();
+  }, [isFocused]);
+
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      setIsOffline(!state.isConnected);
+      // setIsInternetReachable(state.isInternetReachable);
+      setIsInternetReachable(state.isInternetReachable ?? false);
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   const buttonStyle = {
     buttonOne: {
@@ -45,25 +83,7 @@ const Records = ({ route }) => {
     },
   };
 
-  useEffect(() => {
-    async function handleToken() {
-      const token = await AsyncStorage.getItem("token");
-      if (token) {
-        setUserData(JSON.parse(token));
-      }
-    }
 
-    handleToken();
-  }, []);
-
-  useEffect(() => {
-    const unsubscribe = NetInfo.addEventListener((state) => {
-      setIsOffline(!state.isConnected);
-      setIsInternetReachable(state.isInternetReachable);
-    });
-
-    return () => unsubscribe();
-  }, []);
 
   const { data, mutate, isError, error, isPending, isSuccess } = useMutation({
     mutationFn: fetchRecordByDate,
@@ -73,14 +93,14 @@ const Records = ({ route }) => {
     },
 
     onSuccess: (data) => {
-      console.log(data, "fetching records");
+      // console.log(data, "fetching records");
     },
   });
 
   // button background color navigation
   function handleToday() {
     setActiveButton(1);
-    const today = new Date().toISOString().split("T")[0];
+    const formattedDate = new Date().toISOString().split("T")[0];
     const ba_id = userData.ba_id;
 
     if (isOffline) {
@@ -99,17 +119,16 @@ const Records = ({ route }) => {
       return;
     }
 
-    mutate({ today, formID, ba_id });
+    mutate({ formattedDate, formID, ba_id });
   }
 
   function handleYesterday() {
     setActiveButton(2);
-    const yesterday = new Date()
-    yesterday.setDate(yesterday.getDate() - 1)
-
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
 
     // formatting
-    const formattedDate = yesterday.toDateString().split("T")[0]
+    const formattedDate = yesterday.toISOString().split("T")[0];
     const ba_id = userData.ba_id;
 
     if (isOffline) {
@@ -128,45 +147,73 @@ const Records = ({ route }) => {
       return;
     }
 
-    mutate({formattedDate, formID, ba_id})
+    mutate({ formattedDate, formID, ba_id });
   }
+
+  const openDatePicker = () => {
+    setTempDate(pickerdate);
+    setShowPicker(true);
+  };
+
+  const onChange = (event, selectedDate) => {
+    if (selectedDate) {
+      setTempDate(selectedDate);
+    }
+  };
+
+  const confirmDate = () => {
+    setPickerDate(tempDate); // Finalize the date
+    setShowPicker(false); // Close modal
+    handleDateBackend(tempDate)
+  };
+
+
 
   function handleDate() {
     setActiveButton(3);
+    // triggering the modal date to open
+    openDatePicker()
   }
 
-  useEffect(() => {
-    if (isOffline) {
-      Toast.show({
-        type: "error",
-        text1: "Network Error",
-        text2: "No internet connection. Please try again later.",
-      });
-      return;
-    } else if (!isInternetReachable) {
-      Toast.show({
-        type: "error",
-        text1: "Network Error",
-        text2: "No internet access",
-      });
-      return;
-    }
+  function handleDateBackend(selectedDate){
+    const ba_id = userData.ba_id;
+    if (pickerdate) {
+      const formattedDate = selectedDate.toISOString().split("T")[0]
+      mutate({formattedDate, formID, ba_id})
+   } else {
+     Toast.show({
+       type: "error",
+       text1: "Date error",
+       text2: "Failed to pick date",
+     });
+   }
+  }
 
-     handleToday()
 
-  },[])
 
   let content;
 
-  if(isSuccess && !isError && !isPending){
-    const fetchedData = JSON.parse(data)
-    if(fetchedData.data.length === 0){
-      content = <EmptyBox noDataText="You have no records to show!" />
-    }else{
-      content = <RecordContainer formID={formID} formTitle={formTitle}/>
+  if (isSuccess && !isError && !isPending) {
+    const fetchedData = JSON.parse(data);
+    if (fetchedData.data.length === 0) {
+      content = <EmptyBox noDataText='You have no records to show!' />;
+    } else {
+      content = <RecordContainer formID={formID} formTitle={formTitle} />;
     }
+  }
+
+  if(!isFetchingUserData && userData){
 
   }
+
+  useEffect(() => {
+    const formattedDate = new Date().toISOString().split("T")[0];
+    const ba_id = userData.ba_id;
+    mutate({formattedDate, formID, ba_id})
+
+  },[isFetchingUserData, isFocused])
+
+
 
   return (
     <>
@@ -199,11 +246,46 @@ const Records = ({ route }) => {
           </ButtonText>
         </View>
 
+        <Modal visible={showPicker} transparent={true} animationType='slide'>
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <DateTimePicker
+                value={pickerdate}
+                mode='date'
+                display={Platform.OS === "ios" ? "spinner" : "calendar"}
+                onChange={onChange}
+              />
+
+              {/* Confirm Button */}
+              <TouchableOpacity
+                onPress={confirmDate}
+                style={styles.confirmButton}>
+                <Text style={styles.confirmText}>Set Date</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+
+        {/* {showPicker && (
+          <>
+            <DateTimePicker
+            display={Platform.OS === "android" ? "calendar" : "spinner"}
+            testID='dateTimePicker'
+            value={pickerdate}
+            is24Hour={true}
+            onChange={onChange}
+            mode='date'
+          />
+          <View>
+
+          </View>
+          </>
+        )} */}
+
         {/* showing empty box incase no data is available */}
 
-         {content}
+        {content}
         {/* dashboard  showing the records*/}
-
       </View>
       {isPending && (
         <View style={styles.overlayLoading}>
@@ -244,5 +326,27 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     justifyContent: "center",
     alignItems: "center",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  modalContent: {
+    backgroundColor: "#000000",
+    padding: 20,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  confirmButton: {
+    backgroundColor: "#28a745",
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+  },
+  confirmText: {
+    color: "#fff",
+    fontSize: 16,
   },
 });
