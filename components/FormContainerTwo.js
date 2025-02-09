@@ -35,7 +35,7 @@ const FormContainerTwo = ({
   isPending,
   resetForm,
   formID,
-  exstingData
+  existingData,
 }) => {
   const [formState, setFormState] = useState({});
   const [location, setLocation] = useState("");
@@ -141,7 +141,7 @@ const FormContainerTwo = ({
             onUpdateValue={(value) =>
               updateInputValueHandler(item.field_id, value)
             }
-            value={formState[item.field_id]}
+            value={formState[item.field_id] || ""}
             isInvalid={errors[item.field_id]}
             placeholder={placeholder}
             onSubmitEditing={() => inputRef2.current?.focus()}
@@ -242,6 +242,19 @@ const FormContainerTwo = ({
       onSubmit({ ...formState, form_id: formID, input_number: inputs.length });
     }
   }
+
+  useEffect(() => {
+    if (isEditing && existingData) {
+
+
+        // inputs.forEach((item) => {
+        //   console.log(existingData, "item data");
+        //   // prefilledState[item.field_id] = existingData[item.field_id] || "";
+        // });
+        setFormState(existingData);
+      }
+
+  }, [isEditing, existingData, inputs, isError, isSuccess]);
 
   useEffect(() => {
     if (!isError && isSuccess) {

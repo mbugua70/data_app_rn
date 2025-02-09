@@ -17,7 +17,7 @@ function AuthContentTwo({
   isPending,
   isSuccess,
   isError,
-  exstingData,
+  existingData,
 }) {
   const navigation = useNavigation();
   const [isSubmiting, setIsSubmitting] = useState(false);
@@ -68,7 +68,7 @@ function AuthContentTwo({
         isPending={isPending}
         isSuccess={isSuccess}
         isError={isError}
-        exstingData={exstingData}
+        existingData={existingData}
       />
     </View>
   );
