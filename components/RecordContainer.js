@@ -1,13 +1,27 @@
 import { View, Text, StyleSheet } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { IconButton, MD3Colors } from 'react-native-paper';
 import { GlobalStyles } from "../Constants/Globalcolors";
 import { useNavigation } from "@react-navigation/native";
 
 
 
-const RecordContainer = ({index, formID, formTitle}) => {
+const RecordContainer = ({index, formID, formTitle, item}) => {
+  console.log(item)
+  console.log(index, "index")
+  const [dateNumber, setDateNumber] = useState()
+  const [dateText, setDateText] = useState();
+  const [dayOfWeek, setdayOfWeek] = useState()
     console.log(formID, "testing 2")
+
+   useEffect(() => {
+    if(item){
+      const date = new Date(item.t_date).toDateString().split(" ")
+      setDateNumber(date[2])
+      setDateText(date[1])
+      setdayOfWeek(date[0])
+    }
+   }, [])
 
     const navigation =  useNavigation()
 
@@ -33,7 +47,15 @@ const RecordContainer = ({index, formID, formTitle}) => {
       }
 
       const iconColor = {
-        color: index % 2 === 0 ? "#fff" : "#9cacff",
+        color: index % 2 === 0 ? GlobalStyles.colors.gray600 : "#9cacff",
+      }
+
+      const recordeTitle = {
+        color: index % 2 === 0 ? "#fff" : "#000000"
+      }
+
+      const dayTextStyling = {
+        color: index % 2 === 0 ? "#fff" : GlobalStyles.colors.gray600
       }
 
 
@@ -41,13 +63,13 @@ const RecordContainer = ({index, formID, formTitle}) => {
     <View style={styles.screen}>
       {/* date container */}
       <View style={styles.dateContainer}>
-        <Text style={styles.boldText}>15</Text>
-        <Text style={styles.lightText}>Aug</Text>
+        <Text style={styles.boldText}>{dateNumber}</Text>
+        <Text style={styles.lightText}>{dateText}</Text>
       </View>
       {/* main record container */}
       <View style={[styles.recordContainer, styling]}>
         <View>
-          <Text style={styles.boldText}>Record one</Text>
+          <Text style={[styles.boldText, recordeTitle]}>Record {index + 1}</Text>
           {/* button container */}
           <IconButton
             mode={iconButton.mode}
@@ -58,7 +80,7 @@ const RecordContainer = ({index, formID, formTitle}) => {
           />
         </View>
         <View>
-          <Text style={styles.lightText}>Thu</Text>
+          <Text style={[dayTextStyling]}>{dayOfWeek}</Text>
         </View>
       </View>
     </View>
@@ -70,10 +92,11 @@ export default RecordContainer;
 
 const styles = StyleSheet.create({
    screen: {
-    padding: 16,
-    margin: 10,
+    padding: 10,
+    marginHorizontal: 10,
     flexDirection: 'row',
     columnGap: 10,
+    marginVertical: 2,
    },
    recordContainer: {
     borderRadius: 12,
@@ -90,7 +113,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "700",
    },
-   lightText: {
-    color: GlobalStyles.colors.gray600
-   }
+
 })

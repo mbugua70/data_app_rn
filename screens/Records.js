@@ -8,6 +8,7 @@ import {
   Platform,
   Modal,
   TouchableOpacity,
+  FlatList,
 } from "react-native";
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { useMutation } from "@tanstack/react-query";
@@ -24,7 +25,7 @@ import EmptyBox from "../UI/EmptyBox";
 import { ProjectContext } from "../store/projectContext";
 
 const Records = ({ route }) => {
-  const {addRecords} = useContext(ProjectContext)
+  const { addRecords, records } = useContext(ProjectContext);
   const [activeButton, setActiveButton] = useState(1);
   const [userData, setUserData] = useState("");
   const [isOffline, setIsOffline] = useState(false);
@@ -32,8 +33,7 @@ const Records = ({ route }) => {
   const [pickerdate, setPickerDate] = useState(new Date());
   const [tempDate, setTempDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
-  const [isFetchingUserData, setIsFetchingUserData] = useState(true)
-
+  const [isFetchingUserData, setIsFetchingUserData] = useState(true);
 
   const { formID, formTitle } = route.params;
   const isFocused = useIsFocused();
@@ -43,9 +43,9 @@ const Records = ({ route }) => {
       const token = await AsyncStorage.getItem("token");
       if (token) {
         setUserData(JSON.parse(token));
-        setIsFetchingUserData(false)
+        setIsFetchingUserData(false);
       }
-      setIsFetchingUserData(false)
+      setIsFetchingUserData(false);
     }
 
     handleToken();
@@ -86,8 +86,6 @@ const Records = ({ route }) => {
     },
   };
 
-
-
   const { data, mutate, isError, error, isPending, isSuccess } = useMutation({
     mutationFn: fetchRecordByDate,
     // the code below will wait the request to finish before moving to another page.
@@ -96,11 +94,10 @@ const Records = ({ route }) => {
     },
 
     onSuccess: (data) => {
-      const formatData = JSON.parse(data)
-      if(formatData){
-        addRecords(formatData)
+      const formatData = JSON.parse(data);
+      if (formatData) {
+        addRecords(formatData.data);
       }
-
     },
   });
 
@@ -171,35 +168,55 @@ const Records = ({ route }) => {
   const confirmDate = () => {
     setPickerDate(tempDate); // Finalize the date
     setShowPicker(false); // Close modal
-    handleDateBackend(tempDate)
+    handleDateBackend(tempDate);
   };
-
-
 
   function handleDate() {
     setActiveButton(3);
     // triggering the modal date to open
-    openDatePicker()
+    openDatePicker();
   }
 
-  function handleDateBackend(selectedDate){
+  function handleDateBackend(selectedDate) {
     const ba_id = userData.ba_id;
-    if (pickerdate) {
-      const formattedDate = selectedDate.toISOString().split("T")[0]
-      mutate({formattedDate, formID, ba_id})
-   } else {
-     Toast.show({
-       type: "error",
-       text1: "Date error",
-       text2: "Failed to pick date",
-     });
-   }
-  }
 
+    if (isOffline) {
+      Toast.show({
+        type: "error",
+        text1: "Network Error",
+        text2: "No internet connection. Please try again later.",
+      });
+      return;
+    } else if (!isInternetReachable) {
+      Toast.show({
+        type: "error",
+        text1: "Network Error",
+        text2: "No internet access",
+      });
+      return;
+    }
+
+
+    if (pickerdate) {
+      const formattedDate = selectedDate.toISOString().split("T")[0];
+      mutate({ formattedDate, formID, ba_id });
+    } else {
+      Toast.show({
+        type: "error",
+        text1: "Date error",
+        text2: "Failed to pick date",
+      });
+    }
+  }
 
   // renderrecord item
-
-
+  function handleRecordItem({item, index}) {
+    return (
+      <>
+        <RecordContainer formID={formID} formTitle={formTitle} index={index} item={item} />
+      </>
+    );
+  }
 
   let content;
 
@@ -208,21 +225,25 @@ const Records = ({ route }) => {
     if (fetchedData.data.length === 0) {
       content = <EmptyBox noDataText='You have no records to show!' />;
     } else {
-      content = <RecordContainer formID={formID} formTitle={formTitle} />;
+      content = (
+        <FlatList
+          data={records}
+          keyExtractor={(item) => item.r_id}
+          renderItem={handleRecordItem}
+          contentContainerStyle={styles.flatListContainer}
+        />
+      );
     }
   }
 
-  if(!isFetchingUserData && userData){
-
+  if (!isFetchingUserData && userData) {
   }
 
-  useEffect(() => {
-    const formattedDate = new Date().toISOString().split("T")[0];
-    const ba_id = userData.ba_id;
-    mutate({formattedDate, formID, ba_id})
-
-  },[isFetchingUserData, isFocused])
-
+  // useEffect(() => {
+  //   const formattedDate = new Date().toISOString().split("T")[0];
+  //   const ba_id = userData.ba_id;
+  //   mutate({ formattedDate, formID, ba_id });
+  // }, [isFetchingUserData, isFocused]);
 
 
   return (

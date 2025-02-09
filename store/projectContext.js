@@ -170,9 +170,9 @@ function ProjectContextProvider({ children }) {
     AsyncStorage.setItem("formsSelectData", JSON.stringify(data))
   }
 
-  function addRecords(date){
+  function addRecords(data){
     dispatchUserRecords({type: "ADDRECORDS", payload: data})
-    AsyncStorage.setItem("formUserRecords", JSON.stringify(date))
+    AsyncStorage.setItem("formUserRecords", JSON.stringify(data))
   }
 
   const value = {
