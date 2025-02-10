@@ -9,7 +9,6 @@ import { GlobalStyles } from "../Constants/Globalcolors";
 
 const Report = ({ route }) => {
   const { formID, formTitle } = route.params;
-
   const { data, mutate, isError, error, isPending, isSuccess } = useMutation({
     mutationFn: SummaryForm,
     // the code below will wait the request to finish before moving to another page.

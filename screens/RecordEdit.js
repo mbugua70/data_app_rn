@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet } from "react-native";
 import { useMutation } from "@tanstack/react-query";
 import { GlobalStyles } from "../Constants/Globalcolors";
-import { SummaryForm } from "../http/api";
+import { RecordEditForm } from "../http/api";
 
 import React, { useEffect, useState } from "react";
 import AuthContentTwo from "../components/AuthContentTwo";
@@ -11,7 +11,7 @@ const RecordEdit = ({ route }) => {
   const { formID, formTitle, item: existingData } = route.params;
 
   const { data, mutate, isError, error, isPending, isSuccess } = useMutation({
-    mutationFn: SummaryForm,
+    mutationFn: RecordEditForm,
     // the code below will wait the request to finish before moving to another page.
     onMutate: async (data) => {
       return data;
@@ -37,8 +37,9 @@ const RecordEdit = ({ route }) => {
   });
 
   async function submitHandler(record) {
+
     // report submission
-    mutate(record);
+    mutate({record});
   }
 
   useEffect(() => {

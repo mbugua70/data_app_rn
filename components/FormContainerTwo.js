@@ -23,6 +23,7 @@ import LocationPicker from "./LocationPicker";
 import RadioComponent from "./RadioComponent";
 import Checkbox from "./Checkbox";
 import CheckboxComponent from "./Checkbox";
+import { filterAndSetFormState } from "../http/api";
 
 const FormContainerTwo = ({
   isEditing,
@@ -74,9 +75,9 @@ const FormContainerTwo = ({
 
     let placeholder = "Enter value";
     if (item.input_title === "Date") {
-      placeholder = "Enter date e.g 11-12-2000";
+      placeholder = "Enter date e.g YYYY-MM-DD";
     } else if (item.input_title === "Date of Activation") {
-      placeholder = "Enter date e.g 11-12-2000";
+      placeholder = "Enter date e.g YYYY-MM-DD";
     }
 
     // keybaord type
@@ -126,7 +127,7 @@ const FormContainerTwo = ({
             }
             value={formState[item.field_id]}
             isInvalid={errors[item.field_id]}
-            placeholder='Enter date e.g 11-12-2020'
+            placeholder='Enter date e.g YYYY-MM-DD'
             onSubmitEditing={() => inputRef2.current?.focus()}
             blurOnSubmit={false}
             returnKeyType='next'
@@ -245,19 +246,15 @@ const FormContainerTwo = ({
 
   useEffect(() => {
     if (isEditing && existingData) {
+        const filteredRecord = filterAndSetFormState(existingData);
 
-
-        // inputs.forEach((item) => {
-        //   console.log(existingData, "item data");
-        //   // prefilledState[item.field_id] = existingData[item.field_id] || "";
-        // });
-        setFormState(existingData);
+        setFormState(filteredRecord);
       }
 
   }, [isEditing, existingData, inputs, isError, isSuccess]);
 
   useEffect(() => {
-    if (!isError && isSuccess) {
+    if (!isError && isSuccess && !isEditing) {
       const resetState = {};
       inputs.forEach((item) => {
         if (item.field_type === "checkbox") {

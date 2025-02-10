@@ -7,7 +7,6 @@ import { useNavigation } from "@react-navigation/native";
 
 
 const RecordContainer = ({index, formID, formTitle, item}) => {
-  console.log(item)
   const [dateNumber, setDateNumber] = useState()
   const [dateText, setDateText] = useState();
   const [dayOfWeek, setdayOfWeek] = useState()
@@ -91,8 +90,8 @@ export default RecordContainer;
 
 const styles = StyleSheet.create({
    screen: {
-    padding: 10,
-    marginHorizontal: 10,
+    padding: 4,
+    marginHorizontal: 16,
     flexDirection: 'row',
     columnGap: 10,
     marginVertical: 2,

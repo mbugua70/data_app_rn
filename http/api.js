@@ -36,10 +36,11 @@ export async function LoginHander({ name, password }) {
   }
 }
 
+// submit records
 export async function SummaryForm(recordData) {
 
   const token = await AsyncStorage.getItem("token");
-  console.log("recorded data", recordData)
+
 
   if (!token) {
     throw new Error("No token found in AsyncStorage.");
@@ -48,6 +49,7 @@ export async function SummaryForm(recordData) {
   let user;
   try {
     user = JSON.parse(token);
+    console.log(user);
   } catch (error) {
     throw new Error("Failed to parse token.");
   }
@@ -57,13 +59,25 @@ export async function SummaryForm(recordData) {
 
   const formData = new FormData();
 
+
+   formData.append("ba_id", baID);
+
   Object.entries(recordData).forEach(([key, value]) => {
     if (typeof value === "object" && value !== null) {
       // Handle nested objects by appending their key-value pairs separately
       Object.entries(value).forEach(([subKey, subValue]) => {
         formData.append(`${key}[${subKey}]`, subValue);
       });
-    } else {
+    } else if(key === "t_date"){
+      const date = new Date(value)
+     if(isNaN(date.getDate())){
+      throw new Error("Invalid date input")
+     }
+
+     const formattedDate = date.toISOString().split("T")["0"]
+     formData.append(key, formattedDate)
+
+    }else{
       formData.append(key, value);
     }
   });
@@ -83,6 +97,67 @@ export async function SummaryForm(recordData) {
     return data;
   } else {
     console.log(data)
+    throw {
+      message: data || "Submission failed.",
+      statusText: res.statusText,
+      status: res.status,
+    };
+  }
+}
+
+// edit records
+export async function RecordEditForm(recordData) {
+
+  const token = await AsyncStorage.getItem("token");
+   const {record} = recordData;
+
+  //  console.log(record, formID, "sending to the backend")
+
+  if (!token) {
+    throw new Error("No token found in AsyncStorage.");
+  }
+
+  let user;
+  try {
+     user= JSON.parse(token);
+  } catch (error) {
+    throw new Error("Failed to parse token.");
+  }
+
+  const baID = user?.ba_id || "Unknown";
+
+
+  const formData = new FormData();
+  formData.append("ba_id", baID)
+
+  Object.entries(record).forEach(([key, value]) => {
+  if(key === "t_date") {
+        const date = new Date(value)
+       if(isNaN(date.getDate())){
+        throw new Error("Invalid date input")
+       }
+       const formattedDate = date.toISOString().split("T")["0"]
+       formData.append(key, formattedDate)
+    }else if(key === "r_id"){
+      formData.append("record_id", value)
+    }else {
+      formData.append(key, value);
+    }
+  });
+
+
+  console.log("Submitting data:", Object.fromEntries(formData.entries()));
+
+  const res = await fetch("https://iguru.co.ke/BAIMS/ep/UPDATE-RECORD.php", {
+    method: "POST",
+    body: formData,
+  });
+
+  const data = await res.json(); // Handle as plain text
+  console.log(data, "checking");
+  if (res.ok) {
+    return data;
+  } else {
     throw {
       message: data || "Submission failed.",
       statusText: res.statusText,
@@ -152,4 +227,20 @@ export async function fetchRecordByDate(requestData) {
     console.error("Error fetching package data:", error);
     return error;
   }
+}
+
+
+// export filteredData
+
+export function filterAndSetFormState(record) {
+  const formState = {}; // New object to store filtered values
+
+  Object.entries(record).forEach(([key, value]) => {
+    // Only keep keys that are NOT numbers
+    if (isNaN(key)) {
+      formState[key] = value;
+    }
+  });
+
+  return formState;
 }

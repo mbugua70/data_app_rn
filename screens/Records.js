@@ -243,8 +243,6 @@ const Records = ({ route }) => {
     }
   }
 
-  if (!isFetchingUserData && userData) {
-  }
 
   useEffect(() => {
     if (activeButton === 1) {
@@ -378,4 +376,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
   },
+  flatListContainer: {
+    marginTop: 14,
+  }
 });
