@@ -168,6 +168,7 @@ const FormContainerTwo = ({
 
         {isRadio && (
           <RadioComponent
+            isEditing={isEditing}
             isSuccess={isSuccess}
             isError={isError}
             formNumber={item.input_rank}
@@ -183,6 +184,7 @@ const FormContainerTwo = ({
 
         {isCheckbox && (
           <CheckboxComponent
+            isEditing={isEditing}
             isSuccess={isSuccess}
             isError={isError}
             formNumber={item.input_rank}
@@ -270,7 +272,7 @@ const FormContainerTwo = ({
       });
       setFormState(resetState);
     }
-  }, [isError, isSuccess, inputs]);
+  }, [isError, isSuccess, inputs, isEditing]);
 
   return (
     <>
