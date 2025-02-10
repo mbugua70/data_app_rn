@@ -3,7 +3,7 @@ import { Checkbox } from 'react-native-paper';
 import React, { useEffect, useState } from 'react';
 import { GlobalStyles } from '../Constants/Globalcolors';
 
-const CheckboxComponent = ({ title, data, onUpdateValue, formNumber, isSuccess, isError, valueEntered, isEditing}) => {
+const CheckboxComponent = ({ title, data, onUpdateValue, formNumber, isSuccess, isError, valueEntered, isEditing, isInvalid}) => {
   const [selectedValues, setSelectedValues] = useState(valueEntered || {}); // Store checked state per item
   function toggleCheckbox(item) {
     const newValues = {
@@ -18,7 +18,7 @@ const CheckboxComponent = ({ title, data, onUpdateValue, formNumber, isSuccess, 
     return (
       <Checkbox.Item
         position='leading'
-        labelStyle={{fontSize: 14}}
+        labelStyle={[{fontSize: 14},isInvalid && {color: GlobalStyles.colors.error500}]}
         uncheckedColor={GlobalStyles.colors.gray800}
         label={item.label}
         status={selectedValues[item.label] ? 'checked' : 'unchecked'}

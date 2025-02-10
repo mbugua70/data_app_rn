@@ -2,8 +2,9 @@ import { View, Text, FlatList, StyleSheet } from "react-native";
 import { RadioButton } from "react-native-paper";
 import React, { useEffect, useState } from "react";
 import { useFocusEffect } from "@react-navigation/native";
+import { GlobalStyles } from "../Constants/Globalcolors";
 
-const RadioComponent = ({ title, data, onUpdateValue, formNumber, isSuccess, isError, valueEntered, isEditing }) => {
+const RadioComponent = ({ title, data, onUpdateValue, formNumber, isSuccess, isError, valueEntered, isEditing, isInvalid}) => {
   const [selectedValue, setSelectedValue] = useState(valueEntered || "");
 
   function handleRadioButton({ item, index }) {
@@ -15,7 +16,7 @@ const RadioComponent = ({ title, data, onUpdateValue, formNumber, isSuccess, isE
             onUpdateValue(newValue);
           }}>
           <RadioButton.Item
-            labelStyle={{ fontSize: 14 }}
+            labelStyle={[{ fontSize: 14 }, isInvalid && {color: GlobalStyles.colors.error500}]}
             position='leading'
             label={item.label}
             value={item.value}
