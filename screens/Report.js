@@ -37,7 +37,7 @@ const Report = ({ route }) => {
 
   async function submitHandler(record) {
     // report submission
-    mutate(record);
+    mutate({record});
   }
 
   useEffect(() => {

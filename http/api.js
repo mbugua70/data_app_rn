@@ -40,6 +40,7 @@ export async function LoginHander({ name, password }) {
 export async function SummaryForm(recordData) {
 
   const token = await AsyncStorage.getItem("token");
+  const {record} = recordData
 
 
   if (!token) {
@@ -62,13 +63,8 @@ export async function SummaryForm(recordData) {
 
    formData.append("ba_id", baID);
 
-  Object.entries(recordData).forEach(([key, value]) => {
-    if (typeof value === "object" && value !== null) {
-      // Handle nested objects by appending their key-value pairs separately
-      Object.entries(value).forEach(([subKey, subValue]) => {
-        formData.append(`${key}[${subKey}]`, subValue);
-      });
-    } else if(key === "t_date"){
+  Object.entries(record).forEach(([key, value]) => {
+    if(key === "t_date"){
       const date = new Date(value)
      if(isNaN(date.getDate())){
       throw new Error("Invalid date input")
