@@ -41,7 +41,7 @@ const Report = ({ route }) => {
   }
 
   useEffect(() => {
-    console.log(error);
+    console.log(error, "Error");
     if (error && !isPending) {
       Toast.show({
         type: "error",

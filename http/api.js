@@ -50,15 +50,17 @@ export async function SummaryForm(recordData) {
   let user;
   try {
     user = JSON.parse(token);
-    console.log(user);
   } catch (error) {
     throw new Error("Failed to parse token.");
   }
 
   const baID = user?.ba_id || "Unknown";
-;
+
 
   const formData = new FormData();
+
+
+
 
 
    formData.append("ba_id", baID);
@@ -73,26 +75,32 @@ export async function SummaryForm(recordData) {
      const formattedDate = date.toISOString().split("T")["0"]
      formData.append(key, formattedDate)
 
+    } else if(typeof value === "object"){
+      const trueKeys = Object.entries(value)
+      .filter(([keyTwo, valueTwo]) => valueTwo === true) // Keep only true values
+      .map(([keyTwo]) => keyTwo); // Extract keys
+
+    if (trueKeys.length > 0) {
+      formData.append(key, trueKeys); // Store the array under the main key
+    }
+
     }else{
       formData.append(key, value);
     }
   });
-
-
-  console.log("Submitting data:", Object.fromEntries(formData.entries()));
 
   const res = await fetch("https://iguru.co.ke/BAIMS/ep/BM.php", {
     method: "POST",
     body: formData,
   });
 
+
+
   const data = await res.json(); // Handle as plain text
-  console.log(data, "checking");
   if (res.ok) {
-    console.log("submitted")
+
     return data;
   } else {
-    console.log(data)
     throw {
       message: data || "Submission failed.",
       statusText: res.statusText,
@@ -107,7 +115,6 @@ export async function RecordEditForm(recordData) {
   const token = await AsyncStorage.getItem("token");
    const {record} = recordData;
 
-  //  console.log(record, formID, "sending to the backend")
 
   if (!token) {
     throw new Error("No token found in AsyncStorage.");
@@ -136,13 +143,20 @@ export async function RecordEditForm(recordData) {
        formData.append(key, formattedDate)
     }else if(key === "r_id"){
       formData.append("record_id", value)
+    }else if(typeof value === "object"){
+      const trueKeys = Object.entries(value)
+      .filter(([keyTwo, valueTwo]) => valueTwo === true) // Keep only true values
+      .map(([keyTwo]) => keyTwo); // Extract keys
+
+    if (trueKeys.length > 0) {
+      formData.append(key, trueKeys); // Store the array under the main key
+    }
+
     }else {
       formData.append(key, value);
     }
   });
 
-
-  console.log("Submitting data:", Object.fromEntries(formData.entries()));
 
   const res = await fetch("https://iguru.co.ke/BAIMS/ep/UPDATE-RECORD.php", {
     method: "POST",
@@ -150,7 +164,7 @@ export async function RecordEditForm(recordData) {
   });
 
   const data = await res.json(); // Handle as plain text
-  console.log(data, "checking");
+
   if (res.ok) {
     return data;
   } else {
@@ -194,7 +208,6 @@ export async function fetchRecordData(phone) {
 export async function fetchRecordByDate(requestData) {
 
   const {formattedDate, ba_id, formID} = requestData;
-  console.log(formattedDate, ba_id, formID, "sending data api")
 
   const fetchData = {
     ba_id: ba_id,

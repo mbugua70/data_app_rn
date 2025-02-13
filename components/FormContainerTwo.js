@@ -114,6 +114,12 @@ const FormContainerTwo = ({
       }));
     }
 
+
+
+    // const fieldToRemove = ["ba_name", "ba_phone", "ba_region"]
+
+    //  console.log(item, "my values items")
+
     return (
       <>
         {/* date time picker */}
@@ -249,7 +255,7 @@ const FormContainerTwo = ({
   useEffect(() => {
     if (isEditing && existingData) {
         const filteredRecord = filterAndSetFormState(existingData);
-
+         console.log(filteredRecord, "checking record values")
         setFormState(filteredRecord);
       }
 
