@@ -44,6 +44,12 @@
             "./assets/fonts/cocacola.ttf"
           ]
         }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow IGuru app to access your photos"
+        }
       ]
     ],
     "extra": {

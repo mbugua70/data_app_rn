@@ -25,6 +25,7 @@ import Checkbox from "./Checkbox";
 import CheckboxComponent from "./Checkbox";
 import { filterAndSetFormState } from "../http/api";
 import { AuthContext } from "../store/store";
+import PickerImage from "./PickerImage";
 
 const FormContainerTwo = ({
   isEditing,
@@ -45,6 +46,7 @@ const FormContainerTwo = ({
   const [errors, setErrors] = useState({});
   const [longitude, setLongitude] = useState("");
   const [latitude, setLatitude] = useState("");
+  const [imageFile, setImageFile] = useState("");
 
   // userRefs for input fields to be used in the form
   const inputRef1 = useRef(null);
@@ -203,6 +205,13 @@ const FormContainerTwo = ({
     );
   }
 
+  function takeImageHander(image) {
+    setFormState((prevState) => ({
+      ...prevState,
+      imageurl: image, // storing the image in the form state
+    }));
+  }
+
   function takeLocationHandler(pickedLocation) {
     setFormState((prevState) => ({
       ...prevState,
@@ -315,11 +324,22 @@ const FormContainerTwo = ({
           ListFooterComponent={() => (
             //  footer component
             <>
+              {/* image picker */}
+              <PickerImage
+                onImageHandler={takeImageHander}
+                resetForm={resetForm}
+                imageFile={imageFile}
+              />
+
               {/* location picker */}
               <LocationPicker
                 resetForm={resetForm}
                 onLocationHandler={takeLocationHandler}
-                pickedLocationState={isEditing ? {lat: latitude, long: longitude} : formState.location}
+                pickedLocationState={
+                  isEditing
+                    ? { lat: latitude, long: longitude }
+                    : formState.location
+                }
               />
 
               {/* submit button */}
