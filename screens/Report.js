@@ -36,6 +36,7 @@ const Report = ({ route }) => {
   });
 
   async function submitHandler(record) {
+    console.log(record, "sending to the backend")
     // report submission
     mutate({record});
   }

@@ -16,7 +16,7 @@ import SecondaryButton from "./SecondaryButton";
 import Toast from "react-native-toast-message";
 import { AuthContext } from "../store/store";
 
-const LocationPicker = ({ resetForm }) => {
+const LocationPicker = ({ resetForm, onLocationHandler, pickedLocationState}) => {
   const [locationPermissionInformation, requestPermission] =
     Location.useForegroundPermissions();
   const [isFetchingLocation, setIsFetchingLocation] = useState(false);
@@ -98,8 +98,8 @@ const LocationPicker = ({ resetForm }) => {
 
   React.useEffect(() => {
     if (pickedLocation) {
-      // onLocationHandler(pickedLocation);
-      locationHandler(pickedLocation);
+      onLocationHandler(pickedLocation);
+      // locationHandler(pickedLocation);
     }
   }, [pickedLocation]);
 
@@ -142,10 +142,10 @@ const LocationPicker = ({ resetForm }) => {
     );
   }
 
-  if (isLocation) {
+  if (pickedLocationState) {
     const locationUrl = getGoogleMapPreview(
-      pickedLocations.lat,
-      pickedLocations.long
+      pickedLocationState.lat,
+      pickedLocationState.long
     );
     if (locationUrl) {
       content = <Image style={styles.image} source={{ uri: locationUrl }} />;
@@ -155,7 +155,7 @@ const LocationPicker = ({ resetForm }) => {
   }
 
   useEffect(() => {
-    setPickedLocation("");
+     setPickedLocation("");
   }, [resetForm]);
 
   return (

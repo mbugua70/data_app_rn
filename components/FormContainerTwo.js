@@ -44,7 +44,9 @@ const FormContainerTwo = ({
   const { formInputData, formsSelectData } = useContext(ProjectContext);
   const [inputs, setInputs] = useState("");
   const [errors, setErrors] = useState({});
-  const {isLocation, pickedLocations } = useContext(AuthContext)
+  const { isLocation, pickedLocations, locationHandler } =
+    useContext(AuthContext);
+  const [isResettingForm, setIsResettingForm] = useState(false);
 
   // userRefs for input fields to be used in the form
   const inputRef1 = useRef(null);
@@ -115,7 +117,6 @@ const FormContainerTwo = ({
       label: item["0"],
       value: item.option_text,
     }));
-
 
     return (
       <>
@@ -204,16 +205,12 @@ const FormContainerTwo = ({
     );
   }
 
-  useEffect(() => {
-    function takeLocationHandler() {
-      setFormState((prevState) => ({
-        ...prevState,
-        location: pickedLocations,  // Store location inside formState
-      }));
-    }
-
-    return () =>  takeLocationHandler()
-  }, [isLocation, pickedLocations])
+  function takeLocationHandler(pickedLocation) {
+    setFormState((prevState) => ({
+      ...prevState,
+      location: pickedLocation, // Store location inside formState
+    }));
+  }
 
   function validateForm() {
     let errors = {};
@@ -278,6 +275,7 @@ const FormContainerTwo = ({
           resetState[item.field_id] = "";
         }
       });
+      setIsResettingForm(true);
       setFormState(resetState);
     }
   }, [isError, isSuccess, inputs, isEditing]);
@@ -297,6 +295,14 @@ const FormContainerTwo = ({
           ListFooterComponent={() => (
             //  footer component
             <>
+              {/* location picker */}
+              <LocationPicker
+                resetForm={resetForm}
+                onLocationHandler={takeLocationHandler}
+                pickedLocationState={formState.location}
+              />
+
+              {/* submit button */}
               <View style={styles.submitContainer}>
                 {isPending ? (
                   <ActivityIndicator
@@ -310,11 +316,6 @@ const FormContainerTwo = ({
                   </FlatButton>
                 )}
               </View>
-
-              {/* location picker */}
-              <LocationPicker
-                resetForm={resetForm}
-              />
             </>
           )}
         />

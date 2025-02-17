@@ -14,7 +14,7 @@ export const AuthContext = createContext({
 
 export function AuthContextProvider({children}){
     const [authToken, setAuthToken] = useState()
-    const [locationStore, setLocationStore] = useState()
+    const [locationStore, setLocationStore] = useState({})
 
 
 
@@ -24,7 +24,12 @@ export function AuthContextProvider({children}){
     }
 
     function locationHandler(pickedLocation){
-        setLocationStore(pickedLocation)
+        setLocationStore((prev) => {
+            return {
+                ...prev,
+                pickedLocation
+            }
+        })
     }
 
 
