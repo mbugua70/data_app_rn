@@ -24,6 +24,7 @@ import RadioComponent from "./RadioComponent";
 import Checkbox from "./Checkbox";
 import CheckboxComponent from "./Checkbox";
 import { filterAndSetFormState } from "../http/api";
+import { AuthContext } from "../store/store";
 
 const FormContainerTwo = ({
   isEditing,
@@ -43,6 +44,7 @@ const FormContainerTwo = ({
   const { formInputData, formsSelectData } = useContext(ProjectContext);
   const [inputs, setInputs] = useState("");
   const [errors, setErrors] = useState({});
+  const {isLocation, pickedLocations } = useContext(AuthContext)
 
   // userRefs for input fields to be used in the form
   const inputRef1 = useRef(null);
@@ -65,6 +67,21 @@ const FormContainerTwo = ({
       }
     });
   }, [formInputData, formID]);
+
+  function updateInputValueHandler(field_id, enteredValue) {
+    // setFormState((prevState) => ({
+    //   ...prevState,
+    //   [field_id]: enteredValue, // Update only the specific field
+    // }));
+
+    setFormState((prevState) => ({
+      ...prevState,
+      [field_id]:
+        typeof enteredValue === "object"
+          ? { ...prevState[field_id], ...enteredValue } // Merge objects properly
+          : enteredValue, // Otherwise, just update
+    }));
+  }
 
   function handleInputsForms({ item, index }) {
     const isInput = item.field_type === "input";
@@ -99,26 +116,6 @@ const FormContainerTwo = ({
       value: item.option_text,
     }));
 
-    function updateInputValueHandler(field_id, enteredValue) {
-      // setFormState((prevState) => ({
-      //   ...prevState,
-      //   [field_id]: enteredValue, // Update only the specific field
-      // }));
-
-      setFormState((prevState) => ({
-        ...prevState,
-        [field_id]:
-          typeof enteredValue === "object"
-            ? { ...prevState[field_id], ...enteredValue } // Merge objects properly
-            : enteredValue, // Otherwise, just update
-      }));
-    }
-
-
-
-    // const fieldToRemove = ["ba_name", "ba_phone", "ba_region"]
-
-    //  console.log(item, "my values items")
 
     return (
       <>
@@ -207,9 +204,16 @@ const FormContainerTwo = ({
     );
   }
 
-  function takeLocationHandler(pickedlocation) {
-    setLocation(pickedlocation);
-  }
+  useEffect(() => {
+    function takeLocationHandler() {
+      setFormState((prevState) => ({
+        ...prevState,
+        location: pickedLocations,  // Store location inside formState
+      }));
+    }
+
+    return () =>  takeLocationHandler()
+  }, [isLocation, pickedLocations])
 
   function validateForm() {
     let errors = {};
@@ -254,11 +258,9 @@ const FormContainerTwo = ({
 
   useEffect(() => {
     if (isEditing && existingData) {
-        const filteredRecord = filterAndSetFormState(existingData);
-         console.log(filteredRecord, "checking record values")
-        setFormState(filteredRecord);
-      }
-
+      const filteredRecord = filterAndSetFormState(existingData);
+      setFormState(filteredRecord);
+    }
   }, [isEditing, existingData, inputs, isError, isSuccess]);
 
   useEffect(() => {
@@ -293,28 +295,30 @@ const FormContainerTwo = ({
             <Text style={styles.formTitle}>{formTitle}</Text>
           )}
           ListFooterComponent={() => (
-            <View style={styles.submitContainer}>
-              {isPending ? (
-                <ActivityIndicator
-                  animating={true}
-                  color={MD2Colors.lightBlueA700}
-                  size='small'
-                />
-              ) : (
-                <FlatButton isPending={isPending} onPress={submitHandler}>
-                  SUBMIT
-                </FlatButton>
-              )}
-            </View>
+            //  footer component
+            <>
+              <View style={styles.submitContainer}>
+                {isPending ? (
+                  <ActivityIndicator
+                    animating={true}
+                    color={MD2Colors.lightBlueA700}
+                    size='small'
+                  />
+                ) : (
+                  <FlatButton isPending={isPending} onPress={submitHandler}>
+                    SUBMIT
+                  </FlatButton>
+                )}
+              </View>
+
+              {/* location picker */}
+              <LocationPicker
+                resetForm={resetForm}
+              />
+            </>
           )}
         />
       </View>
-
-      {/* location component */}
-      {/* <LocationPicker
-            onLocationHandler={takeLocationHandler}
-            resetForm={resetForm}
-          /> */}
     </>
   );
 };

@@ -5,18 +5,26 @@ export const AuthContext = createContext({
     token: "",
     authenticate: (token)=>{},
     isAuthenticate: false,
-    logout: () =>{}
+    logout: () =>{},
+    locationHandler: (pickedLocation) => {},
+    pickedLocations: "",
+    isLocation: false
 })
 
 
 export function AuthContextProvider({children}){
     const [authToken, setAuthToken] = useState()
+    const [locationStore, setLocationStore] = useState()
 
 
 
     function authenticate(token){
      setAuthToken(token);
      AsyncStorage.setItem("token", token)
+    }
+
+    function locationHandler(pickedLocation){
+        setLocationStore(pickedLocation)
     }
 
 
@@ -36,6 +44,10 @@ export function AuthContextProvider({children}){
         isAuthenticate: !!authToken,
         authenticate: authenticate,
         logout: logout,
+        isLocation: !!locationStore,
+        locationHandler: locationHandler,
+        pickedLocations: locationStore
+
 
     }
 

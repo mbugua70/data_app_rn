@@ -1,7 +1,7 @@
 import NetInfo from "@react-native-community/netinfo";
 import { View, Text, StyleSheet, Image } from "react-native";
 import { ActivityIndicator, MD2Colors } from "react-native-paper";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import * as Location from "expo-location";
 
 import { getGoogleMapPreview } from "../util/location";
@@ -12,17 +12,19 @@ import {
 } from "@react-navigation/native";
 import { GlobalStyles } from "../Constants/Globalcolors";
 
-
 import SecondaryButton from "./SecondaryButton";
 import Toast from "react-native-toast-message";
+import { AuthContext } from "../store/store";
 
-const LocationPicker = ({ onLocationHandler, resetForm }) => {
+const LocationPicker = ({ resetForm }) => {
   const [locationPermissionInformation, requestPermission] =
     Location.useForegroundPermissions();
   const [isFetchingLocation, setIsFetchingLocation] = useState(false);
   const [pickedLocation, setPickedLocation] = useState(null);
   const [isOffline, setIsOffline] = useState(false);
   const [isInternetReachable, setIsInternetReachable] = useState(false);
+  const { locationHandler, isLocation, pickedLocations } =
+    useContext(AuthContext);
   const navigation = useNavigation();
   const route = useRoute();
   const isFocused = useIsFocused();
@@ -96,18 +98,35 @@ const LocationPicker = ({ onLocationHandler, resetForm }) => {
 
   React.useEffect(() => {
     if (pickedLocation) {
-      onLocationHandler(pickedLocation);
+      // onLocationHandler(pickedLocation);
+      locationHandler(pickedLocation);
     }
-  }, [isFetchingLocation, pickedLocation]);
+  }, [pickedLocation]);
 
   useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
       setIsOffline(!state.isConnected);
       setIsInternetReachable(state.isInternetReachable);
+
+      if (!state.isConnected) {
+        Toast.show({
+          type: "error",
+          text1: "Network Error",
+          text2: "No internet connection. Please try again later.",
+        });
+      }
+
+      if (!state.isInternetReachable) {
+        Toast.show({
+          type: "error",
+          text1: "Network Error",
+          text2: "No internet access",
+        });
+      }
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [isFocused]);
 
   let content = (
     <Text style={styles.text}>You have no location picked yet</Text>
@@ -123,25 +142,10 @@ const LocationPicker = ({ onLocationHandler, resetForm }) => {
     );
   }
 
-  if (pickedLocation) {
-
-    // checking internet
-    if (isOffline) {
-      Toast.show({
-        type: "error",
-        text1: "Network Error",
-        text2: "No internet connection. Please try again later.",
-      });
-    } else if (!isInternetReachable) {
-      Toast.show({
-        type: "error",
-        text1: "Network Error",
-        text2: "No internet access, Couldn't  preview your map",
-      });
-    }
+  if (isLocation) {
     const locationUrl = getGoogleMapPreview(
-      pickedLocation.lat,
-      pickedLocation.long
+      pickedLocations.lat,
+      pickedLocations.long
     );
     if (locationUrl) {
       content = <Image style={styles.image} source={{ uri: locationUrl }} />;
