@@ -377,6 +377,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   flatListContainer: {
-    marginTop: 14,
+    marginTop: 20,
+    paddingBottom: 20,
   }
 });

@@ -40,13 +40,11 @@ const FormContainerTwo = ({
   existingData,
 }) => {
   const [formState, setFormState] = useState({});
-  const [location, setLocation] = useState("");
   const { formInputData, formsSelectData } = useContext(ProjectContext);
   const [inputs, setInputs] = useState("");
   const [errors, setErrors] = useState({});
-  const { isLocation, pickedLocations, locationHandler } =
-    useContext(AuthContext);
-  const [isResettingForm, setIsResettingForm] = useState(false);
+  const [longitude, setLongitude] = useState("");
+  const [latitude, setLatitude] = useState("");
 
   // userRefs for input fields to be used in the form
   const inputRef1 = useRef(null);
@@ -256,6 +254,28 @@ const FormContainerTwo = ({
   useEffect(() => {
     if (isEditing && existingData) {
       const filteredRecord = filterAndSetFormState(existingData);
+
+      Object.entries(filteredRecord).forEach(([key, value]) => {
+        const keysName = Object.keys(filteredRecord)
+          .filter((keyFil) => keyFil.startsWith("sub_"))
+          .sort((a, b) => {
+            const numA = parseInt(a.split("_").pop(), 10);
+            const numB = parseInt(b.split("_").pop(), 10);
+            return numA - numB;
+          });
+
+        const longKey = keysName[keysName.length - 1];
+        const latKey = keysName[keysName.length - 2];
+
+        if (key === longKey) {
+          setLongitude(value);
+        }
+
+        if (key === latKey) {
+          setLatitude(value);
+        }
+      });
+
       setFormState(filteredRecord);
     }
   }, [isEditing, existingData, inputs, isError, isSuccess]);
@@ -299,7 +319,7 @@ const FormContainerTwo = ({
               <LocationPicker
                 resetForm={resetForm}
                 onLocationHandler={takeLocationHandler}
-                pickedLocationState={formState.location}
+                pickedLocationState={isEditing ? {lat: latitude, long: longitude} : formState.location}
               />
 
               {/* submit button */}
