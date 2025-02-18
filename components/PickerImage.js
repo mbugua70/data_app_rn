@@ -1,14 +1,30 @@
+globalThis.RNFB_SILENCE_MODULAR_DEPRECATION_WARNINGS = true;
 import { View, Text, Alert, Image, StyleSheet } from 'react-native'
-import React, { useState } from 'react'
+import { GlobalStyles } from '../Constants/Globalcolors';
+import React, { useEffect, useState } from 'react'
+import { utils } from '@react-native-firebase/app';
+
+import storage from '@react-native-firebase/storage';
 import * as ImagePicker from "expo-image-picker";
 import SecondaryButton from './SecondaryButton';
-import { GlobalStyles } from '../Constants/Globalcolors';
+
+
+function formatImage (image){
+    const uri = image.split('/').pop()
+    return uri
+}
 
 
 const PickerImage = ({onImageHandler, imageFile, resetForm}) => {
     const [cameraPermissionInformation, requestPermission] = ImagePicker.useCameraPermissions();
     const [isFetchingImage, setIsFetchingImage] = useState(false)
-    const [pickedImage, setPickedImaage] = useState();
+    const [pickedImage, setPickedImaage] = useState("");
+    const [isUploadingFile, setIsUploadingFile] = useState(false)
+
+    const reference = storage().ref(`data_image_one/${formatImage(imageFile)}`);
+
+
+
 
     async function verifyCameraPermission(){
         if(cameraPermissionInformation.status === ImagePicker.PermissionStatus.UNDETERMINED){
@@ -47,9 +63,29 @@ const PickerImage = ({onImageHandler, imageFile, resetForm}) => {
        if(!image.canceled){
 
         const uri = image.assets[0].uri;
-        console.log(uri, "image picker one")
+
         setPickedImaage(uri);
         onImageHandler(uri);
+
+        if(uri){
+
+           const uriImage = formatImage(uri)
+              // path to existing file on filesystem
+        //   const pathToFile = `${utils.FilePath.PICTURES_DIRECTORY}/${uriImage}`;
+        //   console.log(pathToFile, "path upload")
+          // uploads file
+           try{
+            setIsUploadingFile(true)
+            const uploadResponse = await reference.putFile(uri);
+            setIsUploadingFile(false)
+
+            console.log(uploadResponse)
+           }catch(error){
+            setIsUploadingFile(false)
+            console.log(error, "error uploading file to firebase")
+           }
+
+        }
        }else{
 
        }
