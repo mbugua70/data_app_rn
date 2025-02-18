@@ -59,10 +59,9 @@ export async function SummaryForm(recordData) {
 
   formData.append("ba_id", baID);
 
-  Object.entries(record).forEach(([key, value]) => {
-    // location configuring to sub_1 keys
-    if (key === "location") {
-      // Find the last key that matches the pattern
+  Object.entries(record)
+    .sort()
+    .forEach(([key, value]) => {
       const lastKey = Object.keys(record)
         .filter((key) => key.startsWith("sub_"))
         .sort((a, b) => {
@@ -70,52 +69,58 @@ export async function SummaryForm(recordData) {
           const numB = parseInt(b.split("_").pop(), 10);
           return numA - numB;
         })
-        .pop(); // Get the last key
+        .pop();
 
-      let nextNumber =1; // Default key if no existing key is found
+      let nextNumber = 1;
 
       if (lastKey) {
-        // Extract the last number in the key
         const parts = lastKey.split("_");
         const lastNumber = parseInt(parts.pop(), 10);
-         nextNumber = lastNumber + 1;
+        nextNumber = lastNumber + 1;
       }
 
-      const {lat, long} = value;
+       for(const [key, value] of Object.entries(record)){
+        if (key === "location") {
+          const { lat, long } = value;
+          const latKey = `sub_1_${nextNumber}`;
+          const longKey = `sub_1_${nextNumber + 1}`;
+          // nextNumber += 2;
 
+          formData.append(latKey, lat);
+          formData.append(longKey, long);
+        } else if (key === "imageurl") {
+          const uri = value;
+          const formattedImage = uri.split("/").pop();
 
+          const imageKey = `sub_1_${nextNumber + 2}`;
+          // nextNumber += 1;
+          formData.append(imageKey, formattedImage);
 
-      const latKey = `sub_1_${nextNumber}`;
-      const longKey = `sub_1_${nextNumber + 1}`
+          // Remove the original imageurl
+          formData.delete("imageurl");
+        } else if (key === "t_date") {
+          const date = new Date(value);
+          if (isNaN(date.getDate())) {
+            throw new Error("Invalid date input");
+          }
+          const formattedDate = date.toISOString().split("T")[0];
+          formData.append(key, formattedDate);
+        } else if (typeof value === "object") {
+          const trueKeys = Object.entries(value)
+            .filter(([keyTwo, valueTwo]) => valueTwo === true)
+            .map(([keyTwo]) => keyTwo);
 
-      formData.append(latKey, lat)
-      formData.append(longKey, long)
-
-    }
-
-    //  date configurations
-    if (key === "t_date") {
-      const date = new Date(value);
-      if (isNaN(date.getDate())) {
-        throw new Error("Invalid date input");
-      }
-
-      const formattedDate = date.toISOString().split("T")["0"];
-      formData.append(key, formattedDate);
-    } else if (typeof value === "object") {
-      const trueKeys = Object.entries(value)
-        .filter(([keyTwo, valueTwo]) => valueTwo === true) // Keep only true values
-        .map(([keyTwo]) => keyTwo); // Extract keys
-
-      if (trueKeys.length > 0) {
-        formData.append(key, trueKeys); // Store the array under the main key
-      }
-    } else {
-      formData.append(key, value);
-    }
-  });
+          if (trueKeys.length > 0) {
+            formData.append(key, trueKeys);
+          }
+        } else {
+          formData.append(key, value);
+        }
+       }
+    });
 
   console.log("Submitting data:", Object.fromEntries(formData.entries()));
+  // https://iguru.co.ke/BAIMS/ep/BM.php
 
   const res = await fetch("https://iguru.co.ke/BAIMS/ep/BM.php", {
     method: "POST",

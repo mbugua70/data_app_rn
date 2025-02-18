@@ -206,6 +206,7 @@ const FormContainerTwo = ({
   }
 
   function takeImageHander(image) {
+    console.log(image, "showing image")
     setFormState((prevState) => ({
       ...prevState,
       imageurl: image, // storing the image in the form state
@@ -304,7 +305,6 @@ const FormContainerTwo = ({
           resetState[item.field_id] = "";
         }
       });
-      setIsResettingForm(true);
       setFormState(resetState);
     }
   }, [isError, isSuccess, inputs, isEditing]);
@@ -328,7 +328,7 @@ const FormContainerTwo = ({
               <PickerImage
                 onImageHandler={takeImageHander}
                 resetForm={resetForm}
-                imageFile={imageFile}
+                imageFile={formState.imageurl}
               />
 
               {/* location picker */}

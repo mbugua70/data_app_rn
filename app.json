@@ -13,10 +13,12 @@
       "backgroundColor": "#000000"
     },
     "ios": {
+      "googleServicesFile": "./GoogleService-Info.plist",
       "supportsTablet": true,
       "bundleIdentifier": "com.iguru.co.ke.data"
     },
     "android": {
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#000000"
@@ -31,6 +33,16 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
+      "@react-native-firebase/app",
+      "@react-native-firebase/crashlytics",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ],
       [
         "expo-location",
         {
@@ -51,6 +63,7 @@
           "photosPermission": "Allow IGuru app to access your photos"
         }
       ]
+
     ],
     "extra": {
       "eas": {

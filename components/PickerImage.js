@@ -47,6 +47,7 @@ const PickerImage = ({onImageHandler, imageFile, resetForm}) => {
        if(!image.canceled){
 
         const uri = image.assets[0].uri;
+        console.log(uri, "image picker one")
         setPickedImaage(uri);
         onImageHandler(uri);
        }else{
@@ -62,7 +63,7 @@ const PickerImage = ({onImageHandler, imageFile, resetForm}) => {
     let imageContent  =  <Text style={styles.textfallback}>No image picked yet</Text>;
 
     if(imageFile && !isFetchingImage){
-        imageContent = <Image style={styles.image} source={{uri: imageFile.image}}/>
+        imageContent = <Image style={styles.image} source={{uri: imageFile}}/>
     }
 
     return (
@@ -88,7 +89,8 @@ const styles = StyleSheet.create({
     },
 
     textfallback: {
-      textAlign: "center"
+      textAlign: "center",
+      color: "#fff"
     },
 
     image: {
