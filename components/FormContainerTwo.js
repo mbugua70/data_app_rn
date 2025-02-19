@@ -14,7 +14,10 @@ import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState, useRef, useContext } from "react";
 import { Notifier, NotifierComponents } from "react-native-notifier";
 import { ProjectContext } from "../store/projectContext";
+import { AuthContext } from "../store/store";
+import { filterAndSetFormState } from "../http/api";
 
+import NetInfo from "@react-native-community/netinfo";
 import Toast from "react-native-toast-message";
 import InputTwo from "./InputTwo";
 import FlatButton from "../UI/FlatButton";
@@ -23,8 +26,6 @@ import LocationPicker from "./LocationPicker";
 import RadioComponent from "./RadioComponent";
 import Checkbox from "./Checkbox";
 import CheckboxComponent from "./Checkbox";
-import { filterAndSetFormState } from "../http/api";
-import { AuthContext } from "../store/store";
 import PickerImage from "./PickerImage";
 
 const FormContainerTwo = ({
@@ -47,6 +48,8 @@ const FormContainerTwo = ({
   const [longitude, setLongitude] = useState("");
   const [latitude, setLatitude] = useState("");
   const [imageFile, setImageFile] = useState("");
+  const [isOffline, setIsOffline] = useState(false);
+  const [isInternetReachable, setIsInternetReachable] = useState(false);
 
   // userRefs for input fields to be used in the form
   const inputRef1 = useRef(null);
@@ -206,7 +209,7 @@ const FormContainerTwo = ({
   }
 
   function takeImageHander(image) {
-    console.log(image, "showing image")
+    console.log(image, "showing image");
     setFormState((prevState) => ({
       ...prevState,
       imageurl: image, // storing the image in the form state
@@ -325,11 +328,13 @@ const FormContainerTwo = ({
             //  footer component
             <>
               {/* image picker */}
-              <PickerImage
-                onImageHandler={takeImageHander}
-                resetForm={resetForm}
-                imageFile={formState.imageurl}
-              />
+              {!isEditing && (
+                <PickerImage
+                  onImageHandler={takeImageHander}
+                  resetForm={resetForm}
+                  imageFile={formState.imageurl}
+                />
+              )}
 
               {/* location picker */}
               <LocationPicker
