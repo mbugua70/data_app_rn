@@ -1,9 +1,10 @@
 import NetInfo from "@react-native-community/netinfo";
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import { Alert, StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { Notifier, NotifierComponents } from "react-native-notifier";
+import { GlobalStyles } from "../Constants/Globalcolors";
 
-// import { Colors } from '../../constants/styles';
 import FormContainer from "./FormContainer";
 import Toast from "react-native-toast-message";
 
@@ -26,6 +27,34 @@ function AuthContent({
     const unsubscribe = NetInfo.addEventListener((state) => {
       setIsOffline(!state.isConnected);
       setIsInternetReachable(state.isInternetReachable);
+
+      if (!state.isConnected) {
+        Notifier.showNotification({
+          title: "Network Error",
+          description: "No network access, Please check your network!",
+          Component: NotifierComponents.Notification,
+          componentProps: {
+            imageSource: require("../assets/image/no-network.png"),
+            containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
+            titleStyle: { color: "#fff" },
+            descriptionStyle: { color: "#fff" },
+          },
+        });
+      }
+
+      if (!state.isInternetReachable) {
+        Notifier.showNotification({
+          title: "Network Error",
+          description: "No internet access!",
+          Component: NotifierComponents.Notification,
+          componentProps: {
+            imageSource: require("../assets/image/no-network.png"),
+            containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
+            titleStyle: { color: "#fff" },
+            descriptionStyle: { color: "#fff" },
+          },
+        });
+      }
     });
 
     return () => unsubscribe();
@@ -37,8 +66,7 @@ function AuthContent({
     name = name.trim();
     password = password.trim();
 
-
-    const phoneText = name.replace(/\s+/g, '');
+    const phoneText = name.replace(/\s+/g, "");
     const phoneRegex = /^[0-9]{7,15}$/;
     const nameIsValid = phoneRegex.test(phoneText);
     const passwordIsValid = password.length > 2;
@@ -54,17 +82,29 @@ function AuthContent({
     }
 
     if (isOffline) {
-      Toast.show({
-        type: "error",
-        text1: "Network Error",
-        text2: "No internet connection. Please try again later.",
+      Notifier.showNotification({
+        title: "Network Error",
+        description: "No network access, Please check your network!",
+        Component: NotifierComponents.Notification,
+        componentProps: {
+          imageSource: require("../assets/image/no-network.png"),
+          containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
+          titleStyle: { color: "#fff" },
+          descriptionStyle: { color: "#fff" },
+        },
       });
       return;
     } else if (!isInternetReachable) {
-      Toast.show({
-        type: "error",
-        text1: "Network Error",
-        text2: "No internet access",
+      Notifier.showNotification({
+        title: "Network Error",
+        description: "No internet access!",
+        Component: NotifierComponents.Notification,
+        componentProps: {
+          imageSource: require("../assets/image/no-network.png"),
+          containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
+          titleStyle: { color: "#fff" },
+          descriptionStyle: { color: "#fff" },
+        },
       });
       return;
     }

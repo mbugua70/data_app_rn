@@ -4,7 +4,7 @@ import { Alert, StyleSheet, View, Platform, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { SummaryForm } from "../http/api";
 import { Notifier, NotifierComponents } from "react-native-notifier";
-// import { Colors } from '../../constants/styles';
+import { GlobalStyles } from "../Constants/Globalcolors";
 
 import Toast from "react-native-toast-message";
 import FormContainerTwo from "./FormContainerTwo";
@@ -32,35 +32,33 @@ function AuthContentTwo({
       setIsOffline(!state.isConnected);
       setIsInternetReachable(state.isInternetReachable);
 
+      if (!state.isConnected) {
+        Notifier.showNotification({
+          title: "Network Error",
+          description: "No network access, Please check your network!",
+          Component: NotifierComponents.Notification,
+          componentProps: {
+            imageSource: require("../assets/image/no-network.png"),
+            containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
+            titleStyle: { color: "#fff" },
+            descriptionStyle: { color: "#fff" },
+          },
+        });
+      }
 
-            if (!state.isConnected) {
-              Notifier.showNotification({
-                title: "Network Error",
-                description: "No network access, Please check your network!",
-                Component: NotifierComponents.Notification,
-                componentProps: {
-                  imageSource: require("../assets/image/no-network.png"),
-                  containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
-                  titleStyle: { color: "#fff" },
-                  descriptionStyle: { color: "#fff" },
-                },
-              });
-            }
-
-            if (!state.isInternetReachable) {
-              Notifier.showNotification({
-                title: "Network Error",
-                description: "No internet access!",
-                Component: NotifierComponents.Notification,
-                componentProps: {
-                  imageSource: require("../assets/image/no-network.png"),
-                  containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
-                  titleStyle: { color: "#fff" },
-                  descriptionStyle: { color: "#fff" },
-                },
-              });
-            }
-
+      if (!state.isInternetReachable) {
+        Notifier.showNotification({
+          title: "Network Error",
+          description: "No internet access!",
+          Component: NotifierComponents.Notification,
+          componentProps: {
+            imageSource: require("../assets/image/no-network.png"),
+            containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
+            titleStyle: { color: "#fff" },
+            descriptionStyle: { color: "#fff" },
+          },
+        });
+      }
     });
 
     return () => unsubscribe();
@@ -68,17 +66,29 @@ function AuthContentTwo({
 
   async function submitHandler(credentials) {
     if (isOffline) {
-      Toast.show({
-        type: "error",
-        text1: "Network Error",
-        text2: "No internet connection. Please try again later.",
+      Notifier.showNotification({
+        title: "Network Error",
+        description: "No network access, Please check your network!",
+        Component: NotifierComponents.Notification,
+        componentProps: {
+          imageSource: require("../assets/image/no-network.png"),
+          containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
+          titleStyle: { color: "#fff" },
+          descriptionStyle: { color: "#fff" },
+        },
       });
       return;
     } else if (!isInternetReachable) {
-      Toast.show({
-        type: "error",
-        text1: "Network Error",
-        text2: "No internet access",
+      Notifier.showNotification({
+        title: "Network Error",
+        description: "No internet access!",
+        Component: NotifierComponents.Notification,
+        componentProps: {
+          imageSource: require("../assets/image/no-network.png"),
+          containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
+          titleStyle: { color: "#fff" },
+          descriptionStyle: { color: "#fff" },
+        },
       });
       return;
     }

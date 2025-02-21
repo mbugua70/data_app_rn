@@ -20,11 +20,16 @@ const PickerImage = ({onImageHandler, imageFile, resetForm}) => {
     const [isFetchingImage, setIsFetchingImage] = useState(false)
     const [pickedImage, setPickedImaage] = useState("");
     const [isUploadingFile, setIsUploadingFile] = useState(false)
-
-    const reference = storage().ref(`data_image_one/${formatImage(imageFile)}`);
-
+    const [reference, setReference] = useState("")
 
 
+
+     useEffect(() => {
+        if(imageFile){
+            const reference = storage().ref(`data_image_one/${formatImage(imageFile)}`);
+            setReference(reference)
+        }
+     }, [imageFile])
 
     async function verifyCameraPermission(){
         if(cameraPermissionInformation.status === ImagePicker.PermissionStatus.UNDETERMINED){
@@ -36,7 +41,6 @@ const PickerImage = ({onImageHandler, imageFile, resetForm}) => {
             Alert.alert("Denied Camera Permission", "You need to accept camera permission to continue")
             return false;
         }
-
         return true;
     }
 

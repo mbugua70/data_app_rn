@@ -237,7 +237,7 @@ const Records = ({ route }) => {
           data={records}
           keyExtractor={(item) => item.r_id}
           renderItem={handleRecordItem}
-          contentContainerStyle={styles.flatListContainer}
+          contentContainerStyle={[styles.flatListContainer, Platform.OS === "android" && {paddingBottom: 50}]}
         />
       );
     }
