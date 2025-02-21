@@ -225,7 +225,6 @@ export async function fetchRecordData(phone) {
     return data;
   } catch (error) {
     console.log("Error found");
-    console.error("Error fetching package data:", error);
     return error;
   }
 }
@@ -257,7 +256,6 @@ export async function fetchRecordByDate(requestData) {
     return data;
   } catch (error) {
     console.log("Error found");
-    console.error("Error fetching package data:", error);
     return error;
   }
 }

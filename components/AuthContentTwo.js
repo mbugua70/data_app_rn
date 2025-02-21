@@ -31,35 +31,7 @@ function AuthContentTwo({
     const unsubscribe = NetInfo.addEventListener((state) => {
       setIsOffline(!state.isConnected);
       setIsInternetReachable(state.isInternetReachable);
-
-      if (!state.isConnected) {
-        Notifier.showNotification({
-          title: "Network Error",
-          description: "No network access, Please check your network!",
-          Component: NotifierComponents.Notification,
-          componentProps: {
-            imageSource: require("../assets/image/no-network.png"),
-            containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
-            titleStyle: { color: "#fff" },
-            descriptionStyle: { color: "#fff" },
-          },
-        });
-      }
-
-      if (!state.isInternetReachable) {
-        Notifier.showNotification({
-          title: "Network Error",
-          description: "No internet access!",
-          Component: NotifierComponents.Notification,
-          componentProps: {
-            imageSource: require("../assets/image/no-network.png"),
-            containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
-            titleStyle: { color: "#fff" },
-            descriptionStyle: { color: "#fff" },
-          },
-        });
-      }
-    });
+  });
 
     return () => unsubscribe();
   }, []);

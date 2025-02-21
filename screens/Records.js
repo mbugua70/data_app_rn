@@ -16,13 +16,14 @@ import { GlobalStyles } from "../Constants/Globalcolors";
 import { ActivityIndicator, MD2Colors } from "react-native-paper";
 import { fetchRecordByDate } from "../http/api";
 import { useIsFocused } from "@react-navigation/native";
+import { Notifier, NotifierComponents } from "react-native-notifier";
+import { ProjectContext } from "../store/projectContext";
 
 import DateTimePicker from "@react-native-community/datetimepicker";
 import ButtonText from "../UI/ButtonText";
 import Toast from "react-native-toast-message";
 import RecordContainer from "../components/RecordContainer";
 import EmptyBox from "../UI/EmptyBox";
-import { ProjectContext } from "../store/projectContext";
 
 const Records = ({ route }) => {
   const { addRecords, records } = useContext(ProjectContext);
@@ -56,6 +57,34 @@ const Records = ({ route }) => {
       setIsOffline(!state.isConnected);
       // setIsInternetReachable(state.isInternetReachable);
       setIsInternetReachable(state.isInternetReachable ?? false);
+
+      if (!state.isConnected) {
+        Notifier.showNotification({
+          title: "Network Error",
+          description: "No network access, Please check your network!",
+          Component: NotifierComponents.Notification,
+          componentProps: {
+            imageSource: require("../assets/image/no-network.png"),
+            containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
+            titleStyle: { color: "#fff" },
+            descriptionStyle: { color: "#fff" },
+          },
+        });
+      }
+
+      if (!state.isInternetReachable) {
+        Notifier.showNotification({
+          title: "Network Error",
+          description: "No internet access!",
+          Component: NotifierComponents.Notification,
+          componentProps: {
+            imageSource: require("../assets/image/no-network.png"),
+            containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
+            titleStyle: { color: "#fff" },
+            descriptionStyle: { color: "#fff" },
+          },
+        });
+      }
     });
 
     return () => unsubscribe();
@@ -108,17 +137,29 @@ const Records = ({ route }) => {
     const ba_id = userData.ba_id;
 
     if (isOffline) {
-      Toast.show({
-        type: "error",
-        text1: "Network Error",
-        text2: "No internet connection. Please try again later.",
+      Notifier.showNotification({
+        title: "Network Error",
+        description: "No network Íaccess, Please check your network!",
+        Component: NotifierComponents.Notification,
+        componentProps: {
+          imageSource: require("../assets/image/no-network.png"),
+          containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
+          titleStyle: { color: "#fff" },
+          descriptionStyle: { color: "#fff" },
+        },
       });
       return;
     } else if (!isInternetReachable) {
-      Toast.show({
-        type: "error",
-        text1: "Network Error",
-        text2: "No internet access",
+      Notifier.showNotification({
+        title: "Network Error",
+        description: "No internet access!",
+        Component: NotifierComponents.Notification,
+        componentProps: {
+          imageSource: require("../assets/image/no-network.png"),
+          containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
+          titleStyle: { color: "#fff" },
+          descriptionStyle: { color: "#fff" },
+        },
       });
       return;
     }
@@ -136,17 +177,29 @@ const Records = ({ route }) => {
     const ba_id = userData.ba_id;
 
     if (isOffline) {
-      Toast.show({
-        type: "error",
-        text1: "Network Error",
-        text2: "No internet connection. Please try again later.",
+      Notifier.showNotification({
+        title: "Network Error",
+        description: "No network Íaccess, Please check your network!",
+        Component: NotifierComponents.Notification,
+        componentProps: {
+          imageSource: require("../assets/image/no-network.png"),
+          containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
+          titleStyle: { color: "#fff" },
+          descriptionStyle: { color: "#fff" },
+        },
       });
       return;
     } else if (!isInternetReachable) {
-      Toast.show({
-        type: "error",
-        text1: "Network Error",
-        text2: "No internet access",
+      Notifier.showNotification({
+        title: "Network Error",
+        description: "No internet access!",
+        Component: NotifierComponents.Notification,
+        componentProps: {
+          imageSource: require("../assets/image/no-network.png"),
+          containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
+          titleStyle: { color: "#fff" },
+          descriptionStyle: { color: "#fff" },
+        },
       });
       return;
     }
@@ -184,17 +237,29 @@ const Records = ({ route }) => {
     const ba_id = userData.ba_id;
 
     if (isOffline) {
-      Toast.show({
-        type: "error",
-        text1: "Network Error",
-        text2: "No internet connection. Please try again later.",
+      Notifier.showNotification({
+        title: "Network Error",
+        description: "No network Íaccess, Please check your network!",
+        Component: NotifierComponents.Notification,
+        componentProps: {
+          imageSource: require("../assets/image/no-network.png"),
+          containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
+          titleStyle: { color: "#fff" },
+          descriptionStyle: { color: "#fff" },
+        },
       });
       return;
     } else if (!isInternetReachable) {
-      Toast.show({
-        type: "error",
-        text1: "Network Error",
-        text2: "No internet access",
+      Notifier.showNotification({
+        title: "Network Error",
+        description: "No internet access!",
+        Component: NotifierComponents.Notification,
+        componentProps: {
+          imageSource: require("../assets/image/no-network.png"),
+          containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
+          titleStyle: { color: "#fff" },
+          descriptionStyle: { color: "#fff" },
+        },
       });
       return;
     }
@@ -237,12 +302,14 @@ const Records = ({ route }) => {
           data={records}
           keyExtractor={(item) => item.r_id}
           renderItem={handleRecordItem}
-          contentContainerStyle={[styles.flatListContainer, Platform.OS === "android" && {paddingBottom: 50}]}
+          contentContainerStyle={[
+            styles.flatListContainer,
+            Platform.OS === "android" && { paddingBottom: 50 },
+          ]}
         />
       );
     }
   }
-
 
   useEffect(() => {
     if (activeButton === 1) {
@@ -253,8 +320,8 @@ const Records = ({ route }) => {
   }, [isFetchingUserData, isFocused]);
 
   useEffect(() => {
-    console.log(error);
-    if (error && !isPending) {
+    console.log(error, "Error check");
+    if (error && !isPending && !isOffline && !isInternetReachable) {
       Toast.show({
         type: "error",
         text1: "Failed to fetch",
@@ -379,5 +446,5 @@ const styles = StyleSheet.create({
   flatListContainer: {
     marginTop: 20,
     paddingBottom: 20,
-  }
+  },
 });

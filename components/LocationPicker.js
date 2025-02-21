@@ -3,20 +3,24 @@ import { View, Text, StyleSheet, Image } from "react-native";
 import { ActivityIndicator, MD2Colors } from "react-native-paper";
 import React, { useState, useEffect, useContext } from "react";
 import * as Location from "expo-location";
-
+import { Notifier, NotifierComponents } from "react-native-notifier";
 import { getGoogleMapPreview } from "../util/location";
 import {
   useIsFocused,
   useNavigation,
   useRoute,
 } from "@react-navigation/native";
+import { AuthContext } from "../store/store";
 import { GlobalStyles } from "../Constants/Globalcolors";
 
 import SecondaryButton from "./SecondaryButton";
 import Toast from "react-native-toast-message";
-import { AuthContext } from "../store/store";
 
-const LocationPicker = ({ resetForm, onLocationHandler, pickedLocationState}) => {
+const LocationPicker = ({
+  resetForm,
+  onLocationHandler,
+  pickedLocationState,
+}) => {
   const [locationPermissionInformation, requestPermission] =
     Location.useForegroundPermissions();
   const [isFetchingLocation, setIsFetchingLocation] = useState(false);
@@ -109,18 +113,30 @@ const LocationPicker = ({ resetForm, onLocationHandler, pickedLocationState}) =>
       setIsInternetReachable(state.isInternetReachable);
 
       if (!state.isConnected) {
-        Toast.show({
-          type: "error",
-          text1: "Network Error",
-          text2: "No internet connection. Please try again later.",
+        Notifier.showNotification({
+          title: "Network Error",
+          description: "No network access, Please check your network!",
+          Component: NotifierComponents.Notification,
+          componentProps: {
+            imageSource: require("../assets/image/no-network.png"),
+            containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
+            titleStyle: { color: "#fff" },
+            descriptionStyle: { color: "#fff" },
+          },
         });
       }
 
       if (!state.isInternetReachable) {
-        Toast.show({
-          type: "error",
-          text1: "Network Error",
-          text2: "No internet access",
+        Notifier.showNotification({
+          title: "Network Error",
+          description: "No internet access!",
+          Component: NotifierComponents.Notification,
+          componentProps: {
+            imageSource: require("../assets/image/no-network.png"),
+            containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
+            titleStyle: { color: "#fff" },
+            descriptionStyle: { color: "#fff" },
+          },
         });
       }
     });
@@ -155,7 +171,7 @@ const LocationPicker = ({ resetForm, onLocationHandler, pickedLocationState}) =>
   }
 
   useEffect(() => {
-     setPickedLocation("");
+    setPickedLocation("");
   }, [resetForm]);
 
   return (

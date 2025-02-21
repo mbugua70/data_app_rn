@@ -20,8 +20,6 @@ const FormScreen = ({ navigation, route }) => {
     })
   }, [formsData])
 
-
-
   function handleFormItem({item, index}) {
     function handleNavigation() {
       navigation.navigate("Report", {
