@@ -145,7 +145,10 @@ const LocationPicker = ({
   }, [isFocused]);
 
   let content = (
-    <Text style={styles.text}>You have no location picked yet</Text>
+    <View style={styles.emptyContainer}>
+       <Image source={require("../assets/image/map.png")}  style={styles.fetchlocation} />
+       <Text style={styles.emptyLocationText}>Fetch your current location</Text>
+    </View>
   );
 
   if (isFetchingLocation) {
@@ -227,4 +230,17 @@ const styles = StyleSheet.create({
     width: "100%",
     height: "100%",
   },
+  emptyContainer: {
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  fetchlocation: {
+    width: 100,
+    height: 100,
+  },
+  emptyLocationText: {
+    color: GlobalStyles.colors.gray200,
+  }
 });
