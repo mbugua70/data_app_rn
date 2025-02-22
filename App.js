@@ -165,6 +165,13 @@ function AuthenticatedStack() {
       screenOptions={{
         headerTitleAlign: "center",
         animation: "shift",
+        tabBarStyle: {
+          justifyContent: "center",
+          alignItems: "center",
+          shadowOpacity: 0,
+          elevation: 0,
+          borderTopWidth: 0,
+        }
       }}>
       <Tab.Screen
         name='Dashboard'
@@ -178,8 +185,11 @@ function AuthenticatedStack() {
           headerStyle: {
             backgroundColor: "#000000",
           },
-          tabBarIcon: ({ color, size }) => {
-            return <TabBarIcon name='home' color={color} size={size} />;
+          tabBarLabel: ({ focused}) => {
+
+          },
+          tabBarIcon: ({ color, size , focused}) => {
+            return <TabBarIcon name='home' color={color} size={size} focused={focused} />;
           },
         }}
       />
@@ -196,8 +206,8 @@ function AuthenticatedStack() {
           headerStyle: {
             backgroundColor: "#000000",
           },
-          tabBarIcon: ({ color, size }) => {
-            return <TabBarIcon name='folder' color={color} size={size} />;
+          tabBarIcon: ({ color, size, focused }) => {
+            return <TabBarIcon name='folder' color={color} size={size} focused={focused} />;
           },
         }}
       />
@@ -213,8 +223,9 @@ function AuthenticatedStack() {
           headerStyle: {
             backgroundColor: "#000000",
           },
-          tabBarIcon: ({ color, size }) => {
-            return <TabBarIcon name='person' color={color} size={size} />;
+          tabBarIcon: ({ color, size, focused }) => {
+            return  <TabBarIcon name='person' color={color} size={size} focused={focused} /> ;
+
           },
         }}
       />

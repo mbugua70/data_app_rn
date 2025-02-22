@@ -4,6 +4,7 @@ import { GlobalStyles } from "../Constants/Globalcolors";
 import React, { useEffect, useState } from "react";
 import { utils } from "@react-native-firebase/app";
 import { ActivityIndicator, MD2Colors } from "react-native-paper";
+import { ProgressBar, MD3Colors } from "react-native-paper";
 
 import storage from "@react-native-firebase/storage";
 import * as ImagePicker from "expo-image-picker";
@@ -68,9 +69,6 @@ const PickerImage = ({ onImageHandler, imageFile, resetForm }) => {
       quality: 1,
     });
 
-    setIsImagePicked(false);
-    setIsImagePicked(true);
-
     if (!image.canceled) {
       const uri = image.assets[0].uri;
       setPickedImaage(uri);
@@ -117,18 +115,8 @@ const PickerImage = ({ onImageHandler, imageFile, resetForm }) => {
   );
 
   if (imageFile && !isFetchingImage) {
-    setIsImagePicked(false)
-    imageContent = <Image style={styles.image} source={{ uri: imageFile }} />;
-  }
 
-  if (isImagePicked) {
-    imageContent = (
-      <ActivityIndicator
-        animating={true}
-        color={MD2Colors.lightBlueA700}
-        size='small'
-      />
-    );
+    imageContent = <Image style={styles.image} source={{ uri: imageFile }} />;
   }
 
   return (
@@ -158,7 +146,7 @@ const styles = StyleSheet.create({
     borderStyle: "dashed",
     borderWidth: 2,
     borderRadius: 12,
-    overflow: "hidden",
+    // overflow: "hidden",
   },
 
   textfallback: {
@@ -169,6 +157,7 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: "100%",
+     borderRadius: 12,
   },
 
   emptyContainer: {
