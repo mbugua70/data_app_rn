@@ -55,20 +55,6 @@ const LocationPicker = ({
     return true;
   }
 
-  //   useEffect(() => {
-  //     async function handleAddressLocation(){
-  //      if(pickedLocation){
-
-  //       const address =  await getAddress(pickedLocation.lat, pickedLocation.long)
-  //        if(address){
-  //         onLocationHandler(pickedLocation)
-  //        }
-  //      }
-  //     }
-
-  //     handleAddressLocation();
-  //    },[pickedLocation])
-
   useEffect(() => {
     if (route.params && isFocused) {
       const mapPickedLocation = {
@@ -96,9 +82,6 @@ const LocationPicker = ({
     });
   }
 
-  function handleGetMap() {
-    navigation.navigate("Map");
-  }
 
   React.useEffect(() => {
     if (pickedLocation) {

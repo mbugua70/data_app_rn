@@ -3,6 +3,7 @@ import { View, Text, Alert, Image, StyleSheet, Pressable } from "react-native";
 import { GlobalStyles } from "../Constants/Globalcolors";
 import React, { useEffect, useState } from "react";
 import { utils } from "@react-native-firebase/app";
+import { ActivityIndicator, MD2Colors } from "react-native-paper";
 
 import storage from "@react-native-firebase/storage";
 import * as ImagePicker from "expo-image-picker";
@@ -20,6 +21,7 @@ const PickerImage = ({ onImageHandler, imageFile, resetForm }) => {
   const [pickedImage, setPickedImaage] = useState("");
   const [isUploadingFile, setIsUploadingFile] = useState(false);
   const [reference, setReference] = useState("");
+  const [isImagePicked, setIsImagePicked] = useState(false);
 
   useEffect(() => {
     if (imageFile) {
@@ -59,17 +61,18 @@ const PickerImage = ({ onImageHandler, imageFile, resetForm }) => {
     }
 
     setIsFetchingImage(true);
+
     const image = await ImagePicker.launchCameraAsync({
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
     });
 
-    setIsFetchingImage(false);
+    setIsImagePicked(false);
+    setIsImagePicked(true);
 
     if (!image.canceled) {
       const uri = image.assets[0].uri;
-
       setPickedImaage(uri);
       onImageHandler(uri);
 
@@ -96,6 +99,8 @@ const PickerImage = ({ onImageHandler, imageFile, resetForm }) => {
 
   React.useEffect(() => {}, [isFetchingImage]);
 
+  // loading indicator before the image is fetched
+
   let imageContent = (
     <Pressable
       style={({ pressed }) => [
@@ -112,7 +117,18 @@ const PickerImage = ({ onImageHandler, imageFile, resetForm }) => {
   );
 
   if (imageFile && !isFetchingImage) {
+    setIsImagePicked(false)
     imageContent = <Image style={styles.image} source={{ uri: imageFile }} />;
+  }
+
+  if (isImagePicked) {
+    imageContent = (
+      <ActivityIndicator
+        animating={true}
+        color={MD2Colors.lightBlueA700}
+        size='small'
+      />
+    );
   }
 
   return (
@@ -142,6 +158,7 @@ const styles = StyleSheet.create({
     borderStyle: "dashed",
     borderWidth: 2,
     borderRadius: 12,
+    overflow: "hidden",
   },
 
   textfallback: {
