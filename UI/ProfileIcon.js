@@ -14,7 +14,7 @@ const ProfileIconUI = ({onPress, color, name, size, text, bg}) => {
        <Text style={styles.text}>{text}</Text>
           </View>
        <View>
-       <Ionicons name="chevron-forward" size={24} color="black" />
+       <Ionicons name="chevron-forward-circle" size={32} color="#819c79" />
        </View>
       </Pressable>
     </View>
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     pressed: {
-        opacity: 0.25,
+        opacity: 0.5,
 
     },
 

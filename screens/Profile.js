@@ -75,10 +75,10 @@ const Profile = () => {
         <ProfileIconUI
           name='log-out'
           size={24}
-          color={GlobalStyles.colors.gray800}
+          color="#819c79"
           onPress={signoutHandler}
           text='Sign Out'
-          bg='#fff'
+          bg={GlobalStyles.colors.gray200}
         />
       </View>
     </View>
@@ -90,6 +90,7 @@ export default Profile;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
+    backgroundColor: "#000"
   },
   screenChild: {
     alignItems: "center",
@@ -97,14 +98,8 @@ const styles = StyleSheet.create({
   },
   screen2: {
     padding: 10,
-    backgroundColor: GlobalStyles.colors.primary50,
     height: "100%",
-    borderTopLeftRadius: 40,
-    borderTopRightRadius: 40,
-    elevation: 6,
-    shadowColor: "black",
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 6,
-    shadowOpacity: 0.26,
+    borderTopWidth: 1,
+    borderColor: GlobalStyles.colors.gray300,
   },
 });

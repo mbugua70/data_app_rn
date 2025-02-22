@@ -32,12 +32,12 @@ const styles = StyleSheet.create({
     text: {
         fontWeight: "bold",
         textAlign: "center",
-        color: GlobalStyles.colors.gray800,
+        color: GlobalStyles.colors.gray300,
         fontSize: 20,
     },
     text2: {
         textAlign: "center",
-        color: GlobalStyles.colors.gray500,
+        color: GlobalStyles.colors.gray300,
         fontSize: 16,
         fontFamily: 'Pacifico'
     }
