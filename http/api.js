@@ -238,6 +238,7 @@ export async function fetchRecordByDate(requestData) {
   };
 
   const encodedData = new URLSearchParams(fetchData).toString();
+  console.log(encodedData, "encodedData")
 
   try {
     const response = await fetch(`https://iguru.co.ke/BAIMS/ep/FORM-DATA.php`, {
@@ -255,7 +256,6 @@ export async function fetchRecordByDate(requestData) {
 
     return data;
   } catch (error) {
-    console.log("Error found");
     return error;
   }
 }

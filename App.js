@@ -4,7 +4,7 @@ import Toast from "react-native-toast-message";
 import * as SplashScreen from "expo-splash-screen";
 import { useContext, useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View, Platform } from "react-native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NotifierWrapper } from "react-native-notifier";
@@ -56,9 +56,6 @@ function AuthStack() {
 }
 
 function AuthReportStack() {
-
-
-
   return (
     <>
       <Stack.Navigator
@@ -143,10 +140,10 @@ function AuthReportStack() {
           name='Record Edit'
           component={RecordEdit}
           options={{
-            animation: 'slide_from_bottom',
-            contentStyle: { backgroundColor: "#fff"},
+            animation: "slide_from_bottom",
+            contentStyle: { backgroundColor: "#fff" },
             presentation: "modal",
-            headerStyle: { backgroundColor: "#9cacff"},
+            headerStyle: { backgroundColor: "#9cacff" },
             headerBackButtonDisplayMode: "minimal",
             headerShadowVisible: false,
             headerLeft: ({ headerTintColor }) => {
@@ -166,12 +163,14 @@ function AuthenticatedStack() {
         headerTitleAlign: "center",
         animation: "shift",
         tabBarStyle: {
+          height: 80,
+          paddingVertical: 10,
           justifyContent: "center",
           alignItems: "center",
           shadowOpacity: 0,
           elevation: 0,
           borderTopWidth: 0,
-        }
+        },
       }}>
       <Tab.Screen
         name='Dashboard'
@@ -185,11 +184,28 @@ function AuthenticatedStack() {
           headerStyle: {
             backgroundColor: "#000000",
           },
-          tabBarLabel: ({ focused}) => {
-            return <Text style={{color: GlobalStyles.colors.gray300, fontSize: 12, marginTop: 4}}>Dashboard</Text>
+          tabBarLabel: ({ focused }) => {
+            return (
+              <Text
+                style={{
+                  color: GlobalStyles.colors.gray300,
+                  fontSize: 12,
+                  marginTop: 2,
+                  marginBottom: 4,
+                }}>
+                Dashboard
+              </Text>
+            );
           },
-          tabBarIcon: ({ color, size , focused}) => {
-            return <TabBarIcon name='home' color={color} size={size} focused={focused} />;
+          tabBarIcon: ({ color, size, focused }) => {
+            return (
+              <TabBarIcon
+                name='home'
+                color={color}
+                size={size}
+                focused={focused}
+              />
+            );
           },
         }}
       />
@@ -198,7 +214,7 @@ function AuthenticatedStack() {
         name='Projects'
         component={Home}
         options={{
-          animation: 'none',
+          animation: "none",
           tabBarStyle: {
             backgroundColor: "#000000",
           },
@@ -206,11 +222,28 @@ function AuthenticatedStack() {
           headerStyle: {
             backgroundColor: "#000000",
           },
-          tabBarLabel: ({ focused}) => {
-            return <Text style={{color: GlobalStyles.colors.gray300, fontSize: 12, marginTop: 4}}>Projects</Text>
+          tabBarLabel: ({ focused }) => {
+            return (
+              <Text
+                style={{
+                  color: GlobalStyles.colors.gray300,
+                  fontSize: 12,
+                  marginTop: 2,
+                  marginBottom: 4,
+                }}>
+                Projects
+              </Text>
+            );
           },
           tabBarIcon: ({ color, size, focused }) => {
-            return <TabBarIcon name='folder' color={color} size={size} focused={focused} />;
+            return (
+              <TabBarIcon
+                name='folder'
+                color={color}
+                size={size}
+                focused={focused}
+              />
+            );
           },
         }}
       />
@@ -218,7 +251,7 @@ function AuthenticatedStack() {
         name='Profile'
         component={Profile}
         options={{
-          animation: 'none',
+          animation: "none",
           tabBarStyle: {
             backgroundColor: "#000000",
           },
@@ -226,12 +259,28 @@ function AuthenticatedStack() {
           headerStyle: {
             backgroundColor: "#000000",
           },
-          tabBarLabel: ({ focused}) => {
-            return <Text style={{color: GlobalStyles.colors.gray300, fontSize: 12, marginTop: 4}}>Profile</Text>
+          tabBarLabel: ({ focused }) => {
+            return (
+              <Text
+                style={{
+                  color: GlobalStyles.colors.gray300,
+                  fontSize: 12,
+                  marginTop: 2,
+                  marginBottom: 4,
+                }}>
+                Profile
+              </Text>
+            );
           },
           tabBarIcon: ({ color, size, focused }) => {
-            return  <TabBarIcon name='person' color={color} size={size} focused={focused} /> ;
-
+            return (
+              <TabBarIcon
+                name='person'
+                color={color}
+                size={size}
+                focused={focused}
+              />
+            );
           },
         }}
       />

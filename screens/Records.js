@@ -313,14 +313,12 @@ const Records = ({ route }) => {
 
   useEffect(() => {
     if (activeButton === 1) {
-      const formattedDate = new Date().toISOString().split("T")[0];
-      const ba_id = userData.ba_id;
-      mutate({ formattedDate, formID, ba_id });
+      handleToday()
     }
-  }, [isFetchingUserData, isFocused]);
+  }, [isFocused, isOffline, isInternetReachable]);
 
   useEffect(() => {
-    console.log(error, "Error check");
+    console.log(error)
     if (error && !isPending && !isOffline && !isInternetReachable) {
       Toast.show({
         type: "error",
