@@ -29,7 +29,7 @@ const Home = ({ navigation }) => {
           <CategoryItem
             badgeNumber={badgeNumber}
             title={item.project_title}
-            color={HomeColors[index % HomeColors.length]}
+            color="#cee8c7"
             onNavigate={handleNavigation}
           />
         </View>

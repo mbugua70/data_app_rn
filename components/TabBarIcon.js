@@ -13,7 +13,13 @@ const TabBarIcon = ({ color, size, name, focused }) => {
         alignItems: "center",
         borderRadius: 10,
       }}>
-      <Ionicons name={name} size={size} color={focused ? GlobalStyles.colors.gray800 : color}/>
+      <Ionicons
+        name={name}
+        size={size}
+        color={
+          focused ? GlobalStyles.colors.gray800 : GlobalStyles.colors.gray300
+        }
+      />
     </View>
   );
 };

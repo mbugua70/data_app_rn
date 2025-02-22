@@ -31,9 +31,9 @@ const RecordContainer = ({index, formID, formTitle, item}) => {
     }
 
     const styling = {
-        backgroundColor: index % 2 === 0 ? "#9cacff" : "#fff",
+        backgroundColor: index % 2 === 0 ? "#819c79" : "#fff",
         borderWidth: index % 2 === 0 ? 0 : 2,
-        borderColor: index % 2 === 0 ? "#fff" : "#9cacff"
+        borderColor: index % 2 === 0 ? "#fff" : "#819c79"
       }
 
       const button = {
@@ -45,7 +45,7 @@ const RecordContainer = ({index, formID, formTitle, item}) => {
       }
 
       const iconColor = {
-        color: index % 2 === 0 ? GlobalStyles.colors.gray600 : "#9cacff",
+        color: index % 2 === 0 ? GlobalStyles.colors.gray600 : "#819c79",
       }
 
       const recordeTitle = {

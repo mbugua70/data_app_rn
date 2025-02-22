@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   screen: {
     flex: 1,
     overflow: 'hidden',
-    borderColor: "#9cacff",
+    borderColor: "#819c79",
   },
   button: {
 
@@ -28,12 +28,12 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   textButton: {
-    color: '#4A5BB5',
+    color: '#819c79',
     fontSize: 12,
     fontWeight: 'bold'
   },
   clickedStyling: {
-    backgroundColor: '#9cacff',
+    backgroundColor: '#819c79',
   },
   clickedStylingText: {
     color: "#fff",

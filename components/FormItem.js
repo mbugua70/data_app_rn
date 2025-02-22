@@ -9,9 +9,9 @@ const FormItem = ({index, title, onNavigate, onNavigateRecord}) => {
     const navigation = useNavigation();
 
     const styling = {
-        backgroundColor: index % 2 === 0 ? "#9cacff" : "#fff",
+        backgroundColor: index % 2 === 0 ? "#819c79" : "#fff",
         borderWidth: index % 2 === 0 ? 0 : 2,
-        borderColor: index % 2 === 0 ? "#fff" : "#9cacff"
+        borderColor: index % 2 === 0 ? "#fff" : "#819c79"
       }
 
       const button = {
@@ -31,7 +31,7 @@ const FormItem = ({index, title, onNavigate, onNavigateRecord}) => {
       <View style={styles.buttoncontainer}>
         <View>
           <Button
-            buttonColor={index % 2 === 0 ? "" : "#9cacff"}
+            buttonColor={index % 2 === 0 ? "" : "#819c79"}
             labelStyle={{fontSize: 14}}
             style={styles.button}
             mode={button.mode}
@@ -41,7 +41,7 @@ const FormItem = ({index, title, onNavigate, onNavigateRecord}) => {
         </View>
         <View>
           <IconButton
-            containerColor={index % 2 === 0 ? "#f5f5f5" : "#9cacff"}
+            containerColor={index % 2 === 0 ? "#f5f5f5" : "#819c79"}
             mode={iconButton.mode}
             icon='square-edit-outline'
             iconColor="#000000"

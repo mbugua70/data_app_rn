@@ -186,7 +186,7 @@ function AuthenticatedStack() {
             backgroundColor: "#000000",
           },
           tabBarLabel: ({ focused}) => {
-
+            return <Text style={{color: GlobalStyles.colors.gray300, fontSize: 12, marginTop: 4}}>Dashboard</Text>
           },
           tabBarIcon: ({ color, size , focused}) => {
             return <TabBarIcon name='home' color={color} size={size} focused={focused} />;
@@ -206,6 +206,9 @@ function AuthenticatedStack() {
           headerStyle: {
             backgroundColor: "#000000",
           },
+          tabBarLabel: ({ focused}) => {
+            return <Text style={{color: GlobalStyles.colors.gray300, fontSize: 12, marginTop: 4}}>Projects</Text>
+          },
           tabBarIcon: ({ color, size, focused }) => {
             return <TabBarIcon name='folder' color={color} size={size} focused={focused} />;
           },
@@ -222,6 +225,9 @@ function AuthenticatedStack() {
           headerTintColor: "#fff",
           headerStyle: {
             backgroundColor: "#000000",
+          },
+          tabBarLabel: ({ focused}) => {
+            return <Text style={{color: GlobalStyles.colors.gray300, fontSize: 12, marginTop: 4}}>Profile</Text>
           },
           tabBarIcon: ({ color, size, focused }) => {
             return  <TabBarIcon name='person' color={color} size={size} focused={focused} /> ;
