@@ -1,6 +1,7 @@
 import { View, Text, Pressable, StyleSheet } from 'react-native'
 import React from 'react'
 import Ionicons from '@expo/vector-icons/Ionicons';
+import { GlobalStyles } from '../Constants/Globalcolors';
 
 
 const ProfileIconUI = ({onPress, color, name, size, text, bg}) => {
@@ -38,6 +39,7 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 16,
         fontWeight: 'bold',
+        color: GlobalStyles.colors.gray200
     },
 
     button: {

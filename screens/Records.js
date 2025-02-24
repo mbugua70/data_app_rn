@@ -9,6 +9,7 @@ import {
   Modal,
   TouchableOpacity,
   FlatList,
+  Image,
 } from "react-native";
 import React, { useState, useEffect, useRef, useContext } from "react";
 import { useMutation } from "@tanstack/react-query";
@@ -24,6 +25,7 @@ import ButtonText from "../UI/ButtonText";
 import Toast from "react-native-toast-message";
 import RecordContainer from "../components/RecordContainer";
 import EmptyBox from "../UI/EmptyBox";
+import { handleNewtwork } from "../Network";
 
 const Records = ({ route }) => {
   const { addRecords, records } = useContext(ProjectContext);
@@ -35,6 +37,7 @@ const Records = ({ route }) => {
   const [tempDate, setTempDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
   const [isFetchingUserData, setIsFetchingUserData] = useState(true);
+  const [networkText, setNetworkText] = useState("")
 
   const { formID, formTitle } = route.params;
   const isFocused = useIsFocused();
@@ -53,12 +56,18 @@ const Records = ({ route }) => {
   }, [isFocused]);
 
   useEffect(() => {
+    console.log("rendering")
     const unsubscribe = NetInfo.addEventListener((state) => {
+      console.log(state)
+
+      const isConnected = state.isConnected;
+      const isReachable = state.isInternetReachable ?? false;
+
       setIsOffline(!state.isConnected);
-      // setIsInternetReachable(state.isInternetReachable);
       setIsInternetReachable(state.isInternetReachable ?? false);
 
-      if (!state.isConnected) {
+      if (!isConnected) {
+        setNetworkText("Something went wrong, Please try again!")
         Notifier.showNotification({
           title: "Network Error",
           description: "No network access, Please check your network!",
@@ -70,9 +79,12 @@ const Records = ({ route }) => {
             descriptionStyle: { color: "#fff" },
           },
         });
+      }else{
+        setNetworkText("")
       }
 
-      if (!state.isInternetReachable) {
+      if (!isReachable) {
+        setNetworkText("Something went wrong, Please try again!")
         Notifier.showNotification({
           title: "Network Error",
           description: "No internet access!",
@@ -84,6 +96,8 @@ const Records = ({ route }) => {
             descriptionStyle: { color: "#fff" },
           },
         });
+      }else{
+        setNetworkText("")
       }
     });
 
@@ -130,41 +144,65 @@ const Records = ({ route }) => {
     },
   });
 
+
+
   // button background color navigation
-  function handleToday() {
+  async function handleToday() {
     setActiveButton(1);
     const formattedDate = new Date().toISOString().split("T")[0];
     const ba_id = userData.ba_id;
 
-    if (isOffline) {
-      Notifier.showNotification({
-        title: "Network Error",
-        description: "No network Íaccess, Please check your network!",
-        Component: NotifierComponents.Notification,
-        componentProps: {
-          imageSource: require("../assets/image/no-network.png"),
-          containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
-          titleStyle: { color: "#fff" },
-          descriptionStyle: { color: "#fff" },
-        },
-      });
-      return;
-    } else if (!isInternetReachable) {
-      Notifier.showNotification({
-        title: "Network Error",
-        description: "No internet access!",
-        Component: NotifierComponents.Notification,
-        componentProps: {
-          imageSource: require("../assets/image/no-network.png"),
-          containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
-          titleStyle: { color: "#fff" },
-          descriptionStyle: { color: "#fff" },
-        },
-      });
-      return;
-    }
+    // if (isOffline) {
+    //   Notifier.showNotification({
+    //     title: "Network Error",
+    //     description: "No network Íaccess, Please check your network!",
+    //     Component: NotifierComponents.Notification,
+    //     componentProps: {
+    //       imageSource: require("../assets/image/no-network.png"),
+    //       containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
+    //       titleStyle: { color: "#fff" },
+    //       descriptionStyle: { color: "#fff" },
+    //     },
+    //   });
+    //   return;
+    // } else if (!isInternetReachable) {
+    //   Notifier.showNotification({
+    //     title: "Network Error",
+    //     description: "No internet access!",
+    //     Component: NotifierComponents.Notification,
+    //     componentProps: {
+    //       imageSource: require("../assets/image/no-network.png"),
+    //       containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
+    //       titleStyle: { color: "#fff" },
+    //       descriptionStyle: { color: "#fff" },
+    //     },
+    //   });
+    //   return;
+    // }
 
-    mutate({ formattedDate, formID, ba_id });
+
+     const isNetwork = await handleNewtwork()
+
+     if(isNetwork){
+      if(isNetwork.isConnected && isNetwork.isInternetReachable){
+        mutate({ formattedDate, formID, ba_id });
+      }else{
+        Notifier.showNotification({
+          title: "Network Error",
+          description: "No network access, Please check your network!",
+          Component: NotifierComponents.Notification,
+          componentProps: {
+            imageSource: require("../assets/image/no-network.png"),
+            containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
+            titleStyle: { color: "#fff" },
+            descriptionStyle: { color: "#fff" },
+          },
+        });
+      }
+     }
+
+
+
   }
 
   function handleYesterday() {
@@ -311,15 +349,26 @@ const Records = ({ route }) => {
     }
   }
 
+
+ if( networkText !== "" && networkText !== null && networkText === "Something went wrong, Please try again!"){
+  content = (
+    <View style={styles.imageContainer}>
+        <Image source={require("../assets/image/thinking.png")} style={styles.image} />
+        <Text style={styles.imageText}>Something went wrong, Please try again!</Text>
+    </View>
+  )
+ }
+
+
   useEffect(() => {
     if (activeButton === 1) {
       handleToday()
     }
-  }, [isFocused, isOffline, isInternetReachable]);
+  }, [isFocused]);
 
   useEffect(() => {
     console.log(error)
-    if (error && !isPending && !isOffline && !isInternetReachable) {
+    if (error && !isPending) {
       Toast.show({
         type: "error",
         text1: "Failed to fetch",
@@ -379,7 +428,7 @@ const Records = ({ route }) => {
         {content}
         {/* dashboard  showing the records*/}
       </View>
-      {isPending && (
+      {isPending && !isOffline && (
         <View style={styles.overlayLoading}>
           <ActivityIndicator
             size={32}
@@ -445,4 +494,20 @@ const styles = StyleSheet.create({
     marginTop: 20,
     paddingBottom: 20,
   },
+
+  imageContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    rowGap: 20,
+    padding: 20,
+  },
+  image: {
+    width: 82,
+    height: 82,
+  },
+  imageText: {
+    fontSize: 16,
+    fontWeight: '600'
+  }
 });

@@ -11,7 +11,7 @@ const TabBarIcon = ({ color, size, name, focused }) => {
         backgroundColor: focused ? "#cee8c7" : "",
         justifyContent: "center",
         alignItems: "center",
-        borderRadius: 10,
+        borderRadius: 16,
       }}>
       <Ionicons
         name={name}
