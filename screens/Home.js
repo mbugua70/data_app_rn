@@ -14,7 +14,7 @@ const Home = ({ navigation }) => {
 
   function handleCategoryItem({item,index}) {
     function handleNavigation() {
-      navigation.navigate("Form Container", {
+      navigation.navigate("Forms", {
         projectID: item.project_id
       });
     }

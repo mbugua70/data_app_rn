@@ -43,7 +43,7 @@ const FormItem = ({index, title, onNavigate, onNavigateRecord}) => {
           <IconButton
             containerColor={index % 2 === 0 ? "#f5f5f5" : "#819c79"}
             mode={iconButton.mode}
-            icon='square-edit-outline'
+            icon='plus'
             iconColor="#000000"
             size={32}
             onPress={onNavigate}

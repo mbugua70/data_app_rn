@@ -76,7 +76,7 @@ function AuthReportStack() {
         />
 
         <Stack.Screen
-          name='Form Container'
+          name='Forms'
           component={FormScreen}
           options={{
             animation: "none",
