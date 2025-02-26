@@ -54,10 +54,12 @@ const FormScreen = ({ navigation, route }) => {
     <>
       <View style={styles.screenContainer}>
         <FlatList
+          key={"numColumns_1"}
           data={forms}
           keyExtractor={(item) => item.form_id}
           renderItem={handleFormItem}
           contentContainerStyle= {styles.flatListContainer}
+          numColumns={2}
         />
       </View>
     </>
@@ -72,7 +74,7 @@ const styles = StyleSheet.create({
      flex: 1,
   },
   screen: {
-
+    width: "50%"
   },
   flatListContainer: {
     paddingVertical: 20,
