@@ -16,7 +16,7 @@ import { useMutation } from "@tanstack/react-query";
 import { GlobalStyles } from "../Constants/Globalcolors";
 import { ActivityIndicator, MD2Colors } from "react-native-paper";
 import { fetchRecordByDate } from "../http/api";
-import { useIsFocused } from "@react-navigation/native";
+import { useFocusEffect, useIsFocused } from "@react-navigation/native";
 import { Notifier, NotifierComponents } from "react-native-notifier";
 import { ProjectContext } from "../store/projectContext";
 
@@ -37,10 +37,10 @@ const Records = ({ route }) => {
   const [tempDate, setTempDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
   const [isFetchingUserData, setIsFetchingUserData] = useState(true);
-  const [networkText, setNetworkText] = useState("")
+  const [networkText, setNetworkText] = useState("");
+  const isFocused = useIsFocused();
 
   const { formID, formTitle } = route.params;
-  const isFocused = useIsFocused();
 
   useEffect(() => {
     async function handleToken() {
@@ -56,10 +56,23 @@ const Records = ({ route }) => {
   }, [isFocused]);
 
   useEffect(() => {
-    console.log("rendering")
-    const unsubscribe = NetInfo.addEventListener((state) => {
-      console.log(state)
+    if (error && !isPending) {
+      Toast.show({
+        type: "error",
+        text1: "Failed to fetch",
+        text2: error.message,
+      });
+    } else if (error === "TOO_MANY_ATTEMPTS_TRY-LATER" && !isPending) {
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Too many attempts try later",
+      });
+    }
+  }, [error, isPending]);
 
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener((state) => {
       const isConnected = state.isConnected;
       const isReachable = state.isInternetReachable ?? false;
 
@@ -67,7 +80,7 @@ const Records = ({ route }) => {
       setIsInternetReachable(state.isInternetReachable ?? false);
 
       if (!isConnected) {
-        setNetworkText("Something went wrong, Please try again!")
+        setNetworkText("Something went wrong, Please try again!");
         Notifier.showNotification({
           title: "Network Error",
           description: "No network access, Please check your network!",
@@ -79,12 +92,12 @@ const Records = ({ route }) => {
             descriptionStyle: { color: "#fff" },
           },
         });
-      }else{
-        setNetworkText("")
+      } else {
+        setNetworkText("");
       }
 
       if (!isReachable) {
-        setNetworkText("Something went wrong, Please try again!")
+        setNetworkText("Something went wrong, Please try again!");
         Notifier.showNotification({
           title: "Network Error",
           description: "No internet access!",
@@ -96,8 +109,8 @@ const Records = ({ route }) => {
             descriptionStyle: { color: "#fff" },
           },
         });
-      }else{
-        setNetworkText("")
+      } else {
+        setNetworkText("");
       }
     });
 
@@ -137,6 +150,7 @@ const Records = ({ route }) => {
     },
 
     onSuccess: (data) => {
+
       const formatData = JSON.parse(data);
       if (formatData) {
         addRecords(formatData.data);
@@ -144,13 +158,13 @@ const Records = ({ route }) => {
     },
   });
 
-
-
   // button background color navigation
   async function handleToday() {
     setActiveButton(1);
     const formattedDate = new Date().toISOString().split("T")[0];
-    const ba_id = userData.ba_id;
+    const token = await AsyncStorage.getItem("token");
+    const fetchedUser = JSON.parse(token)
+    const ba_id = fetchedUser.ba_id;
 
     // if (isOffline) {
     //   Notifier.showNotification({
@@ -180,13 +194,12 @@ const Records = ({ route }) => {
     //   return;
     // }
 
+    const isNetwork = await handleNewtwork();
 
-     const isNetwork = await handleNewtwork()
-
-     if(isNetwork){
-      if(isNetwork.isConnected && isNetwork.isInternetReachable){
+    if (isNetwork) {
+      if (isNetwork.isConnected && isNetwork.isInternetReachable) {
         mutate({ formattedDate, formID, ba_id });
-      }else{
+      } else {
         Notifier.showNotification({
           title: "Network Error",
           description: "No network access, Please check your network!",
@@ -199,10 +212,7 @@ const Records = ({ route }) => {
           },
         });
       }
-     }
-
-
-
+    }
   }
 
   function handleYesterday() {
@@ -349,39 +359,30 @@ const Records = ({ route }) => {
     }
   }
 
-
- if( networkText !== "" && networkText !== null && networkText === "Something went wrong, Please try again!"){
-  content = (
-    <View style={styles.imageContainer}>
-        <Image source={require("../assets/image/thinking.png")} style={styles.image} />
-        <Text style={styles.imageText}>Something went wrong, Please try again!</Text>
-    </View>
-  )
- }
-
+  if (
+    networkText !== "" &&
+    networkText !== null &&
+    networkText === "Something went wrong, Please try again!" &&
+    !isFetchingUserData
+  ) {
+    content = (
+      <View style={styles.imageContainer}>
+        <Image
+          source={require("../assets/image/thinking.png")}
+          style={styles.image}
+        />
+        <Text style={styles.imageText}>
+          Something went wrong, Please try again!
+        </Text>
+      </View>
+    );
+  }
 
   useEffect(() => {
-    if (activeButton === 1) {
-      handleToday()
-    }
-  }, [isFocused]);
-
-  useEffect(() => {
-    console.log(error)
-    if (error && !isPending) {
-      Toast.show({
-        type: "error",
-        text1: "Failed to fetch",
-        text2: error.message,
-      });
-    } else if (error === "TOO_MANY_ATTEMPTS_TRY-LATER" && !isPending) {
-      Toast.show({
-        type: "error",
-        text1: "Error",
-        text2: "Too many attempts try later",
-      });
-    }
-  }, [error, isPending]);
+    setTimeout(async() => {
+      await handleToday()
+    }, 500)
+  }, [])
 
   return (
     <>
@@ -497,8 +498,8 @@ const styles = StyleSheet.create({
 
   imageContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     rowGap: 20,
     padding: 20,
   },
@@ -508,6 +509,6 @@ const styles = StyleSheet.create({
   },
   imageText: {
     fontSize: 16,
-    fontWeight: '600'
-  }
+    fontWeight: "600",
+  },
 });

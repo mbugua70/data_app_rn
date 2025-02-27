@@ -9,12 +9,11 @@ import { AuthContext } from "../store/store";
 
 
 const FormScreen = ({ navigation, route }) => {
-  const {indexItem} = useContext(AuthContext)
   const {formsData} = useContext(ProjectContext)
   const { projectID } = route.params;
   const [forms, setForms] = useState("");
 
-  console.log(indexItem, "indexItem")
+
 
   useEffect(() => {
     formsData.forEach((project) => {
@@ -70,9 +69,6 @@ const FormScreen = ({ navigation, route }) => {
           renderItem={handleFormItem}
           contentContainerStyle= {styles.flatListContainer}
           numColumns={2}
-          columnWrapperStyle =  {(item, index) => ({
-             flexDirection: Math.floor(index / numColumns) % 2 === 0 ? 'row' : 'row-reverse'
-          })}
         />
       </View>
     </>

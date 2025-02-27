@@ -127,6 +127,8 @@ export async function SummaryForm(recordData) {
     body: formData,
   });
 
+  console.log(res, "respond")
+
   const data = await res.json(); // Handle as plain text
   if (res.ok) {
     return data;

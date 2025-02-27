@@ -12,9 +12,9 @@ const Report = ({ route }) => {
   const { data, mutate, isError, error, isPending, isSuccess } = useMutation({
     mutationFn: SummaryForm,
     // the code below will wait the request to finish before moving to another page.
-    onMutate: async (data) => {
-      return data;
-    },
+    // onMutate: async (data) => {
+    //   return data;
+    // },
 
     onSuccess: (data) => {
       if (data.response === "fail") {
@@ -36,13 +36,12 @@ const Report = ({ route }) => {
   });
 
   async function submitHandler(record) {
-    console.log(record, "sending to the backend")
     // report submission
     mutate({record});
   }
 
   useEffect(() => {
-    console.log(error, "Error");
+   console.log(error, "Error");
     if (error && !isPending) {
       Toast.show({
         type: "error",

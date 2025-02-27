@@ -10,11 +10,6 @@ import { AuthContext } from "../store/store";
 
 const FormItem = ({index, title, onNavigate, onNavigateRecord, isEvenRow}) => {
     const navigation = useNavigation();
-    const {indexHandler} = useContext(AuthContext)
-
-    useEffect(() => {
-     indexHandler(index)
-    }, [index])
 
     const styling = {
         backgroundColor: index % 3 === 0 ? "#819c79" : "#fff",

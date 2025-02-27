@@ -94,6 +94,8 @@ const FormContainerTwo = ({
     const isDropdown = item.field_type === "dropdown";
     const isRadio = item.field_type === "radio";
     const isRecord = item.field_type === "auto";
+    const isDate = item.field_type === "date";
+
 
     let placeholder = "Enter value";
     if (item.input_title === "Date") {
@@ -124,6 +126,22 @@ const FormContainerTwo = ({
     return (
       <>
         {/* date time picker */}
+        {isDate && (
+           <InputTwo
+           formNumber={item.input_rank}
+           label={item.input_title}
+           onUpdateValue={(value) =>
+             updateInputValueHandler(item.field_id, value)
+           }
+           value={formState[item.field_id]}
+           isInvalid={errors[item.field_id]}
+           placeholder='Enter date e.g YYYY-MM-DD'
+           onSubmitEditing={() => inputRef2.current?.focus()}
+           blurOnSubmit={false}
+           returnKeyType='next'
+           keyboardType={keyboardType}
+         />
+        )}
 
         {isRecord && (
           <InputTwo
@@ -209,7 +227,6 @@ const FormContainerTwo = ({
   }
 
   function takeImageHander(image) {
-    console.log(image, "showing image");
     setFormState((prevState) => ({
       ...prevState,
       imageurl: image, // storing the image in the form state
@@ -328,16 +345,16 @@ const FormContainerTwo = ({
             //  footer component
             <>
               {/* image picker */}
-              {!isEditing && (
+              {/* {!isEditing && (
                 <PickerImage
                   onImageHandler={takeImageHander}
                   resetForm={resetForm}
                   imageFile={formState.imageurl}
                 />
-              )}
+              )} */}
 
               {/* location picker */}
-              <LocationPicker
+              {/* <LocationPicker
                 resetForm={resetForm}
                 onLocationHandler={takeLocationHandler}
                 pickedLocationState={
@@ -345,7 +362,7 @@ const FormContainerTwo = ({
                     ? { lat: latitude, long: longitude }
                     : formState.location
                 }
-              />
+              /> */}
 
               {/* submit button */}
               <View style={styles.submitContainer}>
