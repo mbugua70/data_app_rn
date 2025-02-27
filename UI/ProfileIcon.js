@@ -4,7 +4,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { GlobalStyles } from '../Constants/Globalcolors';
 
 
-const ProfileIconUI = ({onPress, color, name, size, text, bg}) => {
+const ProfileIconUI = ({onPress, color, name, size, text, bg, isSignOut}) => {
   return (
     <View style={styles.screen}>
       <Pressable hitSlop={20} onPress={onPress} style={({pressed}) => [{...styles.button}, pressed && styles.pressed]}>
@@ -12,7 +12,7 @@ const ProfileIconUI = ({onPress, color, name, size, text, bg}) => {
           <View style={[styles.icon, {backgroundColor: bg}]}>
          <Ionicons name={name} size={size} color={color} />
        </View>
-       <Text style={styles.text}>{text}</Text>
+       <Text style={[styles.text, isSignOut && {color: GlobalStyles.colors.error500}]}>{text}</Text>
           </View>
        <View>
        <Ionicons name="chevron-forward-circle" size={32} color="#819c79" />
@@ -27,7 +27,7 @@ export default ProfileIconUI
 const styles = StyleSheet.create({
     screen: {
       width: "100%",
-      marginVertical: 2,
+      marginTop: 20,
     },
 
     textIcon: {

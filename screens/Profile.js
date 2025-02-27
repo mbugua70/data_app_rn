@@ -11,10 +11,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { GlobalStyles } from "../Constants/Globalcolors";
 
 import { AuthContext } from "../store/store";
+import { useNavigation, useIsFocused } from "@react-navigation/native";
 import ProfilePic from "../components/ProfilePic";
 import UserName from "../components/UserName";
 import ProfileIconUI from "../UI/ProfileIcon";
-import { useNavigation, useIsFocused } from "@react-navigation/native";
+import ProfileUIDetails from "../UI/ProfileUIDetails";
+
 
 const Profile = () => {
   const authctx = useContext(AuthContext);
@@ -62,20 +64,29 @@ const Profile = () => {
       </View>
       {/* edit profile */}
       <View style={styles.screen2}>
-        {/* <ProfileIconUI
-          name='person'
-          size={24}
-          color={GlobalStyles.colors.primary800}
-          onPress={editHandler}
-          text='Edit profile'
-          bg='#fff'
-        /> */}
+        {/* support */}
+        <Text style={styles.supporttitle}>Support</Text>
+        {/* email support */}
+        <ProfileUIDetails
+          title='Email us at'
+          details='ceaser@igurukenya.com'
+          iconName='mail'
+          color='#819c79'
+        />
+        {/* call support */}
+        <ProfileUIDetails
+          title='Call Us'
+          details='+254 726 410868'
+          iconName='call'
+          color='#819c79'
+        />
 
         {/* signout */}
         <ProfileIconUI
+          isSignOut={true}
           name='log-out'
           size={24}
-          color="#819c79"
+          color='#819c79'
           onPress={signoutHandler}
           text='Sign Out'
           bg={GlobalStyles.colors.gray200}
@@ -90,7 +101,7 @@ export default Profile;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: "#000"
+    backgroundColor: "#000",
   },
   screenChild: {
     alignItems: "center",
@@ -101,5 +112,12 @@ const styles = StyleSheet.create({
     height: "100%",
     borderTopWidth: 1,
     borderColor: GlobalStyles.colors.gray300,
+  },
+  supporttitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: GlobalStyles.colors.gray200,
+    paddingHorizontal: 10,
+    marginBottom: 16,
   },
 });
