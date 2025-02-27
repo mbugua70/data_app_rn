@@ -150,7 +150,6 @@ const Records = ({ route }) => {
     },
 
     onSuccess: (data) => {
-
       const formatData = JSON.parse(data);
       if (formatData) {
         addRecords(formatData.data);
@@ -163,7 +162,7 @@ const Records = ({ route }) => {
     setActiveButton(1);
     const formattedDate = new Date().toISOString().split("T")[0];
     const token = await AsyncStorage.getItem("token");
-    const fetchedUser = JSON.parse(token)
+    const fetchedUser = JSON.parse(token);
     const ba_id = fetchedUser.ba_id;
 
     // if (isOffline) {
@@ -379,10 +378,10 @@ const Records = ({ route }) => {
   }
 
   useEffect(() => {
-    setTimeout(async() => {
-      await handleToday()
-    }, 500)
-  }, [])
+    setTimeout(async () => {
+      await handleToday();
+    }, 500);
+  }, []);
 
   return (
     <>
