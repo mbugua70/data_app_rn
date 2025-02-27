@@ -8,13 +8,16 @@ export const AuthContext = createContext({
     logout: () =>{},
     locationHandler: (pickedLocation) => {},
     pickedLocations: "",
-    isLocation: false
+    indexItem: "",
+    isLocation: false,
+    indexHandler: (index) => {}
 })
 
 
 export function AuthContextProvider({children}){
     const [authToken, setAuthToken] = useState()
     const [locationStore, setLocationStore] = useState({})
+    const [indexItem, setIndexItem] = useState([])
 
 
 
@@ -32,6 +35,10 @@ export function AuthContextProvider({children}){
         })
     }
 
+    function indexHandler (index) {
+      setIndexItem((prev) => [...prev, index])
+    }
+
 
     function logout(){
         AsyncStorage.removeItem("token");
@@ -40,6 +47,7 @@ export function AuthContextProvider({children}){
         AsyncStorage.removeItem("formsData")
         AsyncStorage.removeItem("formInputData")
         AsyncStorage.removeItem("formsSelectData")
+        setIndexItem(null)
         setAuthToken(null);
     }
 
@@ -51,8 +59,9 @@ export function AuthContextProvider({children}){
         logout: logout,
         isLocation: !!locationStore,
         locationHandler: locationHandler,
-        pickedLocations: locationStore
-
+        pickedLocations: locationStore,
+        indexItem: indexItem,
+        indexHandler: indexHandler
 
     }
 
