@@ -38,7 +38,6 @@ export async function LoginHander({ name, password }) {
 
 // submit records
 export async function SummaryForm(recordData) {
-  console.log(recordData, "received data");
   const token = await AsyncStorage.getItem("token");
   const { record } = recordData;
 
@@ -127,7 +126,6 @@ export async function SummaryForm(recordData) {
     body: formData,
   });
 
-  console.log(res, "respond")
 
   const data = await res.json(); // Handle as plain text
   if (res.ok) {
@@ -274,4 +272,33 @@ export function filterAndSetFormState(record) {
   });
 
   return formState;
+}
+
+// project refetch
+export async function ProjectRefetch(baID) {
+  const userDetails = {
+    ba_id: baID
+  }
+
+  const encodedDat = new URLSearchParams(userDetails).toString();
+
+  const res = await fetch("https://iguru.co.ke/BAIMS/ep/PROJECTS.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded", // ✅ Ensure correct headers
+    },
+    body: encodedDat,
+  });
+
+  const data = await res.json(); // Handle as plain text
+
+  if (res.ok) {
+    return data;
+  } else {
+    throw {
+      message: data || "Submission failed.",
+      statusText: res.statusText,
+      status: res.status,
+    };
+  }
 }
