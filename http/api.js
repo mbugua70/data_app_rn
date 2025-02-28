@@ -302,3 +302,31 @@ export async function ProjectRefetch(baID) {
     };
   }
 }
+// form refetch
+export async function formRefetch({baID, project_id}) {
+  const projectDetails = {
+    ba_id: baID
+  }
+
+  const encodedDat = new URLSearchParams(projectDetails).toString();
+
+  const res = await fetch("https://iguru.co.ke/BAIMS/ep/FORMS.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded", // ✅ Ensure correct headers
+    },
+    body: encodedDat,
+  });
+
+  const data = await res.json(); // Handle as plain text
+
+  if (res.ok) {
+    return data;
+  } else {
+    throw {
+      message: data || "Submission failed.",
+      statusText: res.statusText,
+      status: res.status,
+    };
+  }
+}

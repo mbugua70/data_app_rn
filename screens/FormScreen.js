@@ -13,6 +13,7 @@ const FormScreen = ({ navigation, route }) => {
   const { projectID } = route.params;
   const [forms, setForms] = useState("");
 
+  console.log(projectID, "project id")
 
 
   useEffect(() => {
