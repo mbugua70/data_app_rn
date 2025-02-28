@@ -59,6 +59,8 @@ const Login = () => {
           }))
         );
 
+        console.log(filteredForms, "forms")
+
         addFormSelects(selectFields);
         addFormInputs(inputsFields);
         addProjects(filteredProjects);

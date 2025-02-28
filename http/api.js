@@ -303,9 +303,14 @@ export async function ProjectRefetch(baID) {
   }
 }
 // form refetch
-export async function formRefetch({baID, project_id}) {
+export async function formRefetch(projectData) {
+  const {baID, projectName, projectID} = projectData;
+
+
   const projectDetails = {
-    ba_id: baID
+    ba_id: baID,
+    project: projectName,
+    project_id: projectID
   }
 
   const encodedDat = new URLSearchParams(projectDetails).toString();
@@ -313,7 +318,7 @@ export async function formRefetch({baID, project_id}) {
   const res = await fetch("https://iguru.co.ke/BAIMS/ep/FORMS.php", {
     method: "POST",
     headers: {
-      "Content-Type": "application/x-www-form-urlencoded", // ✅ Ensure correct headers
+      "Content-Type": "application/x-www-form-urlencoded",
     },
     body: encodedDat,
   });
@@ -321,7 +326,7 @@ export async function formRefetch({baID, project_id}) {
   const data = await res.json(); // Handle as plain text
 
   if (res.ok) {
-    return data;
+    return  {...data, project_id: projectID};
   } else {
     throw {
       message: data || "Submission failed.",
