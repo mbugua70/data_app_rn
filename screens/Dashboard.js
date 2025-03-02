@@ -13,6 +13,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { ProjectContext } from "../store/projectContext";
 import { ProjectRefetch } from "../http/api";
+import { GlobalStyles } from "../Constants/Globalcolors";
 
 import Toast from "react-native-toast-message";
 

@@ -7,6 +7,7 @@ import { useMutation } from "@tanstack/react-query";
 import { ProjectContext } from "../store/projectContext";
 import { getIndex } from "../util/getIndex";
 import { AuthContext } from "../store/store";
+import { GlobalStyles } from "../Constants/Globalcolors";
 
 import FormItem from "../components/FormItem";
 import Toast from "react-native-toast-message";
@@ -110,33 +111,33 @@ const FormScreen = ({ navigation, route }) => {
     const baID = user?.ba_id || "Unknown";
 
     // internet connection checking
-    if (isOffline) {
-      Notifier.showNotification({
-        title: "Network Error",
-        description: "No network access, Please check your network!",
-        Component: NotifierComponents.Notification,
-        componentProps: {
-          imageSource: require("../assets/image/no-network.png"),
-          containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
-          titleStyle: { color: "#fff" },
-          descriptionStyle: { color: "#fff" },
-        },
-      });
-      return;
-    } else if (!isInternetReachable) {
-      Notifier.showNotification({
-        title: "Network Error",
-        description: "No internet access!",
-        Component: NotifierComponents.Notification,
-        componentProps: {
-          imageSource: require("../assets/image/no-network.png"),
-          containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
-          titleStyle: { color: "#fff" },
-          descriptionStyle: { color: "#fff" },
-        },
-      });
-      return;
-    }
+    // if (isOffline) {
+    //   Notifier.showNotification({
+    //     title: "Network Error",
+    //     description: "No network access, Please check your network!",
+    //     Component: NotifierComponents.Notification,
+    //     componentProps: {
+    //       imageSource: require("../assets/image/no-network.png"),
+    //       containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
+    //       titleStyle: { color: "#fff" },
+    //       descriptionStyle: { color: "#fff" },
+    //     },
+    //   });
+    //   return;
+    // } else if (!isInternetReachable) {
+    //   Notifier.showNotification({
+    //     title: "Network Error",
+    //     description: "No internet access!",
+    //     Component: NotifierComponents.Notification,
+    //     componentProps: {
+    //       imageSource: require("../assets/image/no-network.png"),
+    //       containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
+    //       titleStyle: { color: "#fff" },
+    //       descriptionStyle: { color: "#fff" },
+    //     },
+    //   });
+    //   return;
+    // }
 
     // mutation func
     mutate({baID, projectName, projectID});

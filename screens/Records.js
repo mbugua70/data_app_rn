@@ -26,9 +26,11 @@ import Toast from "react-native-toast-message";
 import RecordContainer from "../components/RecordContainer";
 import EmptyBox from "../UI/EmptyBox";
 import { handleNewtwork } from "../Network";
+import { AuthContext } from "../store/store";
 
 const Records = ({ route }) => {
   const { addRecords, records } = useContext(ProjectContext);
+  const { handleFormDateRecord, formDateRecord} = useContext(AuthContext)
   const [activeButton, setActiveButton] = useState(1);
   const [userData, setUserData] = useState("");
   const [isOffline, setIsOffline] = useState(false);
@@ -152,7 +154,9 @@ const Records = ({ route }) => {
     onSuccess: (data) => {
       const formatData = JSON.parse(data);
       if (formatData) {
+        console.log(formatData, "formatedData")
         addRecords(formatData.data);
+        handleFormDateRecord(formatData.date)
       }
     },
   });
@@ -164,34 +168,6 @@ const Records = ({ route }) => {
     const token = await AsyncStorage.getItem("token");
     const fetchedUser = JSON.parse(token);
     const ba_id = fetchedUser.ba_id;
-
-    // if (isOffline) {
-    //   Notifier.showNotification({
-    //     title: "Network Error",
-    //     description: "No network Íaccess, Please check your network!",
-    //     Component: NotifierComponents.Notification,
-    //     componentProps: {
-    //       imageSource: require("../assets/image/no-network.png"),
-    //       containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
-    //       titleStyle: { color: "#fff" },
-    //       descriptionStyle: { color: "#fff" },
-    //     },
-    //   });
-    //   return;
-    // } else if (!isInternetReachable) {
-    //   Notifier.showNotification({
-    //     title: "Network Error",
-    //     description: "No internet access!",
-    //     Component: NotifierComponents.Notification,
-    //     componentProps: {
-    //       imageSource: require("../assets/image/no-network.png"),
-    //       containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
-    //       titleStyle: { color: "#fff" },
-    //       descriptionStyle: { color: "#fff" },
-    //     },
-    //   });
-    //   return;
-    // }
 
     const isNetwork = await handleNewtwork();
 

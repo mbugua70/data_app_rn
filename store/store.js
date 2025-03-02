@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createContext, useEffect, useState} from "react";
 
 export const AuthContext = createContext({
+    formDateRecord: "",
     token: "",
     authenticate: (token)=>{},
     isAuthenticate: false,
@@ -10,7 +11,8 @@ export const AuthContext = createContext({
     pickedLocations: "",
     indexItem: "",
     isLocation: false,
-    indexHandler: (index) => {}
+    indexHandler: (index) => {},
+    handleFormDateRecord: (date) => {}
 })
 
 
@@ -18,6 +20,7 @@ export function AuthContextProvider({children}){
     const [authToken, setAuthToken] = useState()
     const [locationStore, setLocationStore] = useState({})
     const [indexItem, setIndexItem] = useState([])
+    const [formDateRecord, setFormDateRecord] = useState("")
 
 
 
@@ -51,6 +54,10 @@ export function AuthContextProvider({children}){
         setAuthToken(null);
     }
 
+    function handleFormDateRecord (date) {
+        setFormDateRecord(date)
+    }
+
 
     const value = {
         token: authToken,
@@ -61,7 +68,9 @@ export function AuthContextProvider({children}){
         locationHandler: locationHandler,
         pickedLocations: locationStore,
         indexItem: indexItem,
-        indexHandler: indexHandler
+        indexHandler: indexHandler,
+        handleFormDateRecord: handleFormDateRecord,
+        formDateRecord: formDateRecord
 
     }
 

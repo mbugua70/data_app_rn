@@ -14,6 +14,7 @@ import { ProjectContext } from "../store/projectContext";
 import { useMutation } from "@tanstack/react-query";
 import { HomeColors } from "../Constants/Globalcolors";
 import { formRefetch, ProjectRefetch } from "../http/api";
+import { GlobalStyles } from "../Constants/Globalcolors";
 
 import CategoryItem from "../components/CategoryItem";
 import Toast from "react-native-toast-message";

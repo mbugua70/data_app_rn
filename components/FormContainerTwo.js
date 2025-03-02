@@ -345,13 +345,13 @@ const FormContainerTwo = ({
             //  footer component
             <>
               {/* image picker */}
-              {/* {!isEditing && (
+              {!isEditing && (
                 <PickerImage
                   onImageHandler={takeImageHander}
                   resetForm={resetForm}
                   imageFile={formState.imageurl}
                 />
-              )} */}
+              )}
 
               {/* location picker */}
               {/* <LocationPicker

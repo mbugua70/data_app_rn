@@ -1,19 +1,21 @@
 import { View, Text, StyleSheet } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { IconButton, MD3Colors } from 'react-native-paper';
 import { GlobalStyles } from "../Constants/Globalcolors";
 import { useNavigation } from "@react-navigation/native";
+import { AuthContext } from "../store/store";
 
 
 
 const RecordContainer = ({index, formID, formTitle, item}) => {
+  const {formDateRecord} = useContext(AuthContext)
   const [dateNumber, setDateNumber] = useState()
-  const [dateText, setDateText] = useState();
+  const [dateText, setDateText] = useState()
   const [dayOfWeek, setdayOfWeek] = useState()
 
    useEffect(() => {
-    if(item){
-      const date = new Date(item["0"]).toDateString().split(" ")
+    if(formDateRecord){
+      const date = new Date(formDateRecord).toDateString().split(" ")
       setDateNumber(date[2])
       setDateText(date[1])
       setdayOfWeek(date[0])

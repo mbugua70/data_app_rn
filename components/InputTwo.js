@@ -30,6 +30,7 @@ const InputTwo = forwardRef((
         secureTextEntry={secure}
         onChangeText={onUpdateValue}
         value={value}
+        placeholderTextColor={GlobalStyles.colors.gray300}
         placeholder={placeholder}
         returnKeyType={returnKeyType}
         ref={ref}
