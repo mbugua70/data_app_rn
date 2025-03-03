@@ -34,6 +34,8 @@ const Login = () => {
           ba_id: data.ba_id
         }
         authenticate(JSON.stringify(baRecord));
+
+
         const filteredProjects = data.projects.map((project) => ({
           project_id: project.project_id,
           project_title: project.project_title,

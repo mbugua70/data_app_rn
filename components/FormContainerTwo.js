@@ -46,8 +46,13 @@ const FormContainerTwo = ({
   existingData,
 }) => {
   const [formState, setFormState] = useState({});
-  const { formInputData, formsSelectData, addFormInputsTwo, formInputDataTwo, editedData} =
-    useContext(ProjectContext);
+  const {
+    formInputData,
+    formsSelectData,
+    addFormInputsTwo,
+    formInputDataTwo,
+    editedData,
+  } = useContext(ProjectContext);
   const [inputs, setInputs] = useState("");
   const [errors, setErrors] = useState({});
   const [longitude, setLongitude] = useState("");
@@ -138,13 +143,11 @@ const FormContainerTwo = ({
 
   useEffect(() => {
     if (formInputDataTwo.length > 0) {
-      console.log("called two");
       setInputs(formInputDataTwo["0"].inputs);
     }
 
     if (formInputDataTwo.length === 0) {
       formInputData.forEach((input) => {
-        console.log("called");
         if (formID === input.form_id) {
           setInputs(input.inputs);
         }
@@ -325,6 +328,8 @@ const FormContainerTwo = ({
     inputs.forEach((item) => {
       const value = formState[item.field_id];
 
+
+
       if (!value || (Array.isArray(value) && value.length === 0)) {
         errors[item.field_id] = `${item.input_title} is required`;
         isValid = false;
@@ -413,7 +418,6 @@ const FormContainerTwo = ({
   }, [isOffline, isInternetReachable, mutateRefetch]);
 
   useEffect(() => {
-    console.log(editedData, "test rendering")
     if (isEditing && editedData) {
       const filteredRecord = filterAndSetFormState(editedData);
 

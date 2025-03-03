@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from "react-native";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { Avatar } from "react-native-paper";
 import { Button } from "react-native-paper";
 import { IconButton, MD3Colors } from "react-native-paper";
@@ -18,29 +18,48 @@ const FormItem = ({
 }) => {
   const { submittedRecord } = useContext(AuthContext);
   const navigation = useNavigation();
+  const [recordSubmit, setRecordSubmit] = useState([])
 
-  console.log(formID, "form id")
+
+
+
+
 
   const styling = {
-    backgroundColor: index % 3 === 0 ? "#819c79" : "#fff",
-    borderWidth: index % 3 === 0 ? 0 : 2,
-    borderColor: index % 3 === 0 ? "#fff" : "#819c79",
+    backgroundColor:  recordSubmit.length === 0 ? "#819c79"  : "#fff",
+    borderWidth: recordSubmit.length === 0 ? 0 : 2,
+    borderColor: recordSubmit.length === 0 ? "#fff" : "#819c79",
   };
 
   const button = {
-    mode: index % 3 === 0 ? "contained-tonal" : "contained",
+    mode: recordSubmit.length === 0 ? "contained-tonal" : "contained",
   };
 
   const iconButton = {
-    mode: index % 3 === 0 ? "contained-tonal" : "contained",
+    mode: recordSubmit.length === 0 ? "contained-tonal" : "contained",
   };
 
   const titleStyling = {
     color:
-      index % 3 === 0
+        recordSubmit.length === 0
         ? GlobalStyles.colors.gray700
         : GlobalStyles.colors.gray600,
   };
+
+  useMemo(() => {
+      submittedRecord.map((item) => {
+        const today = new Date().toISOString().split("T")[0];
+         if(today === item.date) {
+           if(item.formID === formID) {
+             setRecordSubmit((prev) => [
+              ...prev,
+              item.formTitle
+             ])
+           }
+         }
+      })
+
+  }, [submittedRecord])
 
   return (
     <View
@@ -50,7 +69,7 @@ const FormItem = ({
           <Text style={[styles.title, { ...titleStyling }]}>{title}</Text>
           <View>
             <IconButton
-              containerColor={index % 3 === 0 ? "#f5f5f5" : "#819c79"}
+              containerColor={ recordSubmit.length === 0 ? "#f5f5f5" : "#819c79"}
               mode={iconButton.mode}
               icon='plus'
               iconColor='#000000'
@@ -62,14 +81,14 @@ const FormItem = ({
         {/* records */}
 
         <View style={styles.flexContainerTwo}>
-          <Text style={styles.overalRecord}>0</Text>
+          <Text style={styles.overalRecord}>{recordSubmit.length}</Text>
           <Text style={styles.overall}>Overall</Text>
         </View>
 
         <View style={styles.buttoncontainer}>
           <View>
             <Button
-              buttonColor={index % 3 === 0 ? "" : "#819c79"}
+              buttonColor={recordSubmit.length === 0 ? "" : "#819c79"}
               labelStyle={{ fontSize: 10, paddingVertical: 0, lineHeight: 12 }}
               style={styles.button}
               mode={button.mode}

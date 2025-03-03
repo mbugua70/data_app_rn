@@ -69,14 +69,14 @@ const Profile = () => {
         {/* email support */}
         <ProfileUIDetails
           title='Email us at'
-          details='ceaser@igurukenya.com'
+          details='johnmbugua23code@gmail.com'
           iconName='mail'
           color='#819c79'
         />
         {/* call support */}
         <ProfileUIDetails
           title='Call Us'
-          details='+254 726 410868'
+          details='+254728781720'
           iconName='call'
           color='#819c79'
         />

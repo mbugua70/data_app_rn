@@ -20,11 +20,15 @@ import Toast from "react-native-toast-message";
 //components
 import CardCategoryUI from "../UI/CardCategoryUI";
 import Welcome from "../components/Welcome";
+import { useIsFocused } from "@react-navigation/native";
+import { createUser } from "../util/database";
 
 const Dashboard = ({ navigation }) => {
   const { projectsData, addProjects } = useContext(ProjectContext);
   const [isOffline, setIsOffline] = useState(false);
   const [isInternetReachable, setIsInternetReachable] = useState(false);
+  const [userID, setUserID] = useState("")
+  const isFocused = useIsFocused();
   const images = {
     image1: require("../assets/image/backlog.png"),
     image2: require("../assets/image/mail.png"),
@@ -98,6 +102,33 @@ const Dashboard = ({ navigation }) => {
   function handleDashboardNav() {
     navigation.navigate("Projects");
   }
+
+  useEffect(() => {
+   async function creatUserHandler () {
+    const token = await AsyncStorage.getItem("token");
+
+    if (!token) {
+      throw new Error("No token found in AsyncStorage.");
+    }
+
+    let user;
+    try {
+      user = JSON.parse(token);
+    } catch (error) {
+      throw new Error("Failed to parse token.");
+    }
+
+    if(userID === ""){
+      const userDetails = await createUser(user.name)
+
+      AsyncStorage.setItem("userDetails", JSON.stringify(userDetails))
+      setUserID(userDetails)
+    }
+
+   }
+
+   creatUserHandler();
+  }, [isFocused])
 
   const onRefresh = React.useCallback(async () => {
     const token = await AsyncStorage.getItem("token");

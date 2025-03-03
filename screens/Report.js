@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useEffect, useState, useContext } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { inputRefetch, SummaryForm } from "../http/api";
@@ -36,6 +37,7 @@ const Report = ({ route }) => {
       }
 
       if (data.response === "success") {
+        console.log("called")
         submitHandlerRecord({formID, formTitle})
         Toast.show({
           type: "success",
