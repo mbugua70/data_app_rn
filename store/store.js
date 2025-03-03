@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createContext, useEffect, useState} from "react";
 
 export const AuthContext = createContext({
+    submittedRecord: [],
     formDateRecord: "",
     token: "",
     authenticate: (token)=>{},
@@ -12,11 +13,13 @@ export const AuthContext = createContext({
     indexItem: "",
     isLocation: false,
     indexHandler: (index) => {},
-    handleFormDateRecord: (date) => {}
+    handleFormDateRecord: (date) => {},
+    submitHandlerRecord: (data) => {}
 })
 
 
 export function AuthContextProvider({children}){
+    const [submitRecordState, setSubmitRecord] = useState([])
     const [authToken, setAuthToken] = useState()
     const [locationStore, setLocationStore] = useState({})
     const [indexItem, setIndexItem] = useState([])
@@ -40,6 +43,16 @@ export function AuthContextProvider({children}){
 
     function indexHandler (index) {
       setIndexItem((prev) => [...prev, index])
+    }
+
+    function submitHandler(details) {
+        const newSubmission = {
+            ...details,
+            date: new Date().toISOString().split("T")[0], // Store date for tracking
+          };
+
+          setSubmitRecord((prev) => [...prev, newSubmission]);
+
     }
 
 
@@ -70,7 +83,9 @@ export function AuthContextProvider({children}){
         indexItem: indexItem,
         indexHandler: indexHandler,
         handleFormDateRecord: handleFormDateRecord,
-        formDateRecord: formDateRecord
+        formDateRecord: formDateRecord,
+        submitHandlerRecord: submitHandler,
+        submittedRecord: submitRecordState
 
     }
 

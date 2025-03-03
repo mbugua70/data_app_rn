@@ -4,10 +4,12 @@ import { IconButton, MD3Colors } from 'react-native-paper';
 import { GlobalStyles } from "../Constants/Globalcolors";
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../store/store";
+import { ProjectContext } from "../store/projectContext";
 
 
 
 const RecordContainer = ({index, formID, formTitle, item}) => {
+  const {editDataHandler} = useContext(ProjectContext)
   const {formDateRecord} = useContext(AuthContext)
   const [dateNumber, setDateNumber] = useState()
   const [dateText, setDateText] = useState()
@@ -25,6 +27,8 @@ const RecordContainer = ({index, formID, formTitle, item}) => {
     const navigation =  useNavigation()
 
     function handleRecordEdit(){
+        // store editing data
+      editDataHandler(item)
         navigation.navigate("Record Edit", {
             formID: formID,
             formTitle: formTitle,

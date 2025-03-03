@@ -136,6 +136,7 @@ const FormScreen = ({ navigation, route }) => {
       <>
         <View style={styles.screen}>
           <FormItem
+            formID= {item.form_id}
             isEvenRow={isEvenRow}
             index={index}
             title={item.form_title}
@@ -146,7 +147,6 @@ const FormScreen = ({ navigation, route }) => {
       </>
     );
   }
-
 
   // error handler
 

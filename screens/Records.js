@@ -154,7 +154,6 @@ const Records = ({ route }) => {
     onSuccess: (data) => {
       const formatData = JSON.parse(data);
       if (formatData) {
-        console.log(formatData, "formatedData")
         addRecords(formatData.data);
         handleFormDateRecord(formatData.date)
       }

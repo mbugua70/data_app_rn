@@ -4,6 +4,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const ProjectContext = createContext({
   projectsData: [],
+  editedData: {},
+  editDataHandler: (data) => {},
   formsData: [],
   setProjects: (projects)=> {},
   setForms: (formsData) => {},
@@ -108,6 +110,15 @@ function formUserRecordsReducer(state, action){
   }
 }
 
+function editDataReducer(state, action){
+  switch(action.type){
+    case "ADDEDITDATA":
+      return {...action.payload};
+      default:
+      return state
+  }
+}
+
 
 function ProjectContextProvider({ children }) {
   const [projectsState, dispatch] = useReducer(projectReducer, []);
@@ -117,6 +128,7 @@ function ProjectContextProvider({ children }) {
   const [formSelectsState, dispatchFormSelect] = useReducer(formSelectsReducer, [])
   const [userRecordsState, dispatchUserRecords] = useReducer(formUserRecordsReducer, [])
   const [formInputStateTwo, dispatchFormInputTwo] = useReducer(formInputsTwoReducer, [])
+  const [editDataState, dipatchEditData] = useReducer(editDataReducer, {})
 
   useEffect(() => {
     async function loadStoredData() {
@@ -128,6 +140,7 @@ function ProjectContextProvider({ children }) {
         const formInputsTwo = await AsyncStorage.getItem("formInputDataTwo");
         const formSelects = await AsyncStorage.getItem("formsSelectData");
         const formUserRecords = await AsyncStorage.getItem("formUserRecords")
+        const editData = await AsyncStorage.getItem("editData")
 
         if (projects) dispatch({ type: "ADD", payload: JSON.parse(projects) });
         if (forms) dispatchForm({ type: "ADDFORM", payload: JSON.parse(forms) });
@@ -136,6 +149,7 @@ function ProjectContextProvider({ children }) {
         if (formInputsTwo) dispatchFormInputTwo({ type: "ADDINPUTFORMSTWO", payload: JSON.parse(formInputs) });
         if (formSelects) dispatchFormSelect({ type: "ADDSELECT", payload: JSON.parse(formSelects) });
         if(formUserRecords) dispatchUserRecords({type: "ADDRECORDS", payload: JSON.parse(formUserRecords)});
+        if(editData) dipatchEditData({type: "ADDEDITDATAA", payload: JSON.parse(editData)});
       } catch (error) {
         console.error("Error loading data:", error);
       }
@@ -193,6 +207,11 @@ function ProjectContextProvider({ children }) {
     AsyncStorage.setItem("formUserRecords", JSON.stringify(data))
   }
 
+  function editDataHandler(data) {
+    dipatchEditData({type: "ADDEDITDATA", payload: data})
+    AsyncStorage.setItem("editData", JSON.stringify(data))
+  }
+
   const value = {
     addProjects: addProjects,
     deleteProject: deleteProject,
@@ -210,7 +229,9 @@ function ProjectContextProvider({ children }) {
     addRecords: addRecords,
     records: userRecordsState,
     formInputDataTwo: formInputStateTwo,
-    addFormInputsTwo: addFormInputsTwo
+    addFormInputsTwo: addFormInputsTwo,
+    editedData: editDataState,
+    editDataHandler: editDataHandler,
   };
 
   return (

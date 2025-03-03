@@ -20,7 +20,6 @@ import { ProjectContext } from "../store/projectContext";
 import { AuthContext } from "../store/store";
 import { filterAndSetFormState, inputRefetchHandler } from "../http/api";
 
-
 import NetInfo from "@react-native-community/netinfo";
 import Toast from "react-native-toast-message";
 import InputTwo from "./InputTwo";
@@ -47,7 +46,8 @@ const FormContainerTwo = ({
   existingData,
 }) => {
   const [formState, setFormState] = useState({});
-  const { formInputData, formsSelectData, addFormInputsTwo, formInputDataTwo } = useContext(ProjectContext);
+  const { formInputData, formsSelectData, addFormInputsTwo, formInputDataTwo, editedData} =
+    useContext(ProjectContext);
   const [inputs, setInputs] = useState("");
   const [errors, setErrors] = useState({});
   const [longitude, setLongitude] = useState("");
@@ -129,23 +129,22 @@ const FormContainerTwo = ({
           text2: "Please try again!",
         });
       } else {
-        let filteredArray = []
-        filteredArray.push(data)
-        console.log(filteredArray, "array")
-        addFormInputsTwo(filteredArray)
+        let filteredArray = [];
+        filteredArray.push(data);
+        addFormInputsTwo(filteredArray);
       }
     },
   });
 
   useEffect(() => {
-    if(formInputDataTwo.length > 0) {
-      console.log("called two")
-      // setInputs(formInputDataTwo["0"].inputs)
+    if (formInputDataTwo.length > 0) {
+      console.log("called two");
+      setInputs(formInputDataTwo["0"].inputs);
     }
 
-    if(formInputDataTwo.length === 0){
+    if (formInputDataTwo.length === 0) {
       formInputData.forEach((input) => {
-        console.log("called")
+        console.log("called");
         if (formID === input.form_id) {
           setInputs(input.inputs);
         }
@@ -363,9 +362,7 @@ const FormContainerTwo = ({
   // refetch function
 
   const onRefresh = React.useCallback(async () => {
-
     const token = await AsyncStorage.getItem("token");
-
 
     if (!token) {
       throw new Error("No token found in AsyncStorage.");
@@ -412,13 +409,13 @@ const FormContainerTwo = ({
     }
 
     // mutation func
-    console.log("rendered")
     mutateRefetch({ baID, formID, formTitle });
   }, [isOffline, isInternetReachable, mutateRefetch]);
 
   useEffect(() => {
-    if (isEditing && existingData) {
-      const filteredRecord = filterAndSetFormState(existingData);
+    console.log(editedData, "test rendering")
+    if (isEditing && editedData) {
+      const filteredRecord = filterAndSetFormState(editedData);
 
       Object.entries(filteredRecord).forEach(([key, value]) => {
         const keysName = Object.keys(filteredRecord)
@@ -443,7 +440,7 @@ const FormContainerTwo = ({
 
       setFormState(filteredRecord);
     }
-  }, [isEditing, existingData, inputs, isError, isSuccess]);
+  }, [isEditing, inputs, isError, isSuccess, editedData]);
 
   useEffect(() => {
     if (!isError && isSuccess && !isEditing) {
@@ -474,12 +471,14 @@ const FormContainerTwo = ({
           renderItem={handleInputsForms}
           contentContainerStyle={styles.flatListContainer}
           refreshControl={
-            <RefreshControl
-              refreshing={isPendingRefetching}
-              onRefresh={onRefresh}
-              colors={["#819c79", "#32cd32", "#0000ff"]}
-              tintColor="#819c79"
-            />
+            !isEditing && (
+              <RefreshControl
+                refreshing={isPendingRefetching}
+                onRefresh={onRefresh}
+                colors={["#819c79", "#32cd32", "#0000ff"]}
+                tintColor='#819c79'
+              />
+            )
           }
           ListHeaderComponent={() => (
             <Text style={styles.formTitle}>{formTitle}</Text>

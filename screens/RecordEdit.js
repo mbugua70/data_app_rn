@@ -3,12 +3,14 @@ import { useMutation } from "@tanstack/react-query";
 import { GlobalStyles } from "../Constants/Globalcolors";
 import { RecordEditForm } from "../http/api";
 
-import React, { useEffect, useState } from "react";
+import React, { use, useContext, useEffect, useState } from "react";
 import AuthContentTwo from "../components/AuthContentTwo";
 import Toast from "react-native-toast-message";
+import { ProjectContext } from "../store/projectContext";
 
 const RecordEdit = ({ route }) => {
   const { formID, formTitle, item: existingData } = route.params;
+  const {editDataHandler} = useContext(ProjectContext)
 
   const { data, mutate, isError, error, isPending, isSuccess } = useMutation({
     mutationFn: RecordEditForm,
@@ -18,19 +20,21 @@ const RecordEdit = ({ route }) => {
     },
 
     onSuccess: (data) => {
+
       if (data.response === "fail") {
         Toast.show({
           type: "error",
-          text1: "Failed to submit",
-          text2: "Failed to submit the record, please try again!",
+          text1: "Failed to Edit",
+          text2: data.message,
         });
       }
 
       if (data.response === "success") {
+        editDataHandler(data["RAW_POST"])
         Toast.show({
           type: "success",
           text1: "Success",
-          text2: "Data submitted successfully!",
+          text2: "Data edited successfully!",
         });
       }
     },
