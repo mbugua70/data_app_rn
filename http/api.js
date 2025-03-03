@@ -335,3 +335,37 @@ export async function formRefetch(projectData) {
     };
   }
 }
+
+// inputs refetch
+export async function inputRefetchHandler(projectData) {
+  const {baID, formID, formTitle} = projectData;
+
+  console.log(baID, formID, formTitle, "api")
+
+  const projectDetails = {
+    ba_id: baID,
+    form_id: formID,
+  }
+
+  const encodedDat = new URLSearchParams(projectDetails).toString();
+
+  const res = await fetch("https://iguru.co.ke/BAIMS/ep/VIEW-FORM.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: encodedDat,
+  });
+
+  const data = await res.json(); // Handle as plain text
+
+  if (res.ok) {
+    return  {inputs: data.form_inputs, form_id: formID, form_title: formTitle};
+  } else {
+    throw {
+      message: data || "Submission failed.",
+      statusText: res.statusText,
+      status: res.status,
+    };
+  }
+}

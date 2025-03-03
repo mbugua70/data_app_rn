@@ -8,14 +8,18 @@ import {
   Keyboard,
   FlatList,
   Alert,
+  RefreshControl,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ActivityIndicator, MD2Colors } from "react-native-paper";
+import { useMutation } from "@tanstack/react-query";
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState, useRef, useContext } from "react";
 import { Notifier, NotifierComponents } from "react-native-notifier";
 import { ProjectContext } from "../store/projectContext";
 import { AuthContext } from "../store/store";
-import { filterAndSetFormState } from "../http/api";
+import { filterAndSetFormState, inputRefetchHandler } from "../http/api";
+
 
 import NetInfo from "@react-native-community/netinfo";
 import Toast from "react-native-toast-message";
@@ -27,6 +31,7 @@ import RadioComponent from "./RadioComponent";
 import Checkbox from "./Checkbox";
 import CheckboxComponent from "./Checkbox";
 import PickerImage from "./PickerImage";
+import { GlobalStyles } from "../Constants/Globalcolors";
 
 const FormContainerTwo = ({
   isEditing,
@@ -42,7 +47,7 @@ const FormContainerTwo = ({
   existingData,
 }) => {
   const [formState, setFormState] = useState({});
-  const { formInputData, formsSelectData } = useContext(ProjectContext);
+  const { formInputData, formsSelectData, addFormInputsTwo, formInputDataTwo } = useContext(ProjectContext);
   const [inputs, setInputs] = useState("");
   const [errors, setErrors] = useState({});
   const [longitude, setLongitude] = useState("");
@@ -66,12 +71,87 @@ const FormContainerTwo = ({
   const inputRef12 = useRef(null);
 
   useEffect(() => {
-    formInputData.forEach((input) => {
-      if (formID === input.form_id) {
-        setInputs(input.inputs);
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      setIsOffline(!state.isConnected);
+      setIsInternetReachable(state.isInternetReachable);
+
+      if (!state.isConnected) {
+        Notifier.showNotification({
+          title: "Network Error",
+          description: "No network access, Please check your network!",
+          Component: NotifierComponents.Notification,
+          componentProps: {
+            imageSource: require("../assets/image/no-network.png"),
+            containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
+            titleStyle: { color: "#fff" },
+            descriptionStyle: { color: "#fff" },
+          },
+        });
+      }
+
+      if (!state.isInternetReachable) {
+        Notifier.showNotification({
+          title: "Network Error",
+          description: "No internet access!",
+          Component: NotifierComponents.Notification,
+          componentProps: {
+            imageSource: require("../assets/image/no-network.png"),
+            containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
+            titleStyle: { color: "#fff" },
+            descriptionStyle: { color: "#fff" },
+          },
+        });
       }
     });
-  }, [formInputData, formID]);
+
+    return () => unsubscribe();
+  }, []);
+
+  // mutation functionality for refetch
+  const {
+    data,
+    mutate: mutateRefetch,
+    isError: isErrorRefetch,
+    error,
+    isPending: isPendingRefetching,
+  } = useMutation({
+    mutationFn: inputRefetchHandler,
+    // the code below will wait the request to finish before moving to another page.
+    onMutate: async (data) => {
+      return data;
+    },
+
+    onSuccess: (data) => {
+      if (data.response == "fail") {
+        Toast.show({
+          type: "error",
+          text1: "Data refetch failed",
+          text2: "Please try again!",
+        });
+      } else {
+        let filteredArray = []
+        filteredArray.push(data)
+        console.log(filteredArray, "array")
+        addFormInputsTwo(filteredArray)
+      }
+    },
+  });
+
+  useEffect(() => {
+    if(formInputDataTwo.length > 0) {
+      console.log("called two")
+      // setInputs(formInputDataTwo["0"].inputs)
+    }
+
+    if(formInputDataTwo.length === 0){
+      formInputData.forEach((input) => {
+        console.log("called")
+        if (formID === input.form_id) {
+          setInputs(input.inputs);
+        }
+      });
+    }
+  }, [formInputData, formID, formInputDataTwo]);
 
   function updateInputValueHandler(field_id, enteredValue) {
     // setFormState((prevState) => ({
@@ -95,7 +175,6 @@ const FormContainerTwo = ({
     const isRadio = item.field_type === "radio";
     const isRecord = item.field_type === "auto";
     const isDate = item.field_type === "date";
-
 
     let placeholder = "Enter value";
     if (item.input_title === "Date") {
@@ -127,20 +206,20 @@ const FormContainerTwo = ({
       <>
         {/* date time picker */}
         {isDate && (
-           <InputTwo
-           formNumber={item.input_rank}
-           label={item.input_title}
-           onUpdateValue={(value) =>
-             updateInputValueHandler(item.field_id, value)
-           }
-           value={formState[item.field_id]}
-           isInvalid={errors[item.field_id]}
-           placeholder='Enter date e.g YYYY-MM-DD'
-           onSubmitEditing={() => inputRef2.current?.focus()}
-           blurOnSubmit={false}
-           returnKeyType='next'
-           keyboardType={keyboardType}
-         />
+          <InputTwo
+            formNumber={item.input_rank}
+            label={item.input_title}
+            onUpdateValue={(value) =>
+              updateInputValueHandler(item.field_id, value)
+            }
+            value={formState[item.field_id]}
+            isInvalid={errors[item.field_id]}
+            placeholder='Enter date e.g YYYY-MM-DD'
+            onSubmitEditing={() => inputRef2.current?.focus()}
+            blurOnSubmit={false}
+            returnKeyType='next'
+            keyboardType={keyboardType}
+          />
         )}
 
         {isRecord && (
@@ -281,6 +360,62 @@ const FormContainerTwo = ({
     }
   }
 
+  // refetch function
+
+  const onRefresh = React.useCallback(async () => {
+
+    const token = await AsyncStorage.getItem("token");
+
+
+    if (!token) {
+      throw new Error("No token found in AsyncStorage.");
+    }
+
+    let user;
+    try {
+      user = JSON.parse(token);
+    } catch (error) {
+      throw new Error("Failed to parse token.");
+    }
+
+    const baID = user?.ba_id || "Unknown";
+
+    // internet connection checking
+    if (isOffline) {
+      Notifier.showNotification({
+        title: "Network Error",
+        description: "No network access, Please check your network!",
+        Component: NotifierComponents.Notification,
+        componentProps: {
+          imageSource: require("../assets/image/no-network.png"),
+          containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
+          titleStyle: { color: "#fff" },
+          descriptionStyle: { color: "#fff" },
+        },
+      });
+      return;
+    }
+
+    if (!isInternetReachable) {
+      Notifier.showNotification({
+        title: "Network Error",
+        description: "No internet access!",
+        Component: NotifierComponents.Notification,
+        componentProps: {
+          imageSource: require("../assets/image/no-network.png"),
+          containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
+          titleStyle: { color: "#fff" },
+          descriptionStyle: { color: "#fff" },
+        },
+      });
+      return;
+    }
+
+    // mutation func
+    console.log("rendered")
+    mutateRefetch({ baID, formID, formTitle });
+  }, [isOffline, isInternetReachable, mutateRefetch]);
+
   useEffect(() => {
     if (isEditing && existingData) {
       const filteredRecord = filterAndSetFormState(existingData);
@@ -327,7 +462,7 @@ const FormContainerTwo = ({
       });
       setFormState(resetState);
     }
-  }, [isError, isSuccess, inputs, isEditing]);
+  }, [isError, isSuccess, inputs, isEditing, isErrorRefetch]);
 
   return (
     <>
@@ -338,6 +473,14 @@ const FormContainerTwo = ({
           keyExtractor={(item) => item.field_id}
           renderItem={handleInputsForms}
           contentContainerStyle={styles.flatListContainer}
+          refreshControl={
+            <RefreshControl
+              refreshing={isPendingRefetching}
+              onRefresh={onRefresh}
+              colors={["#819c79", "#32cd32", "#0000ff"]}
+              tintColor="#819c79"
+            />
+          }
           ListHeaderComponent={() => (
             <Text style={styles.formTitle}>{formTitle}</Text>
           )}

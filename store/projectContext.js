@@ -14,7 +14,9 @@ export const ProjectContext = createContext({
   editProject: (id, project) => {},
   setFormNumber: (forms) => {},
   addFormInputs: (forms) => {},
+  addFormInputsTwo: (inputs) => {},
   formInputData: [],
+  formInputDataTwo: [],
   formsSelectData: [],
   records: [],
   addRecords: (record) => {}
@@ -79,6 +81,15 @@ function formInputsReducer (state, action) {
   }
 }
 
+function formInputsTwoReducer (state, action) {
+  switch (action.type) {
+    case "ADDINPUTFORMSTWO":
+      return [...action.payload];
+    default:
+      return state;
+  }
+}
+
 function formSelectsReducer (state, action) {
    switch (action.type){
     case "ADDSELECT":
@@ -105,6 +116,7 @@ function ProjectContextProvider({ children }) {
   const [formInputsState, dispatchFormInputs] = useReducer(formInputsReducer, [])
   const [formSelectsState, dispatchFormSelect] = useReducer(formSelectsReducer, [])
   const [userRecordsState, dispatchUserRecords] = useReducer(formUserRecordsReducer, [])
+  const [formInputStateTwo, dispatchFormInputTwo] = useReducer(formInputsTwoReducer, [])
 
   useEffect(() => {
     async function loadStoredData() {
@@ -113,6 +125,7 @@ function ProjectContextProvider({ children }) {
         const forms = await AsyncStorage.getItem("formsData");
         const formNumbers = await AsyncStorage.getItem("formNumbers");
         const formInputs = await AsyncStorage.getItem("formInputData");
+        const formInputsTwo = await AsyncStorage.getItem("formInputDataTwo");
         const formSelects = await AsyncStorage.getItem("formsSelectData");
         const formUserRecords = await AsyncStorage.getItem("formUserRecords")
 
@@ -120,6 +133,7 @@ function ProjectContextProvider({ children }) {
         if (forms) dispatchForm({ type: "ADDFORM", payload: JSON.parse(forms) });
         if (formNumbers) dispatchFormNumber({ type: "SETFORMNUMBERS", payload: JSON.parse(formNumbers) });
         if (formInputs) dispatchFormInputs({ type: "ADDINPUTFORMS", payload: JSON.parse(formInputs) });
+        if (formInputsTwo) dispatchFormInputTwo({ type: "ADDINPUTFORMSTWO", payload: JSON.parse(formInputs) });
         if (formSelects) dispatchFormSelect({ type: "ADDSELECT", payload: JSON.parse(formSelects) });
         if(formUserRecords) dispatchUserRecords({type: "ADDRECORDS", payload: JSON.parse(formUserRecords)});
       } catch (error) {
@@ -164,6 +178,10 @@ function ProjectContextProvider({ children }) {
    AsyncStorage.setItem("formInputData", JSON.stringify(data))
   }
 
+  function addFormInputsTwo (inputs) {
+   dispatchFormInputTwo({type: "ADDINPUTFORMSTWO", payload: inputs})
+   AsyncStorage.setItem("formInputDataTwo", JSON.stringify(inputs))
+  }
 
   function addFormSelects (data){
     dispatchFormSelect({type: "ADDSELECT", payload: data})
@@ -190,8 +208,9 @@ function ProjectContextProvider({ children }) {
     formsSelectData: formSelectsState,
     addFormSelects: addFormSelects,
     addRecords: addRecords,
-    records: userRecordsState
-
+    records: userRecordsState,
+    formInputDataTwo: formInputStateTwo,
+    addFormInputsTwo: addFormInputsTwo
   };
 
   return (

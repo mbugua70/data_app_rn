@@ -1,14 +1,22 @@
 import { useEffect, useState, useContext } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { SummaryForm } from "../http/api";
-import { View, Text, StyleSheet} from "react-native";
+import { inputRefetch, SummaryForm } from "../http/api";
+import { View, Text, StyleSheet, ScrollView, RefreshControl } from "react-native";
+import { useIsFocused } from "@react-navigation/native";
+import { GlobalStyles } from "../Constants/Globalcolors";
+import { ProjectContext } from "../store/projectContext";
 import React from "react";
+
+
 import AuthContentTwo from "../components/AuthContentTwo";
 import Toast from "react-native-toast-message";
-import { GlobalStyles } from "../Constants/Globalcolors";
 
 const Report = ({ route }) => {
+  const {addFormInputsTwo} = useContext(ProjectContext)
   const { formID, formTitle } = route.params;
+  const isFocused  = useIsFocused();
+
+
   const { data, mutate, isError, error, isPending, isSuccess } = useMutation({
     mutationFn: SummaryForm,
     // the code below will wait the request to finish before moving to another page.
@@ -37,11 +45,17 @@ const Report = ({ route }) => {
 
   async function submitHandler(record) {
     // report submission
-    mutate({record});
+    mutate({ record });
   }
 
   useEffect(() => {
-   console.log(error, "Error");
+   if(isFocused){
+    addFormInputsTwo([])
+   }
+  }, [isFocused])
+
+  useEffect(() => {
+    console.log(error, "Error");
     if (error && !isPending) {
       Toast.show({
         type: "error",
@@ -75,10 +89,9 @@ const Report = ({ route }) => {
 
 export default Report;
 
-
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: GlobalStyles.colors.gray200
-  }
-})
+    backgroundColor: GlobalStyles.colors.gray200,
+  },
+});
