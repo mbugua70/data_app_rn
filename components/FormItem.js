@@ -46,7 +46,7 @@ const FormItem = ({
         : GlobalStyles.colors.gray600,
   };
 
-  useMemo(() => {
+  useEffect(() => {
       submittedRecord.map((item) => {
         const today = new Date().toISOString().split("T")[0];
          if(today === item.date) {

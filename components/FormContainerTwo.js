@@ -383,35 +383,35 @@ const FormContainerTwo = ({
     const baID = user?.ba_id || "Unknown";
 
     // internet connection checking
-    if (isOffline) {
-      Notifier.showNotification({
-        title: "Network Error",
-        description: "No network access, Please check your network!",
-        Component: NotifierComponents.Notification,
-        componentProps: {
-          imageSource: require("../assets/image/no-network.png"),
-          containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
-          titleStyle: { color: "#fff" },
-          descriptionStyle: { color: "#fff" },
-        },
-      });
-      return;
-    }
+    // if (isOffline) {
+    //   Notifier.showNotification({
+    //     title: "Network Error",
+    //     description: "No network access, Please check your network!",
+    //     Component: NotifierComponents.Notification,
+    //     componentProps: {
+    //       imageSource: require("../assets/image/no-network.png"),
+    //       containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
+    //       titleStyle: { color: "#fff" },
+    //       descriptionStyle: { color: "#fff" },
+    //     },
+    //   });
+    //   return;
+    // }
 
-    if (!isInternetReachable) {
-      Notifier.showNotification({
-        title: "Network Error",
-        description: "No internet access!",
-        Component: NotifierComponents.Notification,
-        componentProps: {
-          imageSource: require("../assets/image/no-network.png"),
-          containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
-          titleStyle: { color: "#fff" },
-          descriptionStyle: { color: "#fff" },
-        },
-      });
-      return;
-    }
+    // if (!isInternetReachable) {
+    //   Notifier.showNotification({
+    //     title: "Network Error",
+    //     description: "No internet access!",
+    //     Component: NotifierComponents.Notification,
+    //     componentProps: {
+    //       imageSource: require("../assets/image/no-network.png"),
+    //       containerStyle: { backgroundColor: GlobalStyles.colors.error500 },
+    //       titleStyle: { color: "#fff" },
+    //       descriptionStyle: { color: "#fff" },
+    //     },
+    //   });
+    //   return;
+    // }
 
     // mutation func
     mutateRefetch({ baID, formID, formTitle });
