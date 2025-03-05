@@ -3,6 +3,7 @@ import NetInfo from "@react-native-community/netinfo";
 import { Notifier, NotifierComponents } from "react-native-notifier";
 import { View, Text, FlatList, StyleSheet, RefreshControl } from "react-native";
 import React, { useContext, useEffect, useState } from "react";
+import { useIsFocused } from "@react-navigation/native";
 import { useMutation } from "@tanstack/react-query";
 import { ProjectContext } from "../store/projectContext";
 import { getIndex } from "../util/getIndex";
@@ -13,13 +14,13 @@ import FormItem from "../components/FormItem";
 import Toast from "react-native-toast-message";
 import { formRefetch } from "../http/api";
 
-
 const FormScreen = ({ navigation, route }) => {
   const { formsData, addForms } = useContext(ProjectContext);
-  const { projectID, projectName} = route.params;
+  const { projectID, projectName } = route.params;
   const [forms, setForms] = useState("");
   const [isOffline, setIsOffline] = useState(false);
   const [isInternetReachable, setIsInternetReachable] = useState(false);
+  const isFocused = useIsFocused();
 
   // mutation functionality
   const { data, mutate, isError, error, isPending } = useMutation({
@@ -41,8 +42,8 @@ const FormScreen = ({ navigation, route }) => {
           project_id: data.project_id,
           forms: data.project_forms["0"].forms,
         };
-         let filteredArray = []
-         filteredArray.push(filteredForms)
+        let filteredArray = [];
+        filteredArray.push(filteredForms);
         addForms(filteredArray);
       }
     },
@@ -112,7 +113,7 @@ const FormScreen = ({ navigation, route }) => {
     const baID = user?.ba_id || "Unknown";
 
     // mutation func
-    mutate({baID, projectName, projectID});
+    mutate({ baID, projectName, projectID });
   }, []);
 
   function handleFormItem({ item, index }) {
@@ -131,12 +132,11 @@ const FormScreen = ({ navigation, route }) => {
         formTitle: item.form_title,
       });
     }
-
     return (
       <>
         <View style={styles.screen}>
           <FormItem
-            formID= {item.form_id}
+            formID={item.form_id}
             isEvenRow={isEvenRow}
             index={index}
             title={item.form_title}

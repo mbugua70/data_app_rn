@@ -21,7 +21,7 @@ import Toast from "react-native-toast-message";
 import CardCategoryUI from "../UI/CardCategoryUI";
 import Welcome from "../components/Welcome";
 import { useIsFocused } from "@react-navigation/native";
-import { createUser } from "../util/database";
+
 
 const Dashboard = ({ navigation }) => {
   const { projectsData, addProjects } = useContext(ProjectContext);
@@ -119,8 +119,6 @@ const Dashboard = ({ navigation }) => {
     }
 
     if(userID === ""){
-      const userDetails = await createUser(user.name)
-
       AsyncStorage.setItem("userDetails", JSON.stringify(userDetails))
       setUserID(userDetails)
     }

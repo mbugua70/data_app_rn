@@ -1,5 +1,8 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { View, Text, StyleSheet } from "react-native";
 import React, { useContext, useEffect, useMemo, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import {useIsFocused} from "@react-navigation/native";
 import { Avatar } from "react-native-paper";
 import { Button } from "react-native-paper";
 import { IconButton, MD3Colors } from "react-native-paper";
@@ -7,6 +10,8 @@ import { useNavigation } from "@react-navigation/native";
 import { GlobalStyles } from "../Constants/Globalcolors";
 import { getIndex } from "../util/getIndex";
 import { AuthContext } from "../store/store";
+import { fetchRecordByDate } from "../http/api";
+import { connectStorageEmulator } from "@react-native-firebase/storage";
 
 const FormItem = ({
   index,
@@ -16,50 +21,66 @@ const FormItem = ({
   isEvenRow,
   formID,
 }) => {
-  const { submittedRecord } = useContext(AuthContext);
   const navigation = useNavigation();
   const [recordSubmit, setRecordSubmit] = useState([])
+  const [overall, setOverall] = useState("")
+  const isFocused = useIsFocused()
 
 
+  const { data, mutate, isError, error, isPending, isSuccess } = useMutation({
+    mutationFn: fetchRecordByDate,
+    // the code below will wait the request to finish before moving to another page.
+    onMutate: async (data) => {
+      return data;
+    },
 
+    onSuccess: (data) => {
 
-
+      const formatData = JSON.parse(data);
+      if(formatData.data.length > 0) {
+         setOverall(formatData.data)
+      }
+    },
+  });
 
   const styling = {
-    backgroundColor:  recordSubmit.length === 0 ? "#819c79"  : "#fff",
-    borderWidth: recordSubmit.length === 0 ? 0 : 2,
-    borderColor: recordSubmit.length === 0 ? "#fff" : "#819c79",
+    backgroundColor:  overall.length === 0 ? "#819c79"  : "#fff",
+    borderWidth: overall.length === 0 ? 0 : 2,
+    borderColor: overall.length === 0 ? "#fff" : "#819c79",
   };
 
   const button = {
-    mode: recordSubmit.length === 0 ? "contained-tonal" : "contained",
+    mode: overall.length === 0 ? "contained-tonal" : "contained",
   };
 
   const iconButton = {
-    mode: recordSubmit.length === 0 ? "contained-tonal" : "contained",
+    mode: overall.length === 0 ? "contained-tonal" : "contained",
   };
 
   const titleStyling = {
     color:
-        recordSubmit.length === 0
+        overall.length === 0
         ? GlobalStyles.colors.gray700
         : GlobalStyles.colors.gray600,
   };
 
-  useEffect(() => {
-      submittedRecord.map((item) => {
-        const today = new Date().toISOString().split("T")[0];
-         if(today === item.date) {
-           if(item.formID === formID) {
-             setRecordSubmit((prev) => [
-              ...prev,
-              item.formTitle
-             ])
-           }
-         }
-      })
 
-  }, [submittedRecord])
+     useEffect(() => {
+        // button background color navigation
+
+        async function handleToday() {
+          const formattedDate = new Date().toISOString().split("T")[0];
+          const token = await AsyncStorage.getItem("token");
+          const fetchedUser = JSON.parse(token);
+          const ba_id = fetchedUser.ba_id;
+
+          console.log(ba_id, formID, formattedDate, "test")
+
+          mutate({ formattedDate, formID, ba_id });
+        }
+        handleToday()
+      }, [isFocused]);
+
 
   return (
     <View
@@ -69,7 +90,7 @@ const FormItem = ({
           <Text style={[styles.title, { ...titleStyling }]}>{title}</Text>
           <View>
             <IconButton
-              containerColor={ recordSubmit.length === 0 ? "#f5f5f5" : "#819c79"}
+              containerColor={ overall.length === 0 ? "#f5f5f5" : "#819c79"}
               mode={iconButton.mode}
               icon='plus'
               iconColor='#000000'
@@ -81,14 +102,14 @@ const FormItem = ({
         {/* records */}
 
         <View style={styles.flexContainerTwo}>
-          <Text style={styles.overalRecord}>{recordSubmit.length}</Text>
+          <Text style={styles.overalRecord}>{overall.length}</Text>
           <Text style={styles.overall}>Overall</Text>
         </View>
 
         <View style={styles.buttoncontainer}>
           <View>
             <Button
-              buttonColor={recordSubmit.length === 0 ? "" : "#819c79"}
+              buttonColor={overall.length === 0 ? "" : "#819c79"}
               labelStyle={{ fontSize: 10, paddingVertical: 0, lineHeight: 12 }}
               style={styles.button}
               mode={button.mode}

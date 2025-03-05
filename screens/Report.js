@@ -14,7 +14,6 @@ import Toast from "react-native-toast-message";
 import { AuthContext } from "../store/store";
 
 const Report = ({ route }) => {
-  const { submitHandlerRecord } = useContext(AuthContext)
   const {addFormInputsTwo} = useContext(ProjectContext)
   const { formID, formTitle } = route.params;
   const isFocused  = useIsFocused();
@@ -37,8 +36,6 @@ const Report = ({ route }) => {
       }
 
       if (data.response === "success") {
-        console.log("called")
-        submitHandlerRecord({formID, formTitle})
         Toast.show({
           type: "success",
           text1: "Success",
