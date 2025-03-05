@@ -1,4 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { ActivityIndicator, MD2Colors } from 'react-native-paper';
 import { View, Text, StyleSheet } from "react-native";
 import React, { useContext, useEffect, useMemo, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
@@ -35,7 +36,6 @@ const FormItem = ({
     },
 
     onSuccess: (data) => {
-
       const formatData = JSON.parse(data);
       if(formatData.data.length > 0) {
          setOverall(formatData.data)
@@ -67,7 +67,6 @@ const FormItem = ({
 
      useEffect(() => {
         // button background color navigation
-
         async function handleToday() {
           const formattedDate = new Date().toISOString().split("T")[0];
           const token = await AsyncStorage.getItem("token");
@@ -80,6 +79,10 @@ const FormItem = ({
         }
         handleToday()
       }, [isFocused]);
+
+
+
+
 
 
   return (
@@ -102,7 +105,8 @@ const FormItem = ({
         {/* records */}
 
         <View style={styles.flexContainerTwo}>
-          <Text style={styles.overalRecord}>{overall.length}</Text>
+           {(isSuccess && !isPending) && <Text style={styles.overalRecord}>{overall.length}</Text>}
+           {isPending &&  <ActivityIndicator animating={true} color={MD2Colors.white} />}
           <Text style={styles.overall}>Overall</Text>
         </View>
 
