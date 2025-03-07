@@ -80,11 +80,6 @@ const FormItem = ({
         handleToday()
       }, [isFocused]);
 
-
-
-
-
-
   return (
     <View
       style={[styles.screen, { ...styling }, isEvenRow && styles.rowReverse]}>
