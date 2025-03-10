@@ -290,6 +290,7 @@ function AuthenticatedStack() {
 
 function Navigation() {
   const authctx = useContext(AuthContext);
+
   return (
     <NavigationContainer>
       {authctx.isAuthenticate ? <AuthReportStack /> : <AuthStack />}
@@ -300,10 +301,11 @@ function Navigation() {
 function TokenHolder() {
   const authctx = useContext(AuthContext);
   const [isAppReady, setIsAppReady] = useState(false);
+
+
   useEffect(() => {
     async function fetchingToken() {
       const token = await AsyncStorage.getItem("token");
-      console.log(token);
       if (token) {
         authctx.authenticate(token);
       }
@@ -313,24 +315,27 @@ function TokenHolder() {
     fetchingToken();
   }, []);
 
-  if (isAppReady) {
-    SplashScreen.hide();
-  }
+
+
+  useEffect(() => {
+    if (isAppReady) {
+      SplashScreen.hideAsync();
+    }
+  }, [isAppReady]);
 
   if (!isAppReady) {
     return null;
   }
 
   return (
-    <>
-      <GestureHandlerRootView>
-        <NotifierWrapper>
-          <Navigation />
-        </NotifierWrapper>
-      </GestureHandlerRootView>
-    </>
+    <GestureHandlerRootView>
+      <NotifierWrapper>
+        <Navigation />
+      </NotifierWrapper>
+    </GestureHandlerRootView>
   );
 }
+
 
 export default function App() {
   return (

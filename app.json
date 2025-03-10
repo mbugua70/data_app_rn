@@ -48,7 +48,7 @@
       [
         "expo-location",
         {
-          "locationAlwaysAndWhenInUsePermission": "Allow device app to use your location."
+          "locationAlwaysAndWhenInUsePermission": "Allow BAIMS to access this device's location?"
         }
       ],
       [
